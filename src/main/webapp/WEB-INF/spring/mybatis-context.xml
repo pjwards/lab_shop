@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">	
+	
+	
+	<!-- <bean id="nativeJdbcExtractor"
+		class="org.springframework.jdbc.support.nativejdbc.SimpleNativeJdbcExtractor"
+		lazy-init="true"  /> -->
+	
+	<!-- DataSource bean 등록 2-->
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:comp/env/jdbc/studydb" />
+	</bean>
+	
+	<!-- LOB DataHandler 등록 -->
+	<!-- <bean id="lobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler"
+		lazy-init="true">
+		<property name="nativeJdbcExtractor" ref="nativeJdbcExtractor" />
+	</bean> -->
+	
+	<!-- sqlMapClient Bean 등록 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="typeAliasesPackage" value="net.common.vo" />
+		<property name="mapperLocations" value="classpath*:net/*_DAO.xml" />
+		<property name="dataSource" ref="dataSource" />
+		<!-- <property name="lobHandler" ref="lobHandler" /> -->
+	</bean>
+	
+</beans>

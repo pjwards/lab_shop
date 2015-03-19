@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:mvc="http://www.springframework.org/schema/mvc"
+	    xmlns:aop="http://www.springframework.org/schema/aop"
+	    xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+		xmlns:util="http://www.springframework.org/schema/util"
+
+		xsi:schemaLocation="http://www.springframework.org/schema/beans 
+							http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+      						http://www.springframework.org/schema/context 
+      						http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+      						
+                            http://www.springframework.org/schema/aop
+                            http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+                            http://www.springframework.org/schema/tx 
+                            http://www.springframework.org/schema/tx/spring-tx-2.5.xsd     						
+      						
+      						http://www.springframework.org/schema/mvc 
+      						http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd 
+      						http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring 
+      						http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd
+      						http://www.springframework.org/schema/util
+      						http://www.springframework.org/schema/util/spring-util-3.0.xsd" >      						
+	
+	<!-- <context:component-scan base-package="com.common.action"/>
+	<context:component-scan base-package="com.preferences.b2b.action"/>
+	<context:component-scan base-package="com.preferences.board.action"/>
+	<context:component-scan base-package="com.preferences.company.action"/>
+	<context:component-scan base-package="com.preferences.main.action"/>
+	<context:component-scan base-package="com.preferences.member.action"/>
+	<context:component-scan base-package="com.preferences.mypage.action"/>
+	<context:component-scan base-package="com.preferences.sell.action"/>
+	<context:component-scan base-package="com.admin.login.action"/>
+	<context:component-scan base-package="com.admin.board.action"/>
+	<context:component-scan base-package="com.admin.item.action"/>
+	<context:component-scan base-package="com.admin.member.action"/> -->
+	
+	<!-- <bean id="multipartResolver"
+      class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+      p:maxUploadSize="104857600" p:maxInMemorySize="10485760">
+   	</bean> -->
+	
+	<!-- scan -->
+	<context:component-scan base-package="net" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation" expression="org.springframework.scheduling.annotation.Scheduled" />
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+	</context:component-scan>
+	
+	<bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+     
+    <!-- <bean id="transactionTemplate" 
+      class="org.springframework.transaction.support.TransactionTemplate">
+      <property name="transactionManager" ref="transactionManager"/>
+    </bean> -->
+	
+	<!-- bean name을  찾기위한 설정 --> 
+	<!-- <bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+	<mvc:annotation-driven/>
+	<bean name="jsonView" class="org.springframework.web.servlet.view.json.JsonView"/>
+	
+	<bean id="lobHandler" class="com.preferences.systemConfig.OracleClobStringTypeHandler" lazy-init="true" />
+		
+	
+	
+	main
+	<bean id="mainCtrl" class="com.preferences.main.ctrl.MainCtrl">
+	    <property name="mainDao" ref="mainDao"/>
+	</bean>
+	<bean id="mainDao" class="com.preferences.main.dao.MainDAO">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	b2b
+	<bean id="b2bCtrl" class="com.preferences.b2b.ctrl.B2bCtrl">
+	    <property name="b2bDao" ref="b2bDao"/>
+	</bean>
+	<bean id="b2bDao" class="com.preferences.b2b.dao.B2bDAO">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	board
+	<bean id="boardCtrl" class="com.preferences.board.ctrl.BoardCtrl">
+	    <property name="boardDao" ref="boardDao"/>
+	</bean>
+	<bean id="boardDao" class="com.preferences.board.dao.BoardDAO">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	company
+	<bean id="companyCtrl" class="com.preferences.company.ctrl.CompanyCtrl">
+	    <property name="companyDao" ref="companyDao"/>
+	</bean>
+	<bean id="companyDao" class="com.preferences.company.dao.CompanyDAO">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+		
+	member
+	<bean id="memberCtrl" class="com.preferences.member.ctrl.MemberCtrl">
+	    <property name="memberDao" ref="memberDao"/>
+	</bean>
+	<bean id="memberDao" class="com.preferences.member.dao.MemberDAO">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+		
+	mypage
+	<bean id="mypageCtrl" class="com.preferences.mypage.ctrl.MypageCtrl">
+	    <property name="mypageDao" ref="mypageDao"/>
+	</bean>
+	<bean id="mypageDao" class="com.preferences.mypage.dao.MypageDAO">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	sell
+	<bean id="sellCtrl" class="com.preferences.sell.ctrl.SellCtrl">
+	    <property name="sellDao" ref="sellDao"/>
+	</bean>
+	<bean id="sellDao" class="com.preferences.sell.dao.SellDAO">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	admin.login
+	<bean id="loginCtrl" class="com.admin.login.ctrl.LoginCtrl">
+	    <property name="loginDao" ref="loginDao"/>
+	</bean>
+	<bean id="loginDao" class="com.admin.login.dao.LoginDAO">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+		
+	admin.board
+	<bean id="admBoardCtrl" class="com.admin.board.ctrl.AdmBoardCtrl"> 
+	    <property name="admBoardDao" ref="admBoardDao"/>
+	</bean>
+	<bean id="admBoardDao" class="com.admin.board.dao.AdmBoardDAO">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	admin.item
+	<bean id="itemCtrl" class="com.admin.item.ctrl.ItemCtrl"> 
+	    <property name="itemDao" ref="itemDao"/>
+	</bean>
+	<bean id="itemDao" class="com.admin.item.dao.ItemDAO">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	admin.member
+	<bean id="admMemberCtrl" class="com.admin.member.ctrl.AdmMemberCtrl"> 
+	    <property name="admMemberDao" ref="admMemberDao"/>
+	</bean>
+	<bean id="admMemberDao" class="com.admin.member.dao.AdmMemberDAO">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean> -->
+
+		
+	<!-- [s].login 여부를 검사 하기 위한 인터셉터 설정 -->	
+	<!-- <mvc:interceptors> 
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" /> 
+		<mvc:interceptor> 
+			<mvc:mapping path="/secure/phoneoff/adm/*/*" /> 
+			<bean class="com.preferences.systemConfig.LoginCheckInterceptor" /> 
+		</mvc:interceptor> 
+	</mvc:interceptors>  -->
+	<!-- [e].login 여부를 검사 하기 위한 인터셉터 설정 -->	
+			
+</beans>
