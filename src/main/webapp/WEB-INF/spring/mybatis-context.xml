@@ -21,7 +21,7 @@
 	
 	<!-- sqlMapClient Bean 등록 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="typeAliasesPackage" value="net.common.vo" />
+		<property name="typeAliasesPackage" value="net.common.user.vo" />
 		<property name="mapperLocations" value="classpath*:net/*_DAO.xml" />
 		<property name="dataSource" ref="dataSource" />
 		<!-- <property name="lobHandler" ref="lobHandler" /> -->
