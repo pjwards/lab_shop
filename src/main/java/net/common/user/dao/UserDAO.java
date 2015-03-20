@@ -50,4 +50,37 @@ public class UserDAO {
 			sqlSession.close();
 		}
 	}
+
+	public int insert(UserVO userVO) {
+		// TODO Auto-generated method stub
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		
+		try{
+			return sqlSession.insert("net.UserDao.insert", userVO);
+		}finally{
+			sqlSession.close();
+		}
+	}
+
+	public int update(UserVO userVO) {
+		// TODO Auto-generated method stub
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		
+		try{
+			return sqlSession.update("net.UserDao.update", userVO);
+		}finally{
+			sqlSession.close();
+		}
+	}
+
+	public int delete() {
+		// TODO Auto-generated method stub
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		
+		try{
+			return sqlSession.delete("net.UserDao.delete");
+		}finally{
+			sqlSession.close();
+		}
+	}
 }

@@ -6,24 +6,56 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Example</title>
+<title>UserList</title>
 </head>
 <body>
 	<table id="box-table-a" class="table table-hover">
 		<thead>
 			<tr>
-				<th scope="col">Number</th>
-				<th scope="col">Writer</th>
+				<th scope="col">No</th>
+				<th scope="col">Lastname</th>
+				<th scope="col">Email</th>
+				<th scope="col">Created_Date</th>
+				<th scope="col">Last_Date</th>
 			</tr>
 		</thead>
 		<tbody>
-	
+	<c:forEach var="list" items="${lists}">
 		<tr>
-			<th scope="row">${lists.id }</th>
-			<td>${lists.name }</td>
+			<th scope="row">${list.no }</th>
+			<td>${list.lastname }</td>
+			<td>${list.email }</td>
+			<td>${list.createddate }</td>
+			<td>${list.lastdate }</td>
 		</tr>
-	
+	</c:forEach>
 		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="16" align="center">
+  						<c:if test="${page != 1}">
+							<td><a href="<%=request.getContextPath()%>/net/common/user/userList.do?page=${page - 1}">Previous</a></td>
+						</c:if>
+						
+  						<c:forEach begin="1" end="${pages}" var="i">
+							<c:choose>
+								<c:when test="${page eq i}">
+									<td>${i}</td>
+								</c:when>
+								<c:otherwise>
+									<td><a href="<%=request.getContextPath()%>/net/common/user/userList.do?page=${i}">${i}</a></td>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+						
+						<c:if test="${page lt pages}">
+							<td><a href="<%=request.getContextPath()%>/net/common/user/userList.do?page=${page + 1}">Next</a></td>
+						</c:if>
+ 					</td>
+			</tr>
+		</tfoot>
 	</table>
+	<div><p><a href="<%=request.getContextPath()%>/net/common/user/userAdd.do" class="btn btn-success">Sign Up</a></p></div>
+	
 </body>
 </html>

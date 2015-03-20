@@ -33,4 +33,22 @@ public class UserServiceImpl implements UserService {
 		return userDAO.count();
 	}
 
+	@Override
+	public int insert(UserVO userVO) throws Exception {
+		// TODO Auto-generated method stub
+		return userDAO.insert(userVO);
+	}
+
+	@Override
+	public int update(UserVO userVO) throws Exception {
+		// TODO Auto-generated method stub
+		return userDAO.update(userVO);
+	}
+
+	@Override
+	public int delete() throws Exception {
+		// TODO Auto-generated method stub
+		return userDAO.delete();
+	}
+
 }
