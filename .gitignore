@@ -27,3 +27,8 @@ bin
 *.class
 *.bak
 .gradle
+.idea
+gradlew
+gradlew.bat
+*.iml
+gradle

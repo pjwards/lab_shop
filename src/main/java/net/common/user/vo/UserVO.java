@@ -3,60 +3,67 @@ package net.common.user.vo;
 import java.util.Date;
 
 public class UserVO {
-	private int no;
-	private String firstname;
-	private String lastname;
+	private int number;
+	private String firstName;
+	private String lastName;
 	private String email;
 	private String password;
-	private Date createddate;
-	private Date lastdate;
-	
-	public void setNo(int no){
-		this.no=no;
-	}
-	public int getNo(){
-		return this.no;
-	}
-	
-	public void setFirstname(String firstname){
-		this.firstname = firstname;
-	}
-	public String getFirstname(){
-		return this.firstname;
-	}
-	
-	public void setLastname(String lastname){
-		this.lastname = lastname;
-	}
-	public String getLastname(){
-		return this.lastname;
-	}
-	
-	public void setEmail(String email){
-		this.email = email;
-	}
-	public String getEmail(){
-		return this.email;
-	}
-	
-	public void setPassword(String password){
-		this.password = password;
-	}
-	public String getPassword(){
-		return this.password;
-	}
-	
-	public void setCreateddate(Date createddate){
-		this.createddate = createddate;
-	}
-	public Date getCreateddate(){
-		return this.createddate;
-	}
-	
-	public void setLastdate(Date lastdate){
-		this.lastdate = lastdate;
-	}
-	public Date getLastdate(){
-		return this.lastdate;
-	}
+	private Date createdDate;
+	private Date lastDate;
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getLastDate() {
+        return lastDate;
+    }
+
+    public void setLastDate(Date lastDate) {
+        this.lastDate = lastDate;
+    }
 }

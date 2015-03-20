@@ -5,13 +5,13 @@
   
  <mapper namespace="net.UserDao">
   <resultMap type="UserVO" id="userResultMap">
-  	<id column="no" property="no"/>
- 	<result column="first_name" property="firstname"/>
- 	<result column="last_name" property="lastname"/>
+  	<id column="no" property="number"/>
+ 	<result column="first_name" property="firstName"/>
+ 	<result column="last_name" property="lastName"/>
  	<result column="email" property="email"/>
  	<result column="password" property="password"/>
- 	<result column="created_date" property="createddate"/>
- 	<result column="last_date" property="lastdate"/>
+ 	<result column="created_date" property="createDate"/>
+ 	<result column="last_date" property="lastDate"/>
   </resultMap>
   
   <select id="selectOne" resultMap="userResultMap">
@@ -28,15 +28,15 @@
   
   <insert id="insert" parameterType="UserVO">
   insert into shop_user (first_name,last_name,email,password,created_date,last_date) 
-  values(#{firstname},#{lastname},#{email},#{password},now(),now())
+  values(#{firstName},#{lastName},#{email},#{password},now(),now())
   </insert>
   
   <update id="update" parameterType="UserVO">
-  update shop_user set first_name=#{firstname},last_name=#{lastname},password=#{password} 
-  where no=#{no}
+  update shop_user set first_name=#{firstName},last_name=#{lastName},password=#{password}
+  where no=#{number}
   </update>
   
   <delete id="delete">
-  delete from shop_user where no=#{no}
+  delete from shop_user where no=#{number}
   </delete>
  </mapper>
