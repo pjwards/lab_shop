@@ -1,13 +1,13 @@
-package net.common.user.service;
+package net.shop.service;
 
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import net.shop.dao.UserDAO;
 import org.springframework.stereotype.Service;
 
-import net.common.user.dao.UserDAO;
-import net.common.user.vo.UserVO;
+import net.shop.vo.UserVO;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {

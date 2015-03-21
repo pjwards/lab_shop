@@ -6,7 +6,6 @@
 		xmlns:mvc="http://www.springframework.org/schema/mvc"
 	    xmlns:aop="http://www.springframework.org/schema/aop"
 	    xmlns:tx="http://www.springframework.org/schema/tx"
-		xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
 		xmlns:util="http://www.springframework.org/schema/util"
 
 		xsi:schemaLocation="http://www.springframework.org/schema/beans 
@@ -21,8 +20,7 @@
       						
       						http://www.springframework.org/schema/mvc 
       						http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd 
-      						http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring 
-      						http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd
+      						http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
       						http://www.springframework.org/schema/util
       						http://www.springframework.org/schema/util/spring-util-3.0.xsd" >      						
 	
@@ -169,6 +167,6 @@
 			<bean class="com.preferences.systemConfig.LoginCheckInterceptor" /> 
 		</mvc:interceptor> 
 	</mvc:interceptors>  -->
-	<!-- [e].login 여부를 검사 하기 위한 인터셉터 설정 -->	
-			
+	<!-- [e].login 여부를 검사 하기 위한 인터셉터 설정 -->
+
 </beans>

@@ -1,8 +1,8 @@
-package net.common.user.service;
+package net.shop.service;
 
 import java.util.List;
 
-import net.common.user.vo.UserVO;
+import net.shop.vo.UserVO;
 
 public interface UserService {
 	public UserVO selectOne() throws Exception;

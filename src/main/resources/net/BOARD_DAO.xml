@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.BoardDao">
+    <resultMap type="BoardVO" id="boardResultMap">
+        <id column="no" property="number"/>
+        <result column="group_no" property="groupNumber"/>
+        <result column="sequence_no" property="sequenceNumber"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="posting_date" property="postingDate"/>
+        <result column="read_count" property="readCount"/>
+        <result column="comment_count" property="commentCount"/>
+        <result column="user_no" property="userNumber"/>
+        <result column="user_email" property="userEmail"/>
+    </resultMap>
+
+    <select id="selectCount" resultType="int">
+        SELECT COUNT(*) FROM shop_board
+    </select>
+
+    <select id="selectList" resultMap="boardResultMap">
+        SELECT * FROM shop_board ORDER BY sequence_no DESC LIMIT #{offset},#{limit}
+    </select>
+
+    <insert id="insert" parameterType="BoardVO">
+        INSERT INTO shop_board (group_no, sequence_no, title, content, posting_date, read_count, comment_count, user_no, user_email)
+        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),#{readCount},#{commentCount},#{userName},#{userEmail})
+    </insert>
+
+    <select id="selectOne" parameterType="int" resultMap="boardResultMap">
+        SELECT * FROM shop_board WHERE no = #{VALUE}
+    </select>
+
+    <update id="increaseReadCount" parameterType="int">
+        UPDATE shop_board SET read_count = read_count + 1 WHERE no = #{VALUE}
+    </update>
+
+    <select id="selectLastSequenceNumber" parameterMap="hashmap" resultType="String">
+        SELECT min(sequence_no) FROM shop_board WHERE sequence_no <![CDATA[ < ]]> #{searchMaxSeqNum} and sequence_no <![CDATA[ >= ]]> #{searchMinSeqNum}
+    </select>
+
+    <update id="update" parameterType="BoardVO">
+        UPDATE shop_board SET title = #{title}, content = #{content} WHERE no = #{number}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM shop_board WHERE no = #{VALUE }
+    </delete>
+</mapper>

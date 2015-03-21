@@ -1,0 +1,85 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: 동현
+  Date: 2015-03-21
+  Time: 오후 7:16
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<html>
+<head>
+    <title>게시글 목록</title>
+</head>
+<body>
+<table border="1">
+    <c:if test="${totalPageCount > 0}">
+        <tr>
+            <td colspan="5">
+                    ${startRow}-${endRow}
+                [${requestPage}/${totalPageCount}]
+            </td>
+        </tr>
+    </c:if>
+
+    <tr>
+        <td>글 번호</td>
+        <td>제목</td>
+        <td>작성자</td>
+        <td>작성일</td>
+        <td>조회수</td>
+    </tr>
+
+    <c:choose>
+        <c:when test="${hasBoard == false}">
+            <tr>
+                <td colspan="5">
+                    게시글이 없습니다.
+                </td>
+            </tr>
+        </c:when>
+
+        <c:otherwise>
+            <c:forEach var="list" items="${boardVOList}">
+                <tr>
+                    <td>${list.id}</td>
+                    <td>
+                        <c:if test="${list.level > 0}">
+                            <c:forEach begin="1" end="${list.level}">-</c:forEach>&gt;
+                        </c:if>
+                        <c:set var="query" value="boardId=${list.id}&p=${requestPage}"/>
+                        <a href="<c:url value="/board/read.do?${query}"/> ">
+                                ${list.title} (${list.commentCount})
+                        </a>
+                    </td>
+                    <td>${list.writerName}</td>
+                    <td>${list.postingDate}</td>
+                    <td>${list.readCount}</td>
+                </tr>
+            </c:forEach>
+
+            <tr>
+                <td colspan="5">
+                    <c:if test="${beginPage > 10}">
+                        <a href="<c:url value="/board/list.do?p=${beginPage-1}"/> ">이전</a>
+                    </c:if>
+                    <c:forEach var="pno" begin="${beginPage}" end="${endPage}">
+                        <a href="<c:url value="/board/list.do?p=${pno}"/> ">[${pno}]</a>
+                    </c:forEach>
+                    <c:if test="${endPage < totalPageCount}">
+                        <a href="<c:url value="/board/list.do?p=${endPage + 1}"/> ">다음</a>
+                    </c:if>
+                </td>
+            </tr>
+        </c:otherwise>
+    </c:choose>
+
+    <tr>
+        <td colspan="5">
+            <a href="/board/writeForm.do">글쓰기</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

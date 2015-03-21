@@ -1,4 +1,4 @@
-package net.common.user.vo;
+package net.shop.vo;
 
 import java.util.Date;
 
