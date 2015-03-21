@@ -19,7 +19,7 @@ import java.util.List;
  */
 
 @Repository("boardDAO")
-public class BoardDAOMySql {
+public class BoardDAOMySql implements BoardDAO {
     SqlSessionFactory sqlSessionFactory;
 
     @Autowired

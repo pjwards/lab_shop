@@ -56,7 +56,7 @@ public class BoardController {
 
         if(totalBoardCount == 0){
             setListAttributes(modelAndView);
-            modelAndView.setViewName("/jsp/view/board/list.jsp");
+            modelAndView.setViewName("/board/list");
             return modelAndView;
         }
 
@@ -71,7 +71,7 @@ public class BoardController {
 
         List<BoardVO> boardVOList = boardService.selectList(firstRow, endRow);
         setListAttributes(modelAndView, boardVOList, requestPageNumber, totalPageCount, firstRow, endRow);
-        modelAndView.setViewName("/jsp/view/board/list.jsp");
+        modelAndView.setViewName("/board/list");
         return modelAndView;
     }
 

@@ -38,7 +38,7 @@
         UPDATE shop_board SET read_count = read_count + 1 WHERE no = #{VALUE}
     </update>
 
-    <select id="selectLastSequenceNumber" parameterMap="hashmap" resultType="String">
+    <select id="selectLastSequenceNumber" parameterType="hashmap" resultType="String">
         SELECT min(sequence_no) FROM shop_board WHERE sequence_no <![CDATA[ < ]]> #{searchMaxSeqNum} and sequence_no <![CDATA[ >= ]]> #{searchMinSeqNum}
     </select>
 
