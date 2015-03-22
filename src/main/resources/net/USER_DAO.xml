@@ -10,7 +10,7 @@
  	<result column="last_name" property="lastName"/>
  	<result column="email" property="email"/>
  	<result column="password" property="password"/>
- 	<result column="created_date" property="createDate"/>
+ 	<result column="created_date" property="createdDate"/>
  	<result column="last_date" property="lastDate"/>
   </resultMap>
   

@@ -22,11 +22,11 @@
 		<tbody>
 	<c:forEach var="list" items="${lists}">
 		<tr>
-			<th scope="row">${list.no }</th>
-			<td>${list.lastname }</td>
+			<th scope="row">${list.number }</th>
+			<td>${list.lastName }</td>
 			<td>${list.email }</td>
-			<td>${list.createddate }</td>
-			<td>${list.lastdate }</td>
+			<td>${list.createdDate }</td>
+			<td>${list.lastDate }</td>
 		</tr>
 	</c:forEach>
 		</tbody>
@@ -34,7 +34,7 @@
 			<tr>
 				<td colspan="16" align="center">
   						<c:if test="${page != 1}">
-							<td><a href="<%=request.getContextPath()%>/net/common/user/userList.do?page=${page - 1}">Previous</a></td>
+							<td><a href="<%=request.getContextPath()%>/user/userList.do?page=${page - 1}">Previous</a></td>
 						</c:if>
 						
   						<c:forEach begin="1" end="${pages}" var="i">
@@ -43,19 +43,19 @@
 									<td>${i}</td>
 								</c:when>
 								<c:otherwise>
-									<td><a href="<%=request.getContextPath()%>/net/common/user/userList.do?page=${i}">${i}</a></td>
+									<td><a href="<%=request.getContextPath()%>/user/userList.do?page=${i}">${i}</a></td>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
 						
 						<c:if test="${page lt pages}">
-							<td><a href="<%=request.getContextPath()%>/net/common/user/userList.do?page=${page + 1}">Next</a></td>
+							<td><a href="<%=request.getContextPath()%>/user/userList.do?page=${page + 1}">Next</a></td>
 						</c:if>
  					</td>
 			</tr>
 		</tfoot>
 	</table>
-	<div><p><a href="<%=request.getContextPath()%>/net/common/user/userAdd.do" class="btn btn-success">Sign Up</a></p></div>
+	<div><p><a href="<%=request.getContextPath()%>/user/userAdd.do" class="btn btn-success">Sign Up</a></p></div>
 	
 </body>
 </html>

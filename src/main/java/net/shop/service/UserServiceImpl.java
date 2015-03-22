@@ -9,6 +9,13 @@ import org.springframework.stereotype.Service;
 
 import net.shop.vo.UserVO;
 
+/**
+ * 
+ * @author jisung
+ * 
+ *
+ */
+
 @Service("userService")
 public class UserServiceImpl implements UserService {
 

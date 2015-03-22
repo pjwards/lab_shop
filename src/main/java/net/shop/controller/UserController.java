@@ -13,6 +13,13 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 
+ * @author jisung
+ * 
+ *
+ */
+
 @Controller
 public class UserController {
 	
@@ -35,14 +42,14 @@ public class UserController {
 		int pages = (int)Math.ceil(total*(1.0)/end);
 		modelandview.addObject("pages",pages);
 		modelandview.addObject("page",start);
-		modelandview.setViewName("/jsp/view/user/userList");
+		modelandview.setViewName("/user/userList");
 		
 		return modelandview;
 	}
 	
 	@RequestMapping("/user/userAdd.do")
 	public String userAdd() throws Exception{
-		return "/jsp/view/user/userAdd";
+		return "/user/userAdd";
 	}
 	@RequestMapping(value= "/user/userAdd.do", method=RequestMethod.POST)
 	public String userAdd(UserVO userVO) throws Exception{
@@ -51,9 +58,9 @@ public class UserController {
 		return "redirect:/user/userList.do";
 	}
 	
-	@RequestMapping("/net/common/shop/userEdit.do")
+	@RequestMapping("/user/userEdit.do")
 	public String userEdit() throws Exception{
-		return "/jsp/view/user/userEdit";
+		return "/user/userEdit";
 	}
 	@RequestMapping(value= "/user/userEdit.do", method=RequestMethod.POST)
 	public String userEdit(UserVO userVO) throws Exception{

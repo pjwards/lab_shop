@@ -10,11 +10,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Description
- * Donghyun Seo (egaoneko@naver.com)
- * 2015-03-21
- * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
- * version
+ * 
+ * @author jisung
+ * 
+ *
  */
 
 @Repository("userDAO")
