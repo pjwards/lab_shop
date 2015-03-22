@@ -52,4 +52,14 @@ public interface BoardService {
     글을 삭제한다.
      */
     public int delete(int boardNumber) throws Exception;
+
+    /*
+    다음 그룹 번호를 생성한다.
+     */
+    public int generateNextGroupNumber(String groupName) throws Exception;
+
+    /*
+    작성한 글 번호 조회한다.
+     */
+    public int selectLastBoardNumberByEmail(String userEmail) throws Exception;
 }

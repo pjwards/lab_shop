@@ -53,4 +53,19 @@ public interface BoardDAO {
     글을 삭제한다.
      */
     public int delete(int boardNumber) throws Exception;
+
+    /*
+    그룹 번호를 조회한다.
+     */
+    public int selectGroupNumber(String groupName) throws Exception;
+
+    /*
+    그룹 번호의 크기를 하나 증가시킨다.
+     */
+    public int updateGroupNumber(String groupName) throws Exception;
+
+    /*
+    작성한 글 번호 조회한다.
+     */
+    public int selectLastBoardNumberByEmail(String userEmail) throws Exception;
 }

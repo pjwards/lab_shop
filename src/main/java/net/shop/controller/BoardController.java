@@ -1,15 +1,19 @@
 package net.shop.controller;
 
 import net.shop.service.BoardService;
+import net.shop.service.UserService;
 import net.shop.vo.BoardVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,6 +29,9 @@ public class BoardController {
 
     @Resource(name = "boardService")
     private BoardService boardService;
+
+    @Resource(name = "userService")
+    private UserService userService;
 
     private static final int COUNT_PER_PAGE = 10;
 
@@ -123,6 +130,40 @@ public class BoardController {
         }
         modelAndView.addObject("beginPage", beginPageNumber);
         modelAndView.addObject("endPage", endPageNumber);
+    }
+
+    @RequestMapping(value = "/board/write.do")
+    public String boardWrite() throws Exception{
+        return "/board/writeForm";
+    }
+
+    @RequestMapping(value = "/board/write.do", method = RequestMethod.POST)
+    public String boardWrite(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        String memberId = request.getParameter("memberId");
+
+        if(memberId == null || memberId.equals("")){
+            return "/board/error";
+        }
+
+        int groupId = boardService.generateNextGroupNumber("board");
+        int userNumber = userService.selectUserNumberByEmail(request.getParameter("memberId"));
+
+        BoardVO boardVO = new BoardVO();
+        boardVO.setGroupNumber(groupId);
+        DecimalFormat decimalFormat = new DecimalFormat("0000000000");
+        boardVO.setSequenceNumber(decimalFormat.format(groupId) + "999999");
+        boardVO.setTitle(request.getParameter("title"));
+        boardVO.setContent(request.getParameter("content"));
+        boardVO.setUserNumber(userNumber);
+        boardVO.setUserEmail(request.getParameter("memberId"));
+
+        boardService.insert(boardVO);
+        int boardNumber = boardService.selectLastBoardNumberByEmail(request.getParameter("memberId"));
+        boardVO.setNumber(boardNumber);
+        request.setAttribute("postedBoardVO", boardVO);
+
+        return "/board/write";
     }
 
 }

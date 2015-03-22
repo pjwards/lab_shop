@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  User: 동현
+  User: Donghyun Seo (egaoneko@naver.com)
   Date: 2015-03-21
   Time: 오후 7:16
   To change this template use File | Settings | File Templates.
@@ -42,17 +42,17 @@
         <c:otherwise>
             <c:forEach var="list" items="${boardVOList}">
                 <tr>
-                    <td>${list.id}</td>
+                    <td>${list.number}</td>
                     <td>
                         <c:if test="${list.level > 0}">
                             <c:forEach begin="1" end="${list.level}">-</c:forEach>&gt;
                         </c:if>
-                        <c:set var="query" value="boardId=${list.id}&p=${requestPage}"/>
-                        <a href="<c:url value="/board/read.do?${query}"/> ">
+                        <c:set var="query" value="boardId=${list.number}&p=${requestPage}"/>
+                        <a href="<c:url value="read.do?${query}"/> ">
                                 ${list.title} (${list.commentCount})
                         </a>
                     </td>
-                    <td>${list.writerName}</td>
+                    <td>${list.userEmail}</td>
                     <td>${list.postingDate}</td>
                     <td>${list.readCount}</td>
                 </tr>
@@ -61,13 +61,13 @@
             <tr>
                 <td colspan="5">
                     <c:if test="${beginPage > 10}">
-                        <a href="<c:url value="/board/list.do?p=${beginPage-1}"/> ">이전</a>
+                        <a href="<c:url value="list.do?p=${beginPage-1}"/> ">이전</a>
                     </c:if>
                     <c:forEach var="pno" begin="${beginPage}" end="${endPage}">
-                        <a href="<c:url value="/board/list.do?p=${pno}"/> ">[${pno}]</a>
+                        <a href="<c:url value="list.do?p=${pno}"/> ">[${pno}]</a>
                     </c:forEach>
                     <c:if test="${endPage < totalPageCount}">
-                        <a href="<c:url value="/board/list.do?p=${endPage + 1}"/> ">다음</a>
+                        <a href="<c:url value="list.do?p=${endPage + 1}"/> ">다음</a>
                     </c:if>
                 </td>
             </tr>
@@ -76,7 +76,7 @@
 
     <tr>
         <td colspan="5">
-            <a href="/board/writeForm.do">글쓰기</a>
+            <a href="write.do">글쓰기</a>
         </td>
     </tr>
 </table>

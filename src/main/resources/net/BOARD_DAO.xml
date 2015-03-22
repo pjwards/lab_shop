@@ -27,7 +27,7 @@
 
     <insert id="insert" parameterType="BoardVO">
         INSERT INTO shop_board (group_no, sequence_no, title, content, posting_date, read_count, comment_count, user_no, user_email)
-        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),#{readCount},#{commentCount},#{userName},#{userEmail})
+        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),0,0,#{userNumber},#{userEmail})
     </insert>
 
     <select id="selectOne" parameterType="int" resultMap="boardResultMap">
@@ -49,4 +49,16 @@
     <delete id="delete" parameterType="int">
         DELETE FROM shop_board WHERE no = #{VALUE }
     </delete>
+
+    <select id="selectGroupNumber" parameterType="String" resultType="int">
+        SELECT next_value FROM shop_no_sequence WHERE sequence_name = #{NAME} FOR UPDATE
+    </select>
+
+    <update id="updateGroupNumber" parameterType="String">
+        UPDATE shop_no_sequence SET next_value = next_value + 1 WHERE sequence_name = #{NAME}
+    </update>
+
+    <select id="selectLastBoardNumberByEmail" parameterType="String" resultType="int">
+        SELECT no FROM shop_board WHERE user_email = #{userEmail} ORDER BY no DESC LIMIT 0,1
+    </select>
 </mapper>

@@ -60,4 +60,15 @@ public class BoardServiceImpl implements BoardService {
     public int delete(int boardNumber) throws Exception {
         return boardDAO.delete(boardNumber);
     }
+
+    @Override
+    public int generateNextGroupNumber(String groupName) throws Exception {
+        boardDAO.updateGroupNumber(groupName);
+        return boardDAO.selectGroupNumber(groupName);
+    }
+
+    @Override
+    public int selectLastBoardNumberByEmail(String userEmail) throws Exception {
+        return boardDAO.selectLastBoardNumberByEmail(userEmail);
+    }
 }

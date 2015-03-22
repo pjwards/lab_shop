@@ -1,42 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
- <mapper namespace="net.UserDao">
-  <resultMap type="UserVO" id="userResultMap">
-  	<id column="no" property="number"/>
- 	<result column="first_name" property="firstName"/>
- 	<result column="last_name" property="lastName"/>
- 	<result column="email" property="email"/>
- 	<result column="password" property="password"/>
- 	<result column="created_date" property="createdDate"/>
- 	<result column="last_date" property="lastDate"/>
-  </resultMap>
-  
-  <select id="selectOne" resultMap="userResultMap">
-  select * from shop_user where no = 1
-  </select>
-  
-  <select id="selectList" resultMap="userResultMap">
-  select * from shop_user limit #{offset},#{limit}
-  </select>
-  
-  <select id="count" resultType="int">
-  select count(*) from shop_user
-  </select>
-  
-  <insert id="insert" parameterType="UserVO">
-  insert into shop_user (first_name,last_name,email,password,created_date,last_date) 
-  values(#{firstName},#{lastName},#{email},#{password},now(),now())
-  </insert>
-  
-  <update id="update" parameterType="UserVO">
-  update shop_user set first_name=#{firstName},last_name=#{lastName},password=#{password}
-  where no=#{number}
-  </update>
-  
-  <delete id="delete">
-  delete from shop_user where no=#{number}
-  </delete>
- </mapper>
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.UserDao">
+    <resultMap type="UserVO" id="userResultMap">
+        <id column="no" property="number"/>
+        <result column="first_name" property="firstName"/>
+        <result column="last_name" property="lastName"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="last_date" property="lastDate"/>
+    </resultMap>
+
+    <select id="selectOne" resultMap="userResultMap">
+      select * from shop_user where no = 1
+    </select>
+
+    <select id="selectList" resultMap="userResultMap">
+      select * from shop_user limit #{offset},#{limit}
+    </select>
+
+    <select id="count" resultType="int">
+      select count(*) from shop_user
+    </select>
+
+    <insert id="insert" parameterType="UserVO">
+      insert into shop_user (first_name,last_name,email,password,created_date,last_date)
+      values(#{firstName},#{lastName},#{email},#{password},now(),now())
+    </insert>
+
+    <update id="update" parameterType="UserVO">
+      update shop_user set first_name=#{firstName},last_name=#{lastName},password=#{password}
+      where no=#{number}
+    </update>
+
+    <delete id="delete">
+      delete from shop_user where no=#{number}
+    </delete>
+
+    <!--
+    작성자 : Donghyun Seo
+    설명 : 이메일을 통한 유저 번호 조회
+    -->
+    <select id="selectUserNumberByEmail" parameterType="String" resultType="int">
+        SELECT no FROM shop_user WHERE email = #{email}
+    </select>
+</mapper>

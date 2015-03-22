@@ -53,7 +53,7 @@ public class BoardDAOMySql implements BoardDAO {
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
         try{
-            return sqlSession.insert("net.BoardDao.insert");
+            return sqlSession.insert("net.BoardDao.insert", boardVO);
         }finally{
             sqlSession.close();
         }
@@ -108,6 +108,39 @@ public class BoardDAOMySql implements BoardDAO {
 
         try{
             return sqlSession.delete("net.BoardDao.delete", boardNumber);
+        } finally{
+            sqlSession.close();
+        }
+    }
+
+    @Override
+    public int selectGroupNumber(String groupName) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectOne("net.BoardDao.selectGroupNumber", groupName);
+        } finally{
+            sqlSession.close();
+        }
+    }
+
+    @Override
+    public int updateGroupNumber(String groupName) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.update("net.BoardDao.updateGroupNumber", groupName);
+        } finally{
+            sqlSession.close();
+        }
+    }
+
+    @Override
+    public int selectLastBoardNumberByEmail(String userEmail) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectOne("net.BoardDao.selectLastBoardNumberByEmail", userEmail);
         } finally{
             sqlSession.close();
         }

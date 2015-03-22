@@ -84,4 +84,15 @@ public class UserDaoMySql implements UserDAO {
             sqlSession.close();
         }
     }
+
+    @Override
+    public int selectUserNumberByEmail(String email) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectOne("net.UserDao.selectUserNumberByEmail", email);
+        }finally{
+            sqlSession.close();
+        }
+    }
 }
