@@ -14,8 +14,8 @@
 <body>
 <h1>테스트 페이지</h1>
 <ul>
-	<li><a href="user/userAdd.do">User Add</a></li>
-	<li><a href="board/list.do">Board List</a></li>
+	<li><a href="<%=request.getContextPath()%>/user/userList.do">User List</a></li>
+	<li><a href="<%=request.getContextPath()%>/board/list.do">Board List</a></li>
 </ul>
 
 
