@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <title>게시글 목록</title>
@@ -47,13 +48,13 @@
                         <c:if test="${list.level > 0}">
                             <c:forEach begin="1" end="${list.level}">-</c:forEach>&gt;
                         </c:if>
-                        <c:set var="query" value="boardId=${list.number}&p=${requestPage}"/>
+                        <c:set var="query" value="boardNumber=${list.number}&p=${requestPage}"/>
                         <a href="<c:url value="read.do?${query}"/> ">
                                 ${list.title} (${list.commentCount})
                         </a>
                     </td>
                     <td>${list.userEmail}</td>
-                    <td>${list.postingDate}</td>
+                    <td><fmt:formatDate value="${list.postingDate}" pattern="yyyy-MM-dd"/></td>
                     <td>${list.readCount}</td>
                 </tr>
             </c:forEach>

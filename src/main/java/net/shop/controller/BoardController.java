@@ -159,11 +159,56 @@ public class BoardController {
         boardVO.setUserEmail(request.getParameter("memberId"));
 
         boardService.insert(boardVO);
+
+        /*
+        글쓰기 완료 페이지 구현을 위한 부분
+         */
         int boardNumber = boardService.selectLastBoardNumberByEmail(request.getParameter("memberId"));
         boardVO.setNumber(boardNumber);
         request.setAttribute("postedBoardVO", boardVO);
+        //return "/board/write";
 
-        return "/board/write";
+        return "redirect:/board/list.do";
+    }
+
+    @RequestMapping(value = "/board/read.do")
+    public ModelAndView boardRead(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ModelAndView modelAndView = new ModelAndView();
+
+        /*
+        웹 브라우저가 게시글 목록을 캐싱하지 않도록 캐시 관련 헤더를 설정
+         */
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.addHeader("Cache-Control", "no-store");
+        response.setDateHeader("Expire", 1L);
+
+        String requestPageNumberString = request.getParameter("p");
+
+        int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
+
+        BoardVO boardVO = boardService.selectOne(boardNumber);
+
+        if(boardVO == null){
+            modelAndView.setViewName("/board/error");
+            return modelAndView;
+        }
+
+        boardService.increaseReadCount(boardNumber);
+        boardVO.setReadCount(boardVO.getReadCount() + 1);
+
+        modelAndView.addObject("boardVO", boardVO);
+        modelAndView.setViewName("/board/read");
+
+        /*
+        댓글 구현부분
+         */
+        /*
+        ListHandler listHandler = new ListHandler();
+        listHandler.process(request, response);
+        */
+
+        return modelAndView;
     }
 
 }
