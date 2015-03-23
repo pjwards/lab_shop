@@ -15,7 +15,7 @@ public class PagingVO {
     private int firstRow;           // 첫 줄
     private int endRow;             // 마지막 줄
     private int beginPage;          // 시작 페이지
-    private int endPage;            // 끝 페이지
+    private int endPage;            // 끝 페이지v
 
     public PagingVO(int requestPage, int totalPageCount, int firstRow, int endRow, int beginPage, int endPage) {
         this.requestPage = requestPage;
