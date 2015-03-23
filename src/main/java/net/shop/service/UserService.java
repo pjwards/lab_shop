@@ -14,16 +14,41 @@ import net.shop.vo.UserVO;
  */
 
 public interface UserService {
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : 이메일을 통한 유저 번호 조회
+    */
 	public UserVO selectOne() throws Exception;
 
+	/*
+    Editor : Jisung Jeon
+    Decription : Return lists between start and end
+    */
 	public List<UserVO> selectList(int start,int end) throws Exception;
-
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : Return the total counts of lists
+    */
 	public int count() throws Exception;
 
+	/*
+    Editor : Jisung Jeon
+    Decription : Insert the data in DB
+    */
 	public int insert(UserVO userVO) throws Exception;
-
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : Update the data in DB
+    */
 	public int update(UserVO userVO) throws Exception;
-
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : Delete the date in DB
+    */
 	public int delete() throws Exception;
 
 	/*

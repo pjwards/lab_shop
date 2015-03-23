@@ -34,8 +34,8 @@
 			<th scope="row">${list.number }</th>
 			<td>${list.lastName }</td>
 			<td>${list.email }</td>
-			<td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
-			<td><fmt:formatDate value="${list.lastDate} " pattern="yyyy-MM-dd"/></td>
+		    <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
+		    <td><fmt:formatDate value="${list.lastDate}" pattern="yyyy-MM-dd"/></td>
 		</tr>
 	</c:forEach>
 		</tbody>
