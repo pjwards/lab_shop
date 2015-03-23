@@ -5,12 +5,14 @@ import net.shop.vo.BoardVO;
 import java.util.List;
 
 /**
- * Description
- * Donghyun Seo (egaoneko@naver.com)
- * 2015-03-20
+ * First Editor : Donghyun Seo (egaoneko@naver.com)
+ * Last Editor  :
+ * Date         : 2015-03-20
+ * Description  :
  * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
- * version
+ * version      :
  */
+
 public interface BoardService {
 
     /*
