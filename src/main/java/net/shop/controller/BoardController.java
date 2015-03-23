@@ -13,15 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.DecimalFormat;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
- * Description
- * Donghyun Seo (egaoneko@naver.com)
- * 2015-03-20
+ * First Editor : Donghyun Seo (egaoneko@naver.com)
+ * Last Editor  :
+ * Date         : 2015-03-20
+ * Description  :
  * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
- * version
+ * version      :
  */
 
 @Controller

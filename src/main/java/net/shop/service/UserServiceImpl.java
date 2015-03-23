@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import net.shop.vo.UserVO;
 
 /**
- * 
- * @author jisung
- * 
- *
+ * First Editor : Jisung Jeon (cbajs20@gmail.com)
+ * Last Editor  :
+ * Date         : 2015-03-23
+ * Description  :
+ * Copyright ⓒ 2013-2015 Jisung Jeon All rights reserved.
+ * version      :
  */
 
 @Service("userService")

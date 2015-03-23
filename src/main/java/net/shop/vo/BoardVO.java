@@ -3,12 +3,14 @@ package net.shop.vo;
 import java.util.Date;
 
 /**
- * Description
- * Donghyun Seo (egaoneko@naver.com)
- * 2015-03-20
+ * First Editor : Donghyun Seo (egaoneko@naver.com)
+ * Last Editor  :
+ * Date         : 2015-03-20
+ * Description  :
  * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
- * version
+ * version      :
  */
+
 public class BoardVO {
 
     private int number;

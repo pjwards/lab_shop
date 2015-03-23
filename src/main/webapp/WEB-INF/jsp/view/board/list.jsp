@@ -1,10 +1,12 @@
 <%--
-  Created by IntelliJ IDEA.
-  User: Donghyun Seo (egaoneko@naver.com)
-  Date: 2015-03-21
-  Time: 오후 7:16
-  To change this template use File | Settings | File Templates.
+ * First Editor : Donghyun Seo (egaoneko@naver.com)
+ * Last Editor  :
+ * Date         : 2015-03-21 | 오후 7:16
+ * Description  :
+ * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
+ * version      :
 --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
