@@ -28,8 +28,18 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public int selectCount(String separatorName) throws Exception {
+        return boardDAO.selectCount(separatorName);
+    }
+
+    @Override
     public List<BoardVO> selectList(int firstRow, int endRow) throws Exception {
         return boardDAO.selectList(firstRow, endRow);
+    }
+
+    @Override
+    public List<BoardVO> selectList(int firstRow, int endRow, String separatorName) throws Exception {
+        return boardDAO.selectList(firstRow, endRow, separatorName);
     }
 
     @Override

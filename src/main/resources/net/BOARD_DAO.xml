@@ -15,19 +15,28 @@
         <result column="comment_count" property="commentCount"/>
         <result column="user_no" property="userNumber"/>
         <result column="user_email" property="userEmail"/>
+        <result column="separator_name" property="separatorName"/>
     </resultMap>
 
     <select id="selectCount" resultType="int">
         SELECT COUNT(*) FROM shop_board
     </select>
 
+    <select id="selectCountBySeparator" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM shop_board WHERE separator_name = #{separatorName}
+    </select>
+
     <select id="selectList" resultMap="boardResultMap">
         SELECT * FROM shop_board ORDER BY sequence_no DESC LIMIT #{offset},#{limit}
     </select>
 
+    <select id="selectListBySeparator" parameterType="hashmap" resultMap="boardResultMap">
+        SELECT * FROM shop_board WHERE separator_name = #{separatorName} ORDER BY sequence_no DESC LIMIT #{rowBounds.offset},#{rowBounds.limit}
+    </select>
+
     <insert id="insert" parameterType="BoardVO">
-        INSERT INTO shop_board (group_no, sequence_no, title, content, posting_date, read_count, comment_count, user_no, user_email)
-        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),0,0,#{userNumber},#{userEmail})
+        INSERT INTO shop_board (group_no, sequence_no, title, content, posting_date, read_count, comment_count, user_no, user_email, separator_name)
+        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),0,0,#{userNumber},#{userEmail}, #{separatorName})
     </insert>
 
     <select id="selectOne" parameterType="int" resultMap="boardResultMap">

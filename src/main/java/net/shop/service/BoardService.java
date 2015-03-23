@@ -21,9 +21,19 @@ public interface BoardService {
     public int selectCount() throws Exception;
 
     /*
+    특정 카테고리의 게시글 전체 개수를 구한다.
+     */
+    public int selectCount(String separatorName) throws Exception;
+
+    /*
     전체 게시글 중에서 시작 행(firstRow)과 끝 행(endRow)에 속하는 게시글을 읽어온다.
      */
     public List<BoardVO> selectList(int firstRow, int endRow) throws Exception;
+
+    /*
+    특정 카테고리의 전체 게시글 중에서 시작 행(firstRow)과 끝 행(endRow)에 속하는 게시글을 읽어온다.
+     */
+    public List<BoardVO> selectList(int firstRow, int endRow, String separatorName) throws Exception;
 
     /*
     게시글을 작성한다.

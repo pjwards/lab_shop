@@ -16,11 +16,11 @@
 </head>
 <body>
 <table border="1">
-    <c:if test="${totalPageCount > 0}">
+    <c:if test="${pagingVO.totalPageCount > 0}">
         <tr>
             <td colspan="5">
-                    ${startRow}-${endRow}
-                [${requestPage}/${totalPageCount}]
+                    ${pagingVO.firstRow}-${pagingVO.endRow}
+                [${pagingVO.requestPage}/${pagingVO.totalPageCount}]
             </td>
         </tr>
     </c:if>
@@ -50,7 +50,7 @@
                         <c:if test="${list.level > 0}">
                             <c:forEach begin="1" end="${list.level}">-</c:forEach>&gt;
                         </c:if>
-                        <c:set var="query" value="boardNumber=${list.number}&p=${requestPage}"/>
+                        <c:set var="query" value="s=${param.s}&p=${pagingVO.requestPage}&boardNumber=${list.number}"/>
                         <a href="<c:url value="read.do?${query}"/> ">
                                 ${list.title} (${list.commentCount})
                         </a>
@@ -61,16 +61,17 @@
                 </tr>
             </c:forEach>
 
+            <%-- Paging --%>
             <tr>
                 <td colspan="5">
-                    <c:if test="${beginPage > 10}">
-                        <a href="<c:url value="list.do?p=${beginPage-1}"/> ">이전</a>
+                    <c:if test="${pagingVO.beginPage > 10}">
+                        <a href="<c:url value="list.do?s=${param.s}&p=${pagingVO.beginPage-1}"/> ">이전</a>
                     </c:if>
-                    <c:forEach var="pno" begin="${beginPage}" end="${endPage}">
-                        <a href="<c:url value="list.do?p=${pno}"/> ">[${pno}]</a>
+                    <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
+                        <a href="<c:url value="list.do?s=${param.s}&p=${pno}"/> ">[${pno}]</a>
                     </c:forEach>
-                    <c:if test="${endPage < totalPageCount}">
-                        <a href="<c:url value="list.do?p=${endPage + 1}"/> ">다음</a>
+                    <c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
+                        <a href="<c:url value="list.do?s=${param.s}&p=${pagingVO.endPage + 1}"/> ">다음</a>
                     </c:if>
                 </td>
             </tr>

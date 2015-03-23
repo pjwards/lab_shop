@@ -38,6 +38,17 @@ public class BoardDAOMySql implements BoardDAO {
         }
     }
 
+    @Override
+    public int selectCount(String separatorName) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectOne("net.BoardDao.selectCountBySeparator", separatorName);
+        }finally{
+            sqlSession.close();
+        }
+    }
+
     public List<BoardVO> selectList(int firstRow, int endRow) throws Exception{
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
@@ -45,6 +56,23 @@ public class BoardDAOMySql implements BoardDAO {
 
         try{
             return sqlSession.selectList("net.BoardDao.selectList", rowBounds);
+        }finally{
+            sqlSession.close();
+        }
+    }
+
+    @Override
+    public List<BoardVO> selectList(int firstRow, int endRow, String separatorName) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        RowBounds rowBounds = new RowBounds(firstRow - 1, endRow - firstRow + 1);
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("rowBounds", rowBounds);
+        map.put("separatorName", separatorName);
+
+        try{
+            return sqlSession.selectList("net.BoardDao.selectListBySeparator", map);
         }finally{
             sqlSession.close();
         }

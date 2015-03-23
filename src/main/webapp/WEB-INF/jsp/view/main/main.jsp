@@ -16,6 +16,8 @@
 <ul>
 	<li><a href="<%=request.getContextPath()%>/user/userList.do">User List</a></li>
 	<li><a href="<%=request.getContextPath()%>/board/list.do">Board List</a></li>
+    <li><a href="<%=request.getContextPath()%>/board/list.do?s=notice">Notice Board List</a></li>
+    <li><a href="<%=request.getContextPath()%>/board/list.do?s=qna">QnA Board List</a></li>
 </ul>
 
 

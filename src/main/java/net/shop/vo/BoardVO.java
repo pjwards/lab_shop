@@ -23,6 +23,7 @@ public class BoardVO {
     private int commentCount;
     private int userNumber;
     private String userEmail;
+    private String separatorName;
 
     public int getNumber() {
         return number;
@@ -104,9 +105,17 @@ public class BoardVO {
         this.userEmail = userEmail;
     }
 
+    public String getSeparatorName() {
+        return separatorName;
+    }
+
+    public void setSeparatorName(String separatorName) {
+        this.separatorName = separatorName;
+    }
+
     /*
-    중첩 레벨을 구해주는 메서드
-     */
+        중첩 레벨을 구해주는 메서드
+         */
     public int getLevel(){
         if(sequenceNumber == null)          return -1;
         if(sequenceNumber.length() != 16)   return -1;
