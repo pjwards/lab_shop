@@ -38,9 +38,9 @@
     <tr>
         <td colspan="2">
             <a href="list.do?s=${param.s}&p=${param.p}">목록보기</a>
-            <a href="replyForm.do?s=${param.s}&p=${param.p}&boardNumber=${boardVO.number}">답변하기</a>
-            <a href="updateForm.do?s=${param.s}&p=${param.p}&boardNumber=${boardVO.number}">수정하기</a>
-            <a href="deleteForm.do?s=${param.s}&p=${param.p}&boardNumber=${boardVO.number}">삭제하기</a>
+            <a href="reply.do?s=${param.s}&p=${param.p}&boardNumber=${boardVO.number}">답변하기</a>
+            <a href="update.do?s=${param.s}&p=${param.p}&boardNumber=${boardVO.number}">수정하기</a>
+            <a href="delete.do?s=${param.s}&p=${param.p}&boardNumber=${boardVO.number}">삭제하기</a>
         </td>
     </tr>
 </table>

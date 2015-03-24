@@ -39,8 +39,9 @@ public class BoardController {
     @Resource(name = "util")
     private Util util;
 
-    //private static final int COUNT_PER_PAGE = 10;
-
+    /*
+    게시판 리스트
+     */
     @RequestMapping(value = "/board/list.do")
     public ModelAndView boardList(HttpServletRequest request, HttpServletResponse response) throws Exception{
         ModelAndView modelAndView = new ModelAndView();
@@ -101,14 +102,23 @@ public class BoardController {
         return modelAndView;
     }
 
+    /*
+    게시판 글쓰기 폼
+     */
     @RequestMapping(value = "/board/write.do")
     public String boardWrite() throws Exception{
         return "/board/writeForm";
     }
 
+    /*
+    게시판 글쓰기
+     */
     @RequestMapping(value = "/board/write.do", method = RequestMethod.POST)
     public String boardWrite(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
+        /*
+        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
+         */
         String memberId = request.getParameter("memberId");
 
         if(memberId == null || memberId.equals("")){
@@ -138,9 +148,12 @@ public class BoardController {
         request.setAttribute("postedBoardVO", boardVO);
         //return "/board/write";
 
-        return "redirect:/board/list.do";
+        return "redirect:/board/list.do?s="+request.getParameter("s");
     }
 
+    /*
+    게시판 읽기
+     */
     @RequestMapping(value = "/board/read.do")
     public ModelAndView boardRead(HttpServletRequest request, HttpServletResponse response) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
@@ -152,8 +165,6 @@ public class BoardController {
         response.setHeader("Cache-Control", "no-cache");
         response.addHeader("Cache-Control", "no-store");
         response.setDateHeader("Expire", 1L);
-
-        String requestPageNumberString = request.getParameter("p");
 
         int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
 
@@ -181,4 +192,84 @@ public class BoardController {
         return modelAndView;
     }
 
+    /*
+    게시판 수정 폼
+     */
+    @RequestMapping(value = "/board/update.do")
+    public ModelAndView boardUpdate(HttpServletRequest request) throws Exception{
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
+
+        /*
+        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
+         */
+        String memberId = request.getParameter("memberId");
+
+        if (memberId == null || memberId.equals("")) {
+            modelAndView.setViewName("/board/error");
+            return modelAndView;
+        }
+
+        BoardVO boardVO = boardService.selectOne(boardNumber);
+
+        if (!boardVO.getUserEmail().equals(memberId)) {
+            modelAndView.setViewName("/board/error");
+            return modelAndView;
+        }
+
+        modelAndView.addObject("boardVO", boardVO);
+        modelAndView.setViewName("/board/updateForm");
+        return modelAndView;
+    }
+
+    /*
+    게시판 수정
+     */
+    @RequestMapping(value = "/board/update.do", method = RequestMethod.POST)
+    public ModelAndView boardUpdate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
+
+        /*
+        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
+         */
+        String memberId = request.getParameter("memberId");
+
+        if (memberId == null || memberId.equals("")) {
+            modelAndView.setViewName("/board/error");
+            return modelAndView;
+        }
+
+        BoardVO boardVO = boardService.selectOne(boardNumber);
+
+        if (!boardVO.getUserEmail().equals(memberId)) {
+            modelAndView.setViewName("/board/error");
+            return modelAndView;
+        }
+
+        String title = request.getParameter("title");
+        String content = request.getParameter("content");
+
+        boardVO = new BoardVO();
+        boardVO.setNumber(boardNumber);
+        boardVO.setTitle(title);
+        boardVO.setContent(content);
+
+        int updateCount = boardService.update(boardVO);
+        if (updateCount == 0) {
+            modelAndView.setViewName("/board/error");
+            return modelAndView;
+        }
+
+        boardVO = boardService.selectOne(boardNumber);
+
+        modelAndView.addObject("boardVO", boardVO);
+        modelAndView.setViewName("/board/update");
+
+        return modelAndView;
+    }
 }

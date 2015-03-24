@@ -16,8 +16,8 @@
 <body>
 게시글을 등록했습니다.
 <br/>
-<a href="<c:url value="list.do" />">목록보기</a>
-<a href="<c:url value="read.do?boardNumber=${postedBoardVO.number}"/> ">게시글 읽기</a>
+<a href="<c:url value="list.do?s=${param.s}" />">목록보기</a>
+<a href="<c:url value="read.do?s=${param.s}&boardNumber=${postedBoardVO.number}"/> ">게시글 읽기</a>
 </body>
 </html>
 
