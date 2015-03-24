@@ -1,5 +1,8 @@
 package net.shop.util;
 
+import net.shop.error.MemberIdNotEqualsException;
+import net.shop.error.MemberIdNotFoundException;
+import net.shop.vo.BoardVO;
 import net.shop.vo.PagingVO;
 import org.springframework.stereotype.Repository;
 
@@ -62,6 +65,18 @@ public class Util {
         PagingVO pagingVO = new PagingVO(requestPage, totalPageCount, firstRow, endRow, beginPage, endPage);
 
         return pagingVO;
+    }
+
+    public void isMemberId(String memberId) throws MemberIdNotFoundException{
+        if(memberId == null || memberId.equals("")){
+            throw new MemberIdNotFoundException("로그인을 하지 않았습니다.");
+        }
+    }
+
+    public void isEqualMemberId(String email, String memberId) throws MemberIdNotEqualsException{
+        if (!email.equals(memberId)) {
+            throw new MemberIdNotEqualsException("작성자의 ID와 로그인한 사용자의 ID가 다릅니다.");
+        }
     }
 
 }

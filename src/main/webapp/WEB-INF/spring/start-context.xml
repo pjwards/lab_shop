@@ -18,6 +18,21 @@
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 	        <property name="prefix" value="/WEB-INF/jsp/view/"/>
 	        <property name="suffix" value=".jsp"/>
-	</bean>	
-                  
+	</bean>
+
+    <!-- Exception Resolver -->
+    <beans>
+        <bean id="exceptionMapping" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+            <property name="exceptionMappings">
+                <props>
+                    <prop key="BoardNotFoundException">/error/error</prop>
+                    <prop key="CannotReplyBoardException">/error/error</prop>
+                    <prop key="LastChildAleadyExistsException">/error/error</prop>
+                    <prop key="MemberIdNotEqualsException">/error/error</prop>
+                    <prop key="MemberIdNotFoundException">/error/error</prop>
+                </props>
+            </property>
+            <!--property name="defaultErrorView" value="/error/error" /-->
+        </bean>
+    </beans>
 </beans>                           

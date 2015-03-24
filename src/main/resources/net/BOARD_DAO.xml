@@ -36,7 +36,7 @@
 
     <insert id="insert" parameterType="BoardVO">
         INSERT INTO shop_board (group_no, sequence_no, title, content, posting_date, read_count, comment_count, user_no, user_email, separator_name)
-        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),0,0,#{userNumber},#{userEmail}, #{separatorName})
+        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),0,0,#{userNumber},#{userEmail},#{separatorName})
     </insert>
 
     <select id="selectOne" parameterType="int" resultMap="boardResultMap">

@@ -8,7 +8,15 @@
       						http://www.springframework.org/schema/context 
       						http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	
+    <!-- scan -->
+    <context:component-scan base-package="net" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+        <context:include-filter type="annotation" expression="org.springframework.scheduling.annotation.Scheduled" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+    </context:component-scan>
+
 	<!-- <context:component-scan base-package="com.common.action"/>
 	<context:component-scan base-package="com.preferences.b2b.action"/>
 	<context:component-scan base-package="com.preferences.board.action"/>
@@ -27,24 +35,13 @@
       p:maxUploadSize="104857600" p:maxInMemorySize="10485760">
    	</bean> -->
 	
-	<!-- scan -->
-	<context:component-scan base-package="net" use-default-filters="false">
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-		<context:include-filter type="annotation" expression="org.springframework.scheduling.annotation.Scheduled" />
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
-	</context:component-scan>
-	
 	<!-- bean name을  찾기위한 설정 --> 
 	<!-- <bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
 	<mvc:annotation-driven/>
 	<bean name="jsonView" class="org.springframework.web.servlet.view.json.JsonView"/>
 	
 	<bean id="lobHandler" class="com.preferences.systemConfig.OracleClobStringTypeHandler" lazy-init="true" />
-		
-	
-	
+
 	main
 	<bean id="mainCtrl" class="com.preferences.main.ctrl.MainCtrl">
 	    <property name="mainDao" ref="mainDao"/>

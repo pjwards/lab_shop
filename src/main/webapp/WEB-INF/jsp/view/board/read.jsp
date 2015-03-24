@@ -38,9 +38,15 @@
     <tr>
         <td colspan="2">
             <a href="list.do?s=${param.s}&p=${param.p}">목록보기</a>
-            <a href="reply.do?s=${param.s}&p=${param.p}&boardNumber=${boardVO.number}">답변하기</a>
+            <a href="reply.do?s=${param.s}&p=${param.p}&parentBoardNumber=${boardVO.number}">답변하기</a>
             <a href="update.do?s=${param.s}&p=${param.p}&boardNumber=${boardVO.number}">수정하기</a>
-            <a href="delete.do?s=${param.s}&p=${param.p}&boardNumber=${boardVO.number}">삭제하기</a>
+            <form action="<c:url value="delete.do" />" method="post">
+                <input type="hidden" name="p" value="${param.p}"/>
+                <input type="hidden" name="s" value="${param.s}"/>
+                <input type="hidden" name="boardNumber" value="${boardVO.number}"/>
+                <input type="hidden" name="memberId" value="${param.memberId}"/>
+                <input type="submit" value="삭제하기" >
+            </form>
         </td>
     </tr>
 </table>
