@@ -18,14 +18,23 @@
 			authentication-failure-url="/main/login.do?error" 
 			username-parameter="email"
 			password-parameter="password" />
-		<logout logout-success-url="/main/main.do" />
+		<logout logout-success-url="/main/main.do" delete-cookies="JSESSIONID"/>
+		<session-management
+			session-authentication-strategy-ref="sess" />
 	</http>
- 
+	
+ 	<!-- beans -->
+	<b:bean id="sess"
+		class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+		<b:property name="maximumSessions" value="1" />
+		<b:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+	</b:bean>
+	<b:bean id="sessionRegistry"
+		class="org.springframework.security.core.session.SessionRegistryImpl" />
+		
     <!-- Authentication Providers for Login -->
     <authentication-manager alias="authenticationManager">
        	<authentication-provider user-service-ref="loginService"/>
     </authentication-manager>
-    
 
-	
 </b:beans>

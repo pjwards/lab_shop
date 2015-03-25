@@ -80,7 +80,7 @@
 
     <tr>
         <td colspan="5">
-            <a href="write.do">글쓰기</a>
+            <a href="write.do?s=${param.s}">글쓰기</a>
         </td>
     </tr>
 </table>

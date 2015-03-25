@@ -18,7 +18,15 @@
 
 <ul>
 	<li><a href="<%=request.getContextPath()%>/user/userAdd.do">Sign Up</a></li>
-	<li><a href="<%=request.getContextPath()%>/main/login.do">Sign In</a></li>
+	<c:choose>
+		<c:when test="${auth != null }">
+			<c:url value="/j_spring_security_logout" var="logoutUrl" />
+			<li><a href="${logoutUrl}">Log Out</a></li>
+		</c:when>
+		<c:otherwise>
+			<li><a href="<%=request.getContextPath()%>/main/login.do">Sign In</a></li>
+		</c:otherwise>
+	</c:choose>
 	<li><a href="<%=request.getContextPath()%>/user/userList.do">User List</a></li>
 	<li><a href="<%=request.getContextPath()%>/board/list.do">Board List</a></li>
     <li><a href="<%=request.getContextPath()%>/board/list.do?s=notice">Notice Board List</a></li>
