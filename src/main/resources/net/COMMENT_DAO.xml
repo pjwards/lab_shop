@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.CommentDAO">
+    <resultMap type="CommentVO" id="CommentResultMap">
+        <id column="no" property="number"/>
+        <result column="group_no" property="groupNumber"/>
+        <result column="sequence_no" property="sequenceNumber"/>
+        <result column="content" property="content"/>
+        <result column="posting_date" property="postingDate"/>
+        <result column="user_no" property="userNumber"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="board_no" property="boardNumber"/>
+        <result column="separator_name" property="separatorName"/>
+    </resultMap>
+
+    <select id="selectCount" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM shop_comment WHERE board_no = #{boardNumber}
+    </select>
+
+    <select id="selectCountBySeparator" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) FROM shop_comment WHERE board_no = #{boardNumber} AND separator_name = #{separatorName}
+    </select>
+
+    <select id="selectList" parameterType="int" resultMap="CommentResultMap">
+        SELECT * FROM shop_comment WHERE board_no = #{boardNumber} ORDER BY sequence_no DESC
+    </select>
+
+    <select id="selectListBySeparator" parameterType="hashmap" resultMap="CommentResultMap">
+        SELECT * FROM shop_comment WHERE board_no = #{boardNumber} AND separator_name = #{separatorName}  ORDER BY sequence_no DESC
+    </select>
+
+    <select id="selectListByRow" parameterType="hashmap" resultMap="CommentResultMap">
+        SELECT * FROM shop_comment WHERE board_no = #{boardNumber} ORDER BY sequence_no DESC LIMIT #{rowBounds.offset},#{rowBounds.limit}
+    </select>
+
+    <select id="selectListByRowSeparator" parameterType="hashmap" resultMap="CommentResultMap">
+        SELECT * FROM shop_comment WHERE board_no = #{boardNumber} AND separator_name = #{separatorName} ORDER BY sequence_no DESC LIMIT #{rowBounds.offset},#{rowBounds.limit}
+    </select>
+
+    <insert id="insert" parameterType="CommentVO">
+        INSERT INTO shop_comment (group_no, sequence_no, content, posting_date, user_no, user_email, board_no, separator_name)
+        VALUE (#{groupNumber},#{sequenceNumber},#{content},now(),#{userNumber},#{userEmail},#{boardNumber},#{separatorName})
+    </insert>
+
+    <select id="selectOne" parameterType="int" resultMap="CommentResultMap">
+        SELECT * FROM shop_comment WHERE no = #{VALUE}
+    </select>
+
+    <update id="increaseCommentCount" parameterType="int">
+        UPDATE shop_board SET comment_count = comment_count + 1 WHERE no = #{VALUE}
+    </update>
+
+    <select id="selectLastSequenceNumber" parameterType="hashmap" resultType="String">
+        SELECT min(sequence_no) FROM shop_comment WHERE sequence_no <![CDATA[ < ]]> #{searchMaxSeqNum} and sequence_no <![CDATA[ >= ]]> #{searchMinSeqNum}
+    </select>
+
+    <update id="update" parameterType="CommentVO">
+        UPDATE shop_comment SET content = #{content} WHERE no = #{number}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM shop_comment WHERE no = #{VALUE }
+    </delete>
+
+    <update id="decreaseCommentCount" parameterType="int">
+        UPDATE shop_board SET comment_count = comment_count - 1 WHERE no = #{VALUE}
+    </update>
+
+    <select id="selectGroupNumber" parameterType="String" resultType="int">
+        SELECT next_value FROM shop_no_sequence WHERE sequence_name = #{NAME} FOR UPDATE
+    </select>
+
+    <update id="updateGroupNumber" parameterType="String">
+        UPDATE shop_no_sequence SET next_value = next_value + 1 WHERE sequence_name = #{NAME}
+    </update>
+</mapper>

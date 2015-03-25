@@ -7,7 +7,7 @@ package net.shop.error;
  * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
  * version
  */
-public class MemberIdNotFoundException extends Exception {
+public class MemberIdNotFoundException extends NotEqualsException {
     public MemberIdNotFoundException(String msg){
         super(msg);
     }
