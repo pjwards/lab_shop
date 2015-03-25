@@ -15,7 +15,7 @@ import net.shop.vo.UserVO;
 
 public interface UserDAO {
 
-	public UserVO selectOne() throws Exception;
+	public UserVO selectOne(String email) throws Exception;
 
 	public List<UserVO> selectList(int start, int end);
 

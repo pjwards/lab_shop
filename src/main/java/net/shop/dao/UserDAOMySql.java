@@ -1,12 +1,14 @@
 package net.shop.dao;
 
 import net.shop.vo.UserVO;
+
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ import java.util.List;
  */
 
 @Repository("userDAO")
-public class UserDaoMySql implements UserDAO {
+public class UserDAOMySql implements UserDAO {
     SqlSessionFactory sqlSessionFactory;
 
     @Autowired
@@ -27,11 +29,11 @@ public class UserDaoMySql implements UserDAO {
         this.sqlSessionFactory = sqlSessionFactory;
     }
 
-    public UserVO selectOne() throws Exception{
+    public UserVO selectOne(String email) throws Exception{
         SqlSession sqlSession = sqlSessionFactory.openSession();
-
+		String id = email;
         try{
-            return sqlSession.selectOne("net.UserDao.selectOne");
+            return sqlSession.selectOne("net.UserDao.selectOne",id);
         }finally{
             sqlSession.close();
         }

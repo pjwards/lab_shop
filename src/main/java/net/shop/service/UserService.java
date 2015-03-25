@@ -17,9 +17,9 @@ public interface UserService {
 
     /*
     Editor : Jisung Jeon
-    Decription : 이메일을 통한 유저 번호 조회
+    Decription : Return list that has email and password of this parameters
     */
-    public UserVO selectOne() throws Exception;
+    public UserVO selectOne(String email) throws Exception;
 
     /*
     Editor : Jisung Jeon

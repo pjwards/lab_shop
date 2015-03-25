@@ -1,10 +1,19 @@
 package net.shop.service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import net.shop.dao.UserDAO;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import net.shop.vo.UserVO;
@@ -25,8 +34,8 @@ public class UserServiceImpl implements UserService {
 	private UserDAO userDAO;
 	
 	@Override
-	public UserVO selectOne() throws Exception {
-		return userDAO.selectOne();
+	public UserVO selectOne(String email) throws Exception {
+		return userDAO.selectOne( email);
 	}
 
 	@Override
@@ -58,4 +67,5 @@ public class UserServiceImpl implements UserService {
     public int selectUserNumberByEmail(String email) throws Exception {
         return userDAO.selectUserNumberByEmail(email);
     }
+
 }

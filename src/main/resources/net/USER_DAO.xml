@@ -13,9 +13,10 @@
         <result column="created_date" property="createdDate"/>
         <result column="last_date" property="lastDate"/>
     </resultMap>
-
-    <select id="selectOne" resultMap="userResultMap">
-      select * from shop_user where no = 1
+    
+	<!-- Don't use parameterMap -->
+    <select id="selectOne" parameterType="String" resultMap="userResultMap">
+      select * from shop_user where email=#{email}
     </select>
 
     <select id="selectList" resultMap="userResultMap">
