@@ -1,16 +1,8 @@
 package net.shop.vo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 /**
  * First Editor : Jisung Jeon (cbajs20@gmail.com)
@@ -21,7 +13,7 @@ import com.sun.org.apache.bcel.internal.generic.RETURN;
  * version      :
  */
 
-public class UserVO implements UserDetails, Serializable{
+public class UserVO implements Serializable{
 	
 	static final long serialVersionUID = 19900317L;
 	
@@ -32,8 +24,34 @@ public class UserVO implements UserDetails, Serializable{
 	private String password;
 	private Date createdDate;
 	private Date lastDate;
+	private String authority;
+	
+	public UserVO(){}
+	
+	public UserVO(String firstname,String lastname,String email, String password){
+		this.firstName = firstname;
+		this.lastName = lastname;
+		this.email = email;
+		this.password = password;
+	}
+	
+	public UserVO(String firstname,String lastname,String email, String password,Date lastDate){
+		this.firstName = firstname;
+		this.lastName = lastname;
+		this.email = email;
+		this.password = password;
+		this.lastDate = lastDate;
+	}
+	
+    public String getAuthority() {
+		return authority;
+	}
 
-    public int getNumber() {
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
+
+	public int getNumber() {
         return number;
     }
 
@@ -89,40 +107,4 @@ public class UserVO implements UserDetails, Serializable{
         this.lastDate = lastDate;
     }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub	
-	     return null;
-	
-	}
-
-	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return this.email;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
-	}
 }

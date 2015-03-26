@@ -2,12 +2,15 @@ package net.shop.controller;
 
 import java.util.List;
 
+import net.shop.service.LoginService;
 import net.shop.service.UserService;
 import net.shop.vo.UserVO;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -27,6 +30,8 @@ public class UserController {
 	
 	@Resource(name = "userService")
 	private UserService userService;
+	@Resource(name = "loginService")
+	private LoginService loginService;
 	
 	@RequestMapping(value= "/user/userList.do")
 	public ModelAndView userList(HttpServletRequest request) throws Exception{
@@ -54,7 +59,25 @@ public class UserController {
 		return "/user/userAdd";
 	}
 	@RequestMapping(value= "/user/userAdd.do", method=RequestMethod.POST)
-	public String userAdd(UserVO userVO) throws Exception{
+	public String userAdd(@RequestParam("firstName")String firstName,
+			@RequestParam("lastName")String lastName,
+			@RequestParam("email")String email,
+			@RequestParam("password")String password,
+			Model model) throws Exception{
+		
+		if(firstName.length() < 3 || password.length()<3|| email.length()<6 || lastName.length() < 3){
+			model.addAttribute("say", "Wrong Input");
+			return "/main/main";
+		}
+		
+		if (userService.selectOne(email)){
+			model.addAttribute("say", "It has already used");
+			return "/main/main";
+		}
+		
+		String encode = loginService.encoding(password);
+		//System.out.println(encode);
+		UserVO userVO = new UserVO(firstName,lastName,email,encode);
 		userService.insert(userVO);
 		
 		return "redirect:/user/userList.do";

@@ -17,9 +17,10 @@ create table shop_user (
 	first_name varchar(20) not null,
 	last_name varchar(20) not null,
 	email varchar(50) not null,
-	password varchar(10) not null,
+	password varchar(50) not null,
 	created_date datetime not null,
 	last_date datetime not null,
+	authority varchar(20) not null default 'ROLE_USER',
 	primary key (no),
 	unique index (email)
 );

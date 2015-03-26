@@ -12,6 +12,7 @@
         <result column="password" property="password"/>
         <result column="created_date" property="createdDate"/>
         <result column="last_date" property="lastDate"/>
+        <result column="authority" property="authority"/>
     </resultMap>
     
 	<!-- Don't use parameterMap -->

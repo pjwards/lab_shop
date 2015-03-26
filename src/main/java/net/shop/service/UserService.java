@@ -19,7 +19,7 @@ public interface UserService {
     Editor : Jisung Jeon
     Decription : Return list that has email and password of this parameters
     */
-    public UserVO selectOne(String email) throws Exception;
+    public boolean selectOne(String email) throws Exception;
 
     /*
     Editor : Jisung Jeon

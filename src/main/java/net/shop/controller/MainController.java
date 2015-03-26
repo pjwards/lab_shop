@@ -1,8 +1,10 @@
 package net.shop.controller;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.shop.service.LoginService;
 import net.shop.service.UserService;
 import net.shop.vo.UserVO;
 
@@ -10,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,15 +36,13 @@ public class MainController {
 	
 	/* For showing main page */
 	@RequestMapping(value="/main/main.do")
-	public ModelAndView showMain() throws Exception{
+	public ModelAndView showMain(Authentication auth) throws Exception{
 		//log.debug("Test Logger");
 		ModelAndView modelAndView = new ModelAndView();
-		
-		/*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String email =  (String) auth.getPrincipal();
-		if(email != null){
-			modelAndView.addObject("auth", email);
-		}*/
+		if(auth != null){
+			UserDetails vo = (UserDetails) auth.getPrincipal();
+			modelAndView.addObject("vo", vo);
+		}
 		modelAndView.setViewName("/main/main");
 		return modelAndView;
 	}
@@ -52,16 +53,17 @@ public class MainController {
 	}
 	
 	@RequestMapping("/main/login.do")
-	public String login(@RequestParam(value = "error", required = false) String error,HttpServletResponse response) throws Exception{
-		if (error != null) {
+	public ModelAndView login(@RequestParam(value = "error", required = false) String error,HttpServletResponse response,HttpServletRequest request) throws Exception{
+		ModelAndView modelAndView = new ModelAndView();
+		/*if (error != null) {
 			try{
-				response.setCharacterEncoding("utf-8");
-				response.getWriter().println("error");
-				response.getWriter().close();	
+				modelAndView.addObject("error", error);
+				response.sendRedirect(request.getContextPath()+"/main/login.do");
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-		}
-		return "/main/login";
+		}*/
+		modelAndView.setViewName("/main/login");
+		return modelAndView;
 	}
 }
