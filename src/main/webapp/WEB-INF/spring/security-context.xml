@@ -12,7 +12,11 @@
  
    	<http auto-config="true" use-expressions="true">
    		<intercept-url pattern="/main/login.do" access="isAnonymous()" />
+   		<intercept-url pattern="/user/userAdd.do" access="isAnonymous()" />
 		<intercept-url pattern="/user/userList.do" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/user/userEdit.do" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/user/userDelete.do" access="hasRole('ROLE_USER')" />
+		
 		<form-login 
 		    login-page="/main/login.do" 
 		    default-target-url="/main/main.do" 

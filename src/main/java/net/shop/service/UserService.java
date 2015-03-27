@@ -49,7 +49,7 @@ public interface UserService {
     Editor : Jisung Jeon
     Decription : Delete the date in DB
     */
-    public int delete() throws Exception;
+    public int delete(String email) throws Exception;
 
     /*
     Editor : Donghyun Seo

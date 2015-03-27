@@ -6,6 +6,8 @@ import net.shop.service.LoginService;
 import net.shop.service.UserService;
 import net.shop.vo.UserVO;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,16 +65,18 @@ public class UserController {
 			@RequestParam("lastName")String lastName,
 			@RequestParam("email")String email,
 			@RequestParam("password")String password,
-			Model model) throws Exception{
+			Model model,HttpServletRequest request) throws Exception{
 		
 		if(firstName.length() < 3 || password.length()<3|| email.length()<6 || lastName.length() < 3){
 			model.addAttribute("say", "Wrong Input");
-			return "/main/main";
+			model.addAttribute("url", request.getContextPath()+"/user/userAdd.do");
+			return "/error/alert";
 		}
 		
 		if (userService.selectOne(email)){
 			model.addAttribute("say", "It has already used");
-			return "/main/main";
+			model.addAttribute("url", request.getContextPath()+"/user/userAdd.do");
+			return "/error/alert";
 		}
 		
 		String encode = loginService.encoding(password);
@@ -80,7 +84,7 @@ public class UserController {
 		UserVO userVO = new UserVO(firstName,lastName,email,encode);
 		userService.insert(userVO);
 		
-		return "redirect:/user/userList.do";
+		return "redirect:/main/main.do";
 	}
 	
 	@RequestMapping("/user/userEdit.do")
@@ -88,16 +92,32 @@ public class UserController {
 		return "/user/userEdit";
 	}
 	@RequestMapping(value= "/user/userEdit.do", method=RequestMethod.POST)
-	public String userEdit(UserVO userVO) throws Exception{
+	public String userEdit(@RequestParam("firstName")String firstName,
+			@RequestParam("lastName")String lastName,
+			@RequestParam("password")String password,
+			Model model,Authentication auth,HttpServletRequest request) throws Exception{
+		
+		if(firstName.length() < 3 || password.length()<3 || lastName.length() < 3){
+			model.addAttribute("say", "Wrong Input");
+			model.addAttribute("url", request.getContextPath()+"/user/userEdit.do");
+			return "/error/alert";
+		}
+		
+		UserDetails vo = (UserDetails) auth.getPrincipal();
+		String email = vo.getUsername();
+		String encode = loginService.encoding(password);
+		UserVO userVO = new UserVO(firstName,lastName,email,encode);
 		userService.update(userVO);
 		
-		return "redirect:/user/userList.do";
+		return "redirect:/main/main.do";
 	}
 	
-	@RequestMapping(value= "/user/userDelete.do", method=RequestMethod.POST)
-	public String userDelete() throws Exception{
-		userService.delete();
-		
-		return "redirect:/user/userList.do";
+	@RequestMapping(value= "/user/userDelete.do")
+	public String userDelete(Authentication auth,HttpServletRequest request) throws Exception{
+		UserDetails vo = (UserDetails) auth.getPrincipal();
+		String email = vo.getUsername();
+		userService.delete(email);
+		request.getSession().invalidate();
+		return "redirect:/main/main.do";
 	}
 }

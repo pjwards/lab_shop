@@ -35,11 +35,11 @@
 
     <update id="update" parameterType="UserVO">
       update shop_user set first_name=#{firstName},last_name=#{lastName},password=#{password}
-      where no=#{number}
+      where email=#{email}
     </update>
 
-    <delete id="delete">
-      delete from shop_user where no=#{number}
+    <delete id="delete" parameterType="String">
+      delete from shop_user where email=#{email}
     </delete>
 
     <!--

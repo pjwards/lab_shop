@@ -25,7 +25,7 @@ public interface UserDAO {
 
 	public int update(UserVO userVO);
 
-	public int delete();
+	public int delete(String email);
 
     /*
        Editor : Donghyun Seo
