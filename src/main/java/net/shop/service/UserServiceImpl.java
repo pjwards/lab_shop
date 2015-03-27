@@ -55,8 +55,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int delete() throws Exception {
-		return userDAO.delete();
+	public int delete(String email) throws Exception {
+		return userDAO.delete(email);
 	}
 
     @Override

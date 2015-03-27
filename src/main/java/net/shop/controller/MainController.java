@@ -1,19 +1,11 @@
 package net.shop.controller;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import net.shop.service.LoginService;
-import net.shop.service.UserService;
-import net.shop.vo.UserVO;
-
-import org.apache.log4j.Logger;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,13 +23,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class MainController {
 	//private Logger log = Logger.getLogger(this.getClass());
 	
-	@Resource(name = "userService")
-	private UserService userService;
-	
 	/* For showing main page */
 	@RequestMapping(value="/main/main.do")
 	public ModelAndView showMain(Authentication auth) throws Exception{
-		//log.debug("Test Logger");
 		ModelAndView modelAndView = new ModelAndView();
 		if(auth != null){
 			UserDetails vo = (UserDetails) auth.getPrincipal();
@@ -53,17 +41,15 @@ public class MainController {
 	}
 	
 	@RequestMapping("/main/login.do")
-	public ModelAndView login(@RequestParam(value = "error", required = false) String error,HttpServletResponse response,HttpServletRequest request) throws Exception{
-		ModelAndView modelAndView = new ModelAndView();
-		/*if (error != null) {
-			try{
-				modelAndView.addObject("error", error);
-				response.sendRedirect(request.getContextPath()+"/main/login.do");
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-		}*/
-		modelAndView.setViewName("/main/login");
-		return modelAndView;
+	public String login(@RequestParam(value = "error", required = false) String error,
+			HttpServletRequest request,Model model) throws Exception{
+		
+		if (error != null) {
+			model.addAttribute("say", "Check your Email and Password again");
+			model.addAttribute("url", request.getContextPath()+"/main/login.do");
+			return "/error/alert";
+		}
+	
+		return "/main/login";
 	}
 }

@@ -30,9 +30,9 @@ public class UserDAOMySql implements UserDAO {
 
     public UserVO selectOne(String email) throws Exception{
         SqlSession sqlSession = sqlSessionFactory.openSession();
-		String id = email;
+
         try{
-            return sqlSession.selectOne("net.UserDao.selectOne",id);
+            return sqlSession.selectOne("net.UserDao.selectOne",email);
         }finally{
             sqlSession.close();
         }
@@ -78,11 +78,11 @@ public class UserDAOMySql implements UserDAO {
         }
     }
 
-    public int delete() {
+    public int delete(String email) {
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
         try{
-            return sqlSession.delete("net.UserDao.delete");
+            return sqlSession.delete("net.UserDao.delete",email);
         }finally{
             sqlSession.close();
         }

@@ -64,8 +64,6 @@
 			</tr>
 		</tfoot>
 	</table>
-	<div><p><a href="<%=request.getContextPath()%>/user/userEdit.do" class="btn btn-success">Edit User Info</a></p></div>
-	<div><p><a href="<%=request.getContextPath()%>/user/userDelete.do" class="btn btn-danger">Delete Account</a></p></div>
-	
+	<li><a href="<%=request.getContextPath()%>/main/main.do">Back Home</a></li>
 </body>
 </html>
