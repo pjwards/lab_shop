@@ -53,7 +53,7 @@
 
 <!-- 덧글 구현부 -->
 
-<!-- jsp:include page="/view/comment/list.jsp"/ -->
+<!-- jsp:include page="/view/comment/listAll.jsp"/ -->
 
 </body>
 </html>

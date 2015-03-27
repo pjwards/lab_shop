@@ -3,6 +3,7 @@ import java.lang.invoke.LambdaForm.Compiled;
 apply plugin: 'java'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'war'
+apply plugin: 'idea'
 
 compileJava.options.encoding = 'UTF-8'
 sourceCompatibility = 1.7

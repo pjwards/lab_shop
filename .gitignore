@@ -32,3 +32,4 @@ gradlew
 gradlew.bat
 *.iml
 gradle
+logs
