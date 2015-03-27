@@ -23,5 +23,6 @@
 		<input type="text" class="form-control" name="password" maxlength="10" required="required" placeholder="Write Password" autocomplete="off"><br>
 		<button type="submit" class="btn btn-primary" value="submit">Submit</button>
 	</form>
+	<li><a href="<%=request.getContextPath()%>/main/main.do">Back Home</a></li>
 </body>
 </html>

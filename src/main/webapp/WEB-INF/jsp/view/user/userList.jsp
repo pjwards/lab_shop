@@ -64,6 +64,6 @@
 			</tr>
 		</tfoot>
 	</table>
-	
+	<li><a href="<%=request.getContextPath()%>/main/main.do">Back Home</a></li>
 </body>
 </html>
