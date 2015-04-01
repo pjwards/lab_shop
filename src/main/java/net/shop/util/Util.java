@@ -2,11 +2,8 @@ package net.shop.util;
 
 import net.shop.error.MemberIdNotEqualsException;
 import net.shop.error.MemberIdNotFoundException;
-import net.shop.vo.BoardVO;
 import net.shop.vo.PagingVO;
-import org.springframework.stereotype.Repository;
-
-import java.util.HashMap;
+import org.springframework.stereotype.Component;
 
 /**
  * First Editor : Donghyun Seo (egaoneko@naver.com)
@@ -17,7 +14,7 @@ import java.util.HashMap;
  * version      :
  */
 
-@Repository("util")
+@Component("util")
 public class Util {
 
     public PagingVO paging(int requestPage, int countPerPage, int totalCount) {

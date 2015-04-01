@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="net.CommentDAO">
+<mapper namespace="net.CommentDao">
     <resultMap type="CommentVO" id="CommentResultMap">
         <id column="no" property="number"/>
         <result column="group_no" property="groupNumber"/>

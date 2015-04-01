@@ -185,18 +185,11 @@ public class BoardController {
         boardService.increaseReadCount(boardNumber);
         boardVO.setReadCount(boardVO.getReadCount() + 1);
 
-        modelAndView.addObject("boardVO", boardVO);
-        modelAndView.setViewName("/board/read");
+        request.setAttribute("boardVO", boardVO);
+        //modelAndView.setViewName("/board/read");
 
-        /*
-        댓글 구현부분
-         */
-        /*
-        ListHandler listHandler = new ListHandler();
-        listHandler.process(request, response);
-        */
-
-        return modelAndView;
+        return (ModelAndView)new ModelAndView("forward:/comment/listAll.do?s=" + request.getParameter("s")
+                +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
     }
 
     /*

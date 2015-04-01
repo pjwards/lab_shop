@@ -8,11 +8,13 @@ import net.shop.vo.CommentVO;
 import net.shop.vo.PagingVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -65,7 +67,7 @@ public class CommentController {
 
         int totalCount = commentService.selectCount(boardNumber);
 
-        modelAndView.setViewName("/comment/listAll");
+        modelAndView.setViewName("/board/read");
 
         if(totalCount == 0){
             modelAndView.addObject("commentVOList", Collections.<CommentVO>emptyList());
@@ -124,7 +126,7 @@ public class CommentController {
         /*Paging 메소드의 사용 */
         PagingVO pagingVO = util.paging(requestPage, 10, totalCount);
         modelAndView.addObject("pagingVO", pagingVO);
-        modelAndView.setViewName("/comment/listAll");
+        modelAndView.setViewName("/board/read");
 
         if(totalCount == 0){
             modelAndView.addObject("commentVOList", Collections.<CommentVO>emptyList());
@@ -137,6 +139,37 @@ public class CommentController {
         request.setAttribute("hasComment", new Boolean(true));
 
         return modelAndView;
+    }
+
+    /*
+    댓글 글쓰기
+     */
+    @RequestMapping(value = "/comment/write.do", method = RequestMethod.POST)
+    public ModelAndView commentWrite(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        /*
+        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
+         */
+        String memberId = request.getParameter("memberId");
+        util.isMemberId(memberId);
+
+        int groupId = commentService.generateNextGroupNumber("comment");
+        int userNumber = userService.selectUserNumberByEmail(memberId);
+
+        CommentVO commentVO = new CommentVO();
+        commentVO.setGroupNumber(groupId);
+        DecimalFormat decimalFormat = new DecimalFormat("0000000000");
+        commentVO.setSequenceNumber(decimalFormat.format(groupId) + "999999");
+        commentVO.setContent(request.getParameter("content"));
+        commentVO.setUserNumber(userNumber);
+        commentVO.setUserEmail(memberId);
+        commentVO.setBoardNumber(Integer.parseInt(request.getParameter("boardNumber")));
+        commentVO.setSeparatorName(request.getParameter("s"));
+
+        commentService.insert(commentVO);
+        commentService.increaseCommentCount(Integer.parseInt(request.getParameter("boardNumber")));
+
+        return (ModelAndView)new ModelAndView("redirect:/board/read.do?s=" + request.getParameter("s")
+                +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
     }
 
 }

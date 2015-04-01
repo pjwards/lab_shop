@@ -49,9 +49,9 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <a href="<c:url value="/comment/reply.do?boardNumber=${param.boardNumber}&parentId=${comment.id}&p=${param.p}"/>">답변하기</a>
-                            <a href="<c:url value="/comment/update.do?boardNumber=${param.boardNumber}&commentId=${comment.id}&p=${param.p}"/> ">수정하기</a>
-                            <a href="<c:url value="/comment/delete.do?boardNumber=${param.boardNumber}&commentId=${comment.id}"/> ">삭제하기</a>
+                            <a href="<c:url value="/comment/reply.do?boardNumber=${param.boardNumber}&parentId=${comment.number}&p=${param.p}"/>">답변하기</a>
+                            <a href="<c:url value="/comment/update.do?boardNumber=${param.boardNumber}&commentId=${comment.number}&p=${param.p}"/> ">수정하기</a>
+                            <a href="<c:url value="/comment/delete.do?boardNumber=${param.boardNumber}&commentId=${comment.number}"/> ">삭제하기</a>
                         </td>
                     </tr>
 
@@ -71,8 +71,9 @@
             <td>
                 <form action="<c:url value="/comment/write.do" />" method="post">
                     <input type="hidden" name="boardNumber" value="${param.boardNumber}">
-                    <input type="hidden" name="s" value="${param.s}">
-                    작성자 : <input type="text" name="userEmail"/><br/>
+                    <input type="hidden" name="s" value="${param.s}"/>
+                    <input type="hidden" name="p" value="${param.p}"/>
+                    작성자 : <input type="text" name="memberId"/><br/>
                     내용: <br/>
                     <textarea name="content" cols="40" rows="5"></textarea>
                     <br/>

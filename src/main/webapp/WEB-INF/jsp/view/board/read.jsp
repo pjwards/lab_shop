@@ -51,9 +51,8 @@
     </tr>
 </table>
 
-<!-- 덧글 구현부 -->
-
-<!-- jsp:include page="/view/comment/listAll.jsp"/ -->
+<!-- 댓글 구현부 -->
+<jsp:include page="/WEB-INF/jsp/view/comment/listAll.jsp"/>
 
 </body>
 </html>
