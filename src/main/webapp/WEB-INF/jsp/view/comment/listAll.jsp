@@ -49,9 +49,9 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <a href="<c:url value="/comment/reply.do?boardNumber=${param.boardNumber}&parentId=${comment.number}&p=${param.p}"/>">답변하기</a>
-                            <a href="<c:url value="/comment/update.do?boardNumber=${param.boardNumber}&commentId=${comment.number}&p=${param.p}"/> ">수정하기</a>
-                            <a href="<c:url value="/comment/delete.do?boardNumber=${param.boardNumber}&commentId=${comment.number}"/> ">삭제하기</a>
+                            <a href="<c:url value="/comment/reply.do?s=${param.s}&p=${param.p}&boardNumber=${param.boardNumber}&parentCommentNumber=${comment.number}"/>">답변하기</a>
+                            <a href="<c:url value="/comment/update.do?s=${param.s}&p=${param.p}&boardNumber=${param.boardNumber}&commentNumber=${comment.number}"/> ">수정하기</a>
+                            <a href="<c:url value="/comment/delete.do?s=${param.s}&p=${param.p}&boardNumber=${param.boardNumber}&commentNumber=${comment.number}"/> ">삭제하기</a>
                         </td>
                     </tr>
 

@@ -178,8 +178,7 @@ public class BoardController {
         BoardVO boardVO = boardService.selectOne(boardNumber);
 
         if(boardVO == null){
-            modelAndView.setViewName("/board/error");
-            return modelAndView;
+            throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
         }
 
         boardService.increaseReadCount(boardNumber);
@@ -209,6 +208,10 @@ public class BoardController {
         util.isMemberId(memberId);
 
         BoardVO boardVO = boardService.selectOne(boardNumber);
+        if(boardVO == null){
+            throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
+        }
+
         util.isEqualMemberId(boardVO.getUserEmail(), memberId);
 
         modelAndView.addObject("boardVO", boardVO);
@@ -233,6 +236,10 @@ public class BoardController {
         util.isMemberId(memberId);
 
         BoardVO boardVO = boardService.selectOne(boardNumber);
+        if(boardVO == null){
+            throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
+        }
+
         util.isEqualMemberId(boardVO.getUserEmail(), memberId);
 
         String title = request.getParameter("title");
@@ -251,9 +258,10 @@ public class BoardController {
         boardVO = boardService.selectOne(boardNumber);
 
         modelAndView.addObject("boardVO", boardVO);
-        modelAndView.setViewName("/board/update");
+        //modelAndView.setViewName("/board/update");
 
-        return modelAndView;
+        return (ModelAndView)new ModelAndView("redirect:/board/read.do?s=" + request.getParameter("s")
+                +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
     }
 
     /*

@@ -1,6 +1,7 @@
 package net.shop.controller;
 
 import net.shop.error.BoardNotFoundException;
+import net.shop.error.CommentNotFoundException;
 import net.shop.service.CommentService;
 import net.shop.service.UserService;
 import net.shop.util.Util;
@@ -90,7 +91,7 @@ public class CommentController {
         ModelAndView modelAndView = new ModelAndView();
 
         /*
-        웹 브라우저가 게시글 목록을 캐싱하지 않도록 캐시 관련 헤더를 설정
+        웹 브라우저가 댓글 목록을 캐싱하지 않도록 캐시 관련 헤더를 설정
          */
         response.setHeader("Pragma", "No-cache");
         response.setHeader("Cache-Control", "no-cache");
@@ -171,5 +172,94 @@ public class CommentController {
         return (ModelAndView)new ModelAndView("redirect:/board/read.do?s=" + request.getParameter("s")
                 +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
     }
+
+    /*
+    댓글 읽기
+     */
+    public CommentVO commentRead(int commentNumber) throws Exception {
+
+        CommentVO commentVO = commentService.selectOne(commentNumber);
+
+        if(commentVO == null){
+            throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
+        }
+
+        return commentVO;
+    }
+
+    /*
+    댓글 수정 폼
+     */
+    @RequestMapping(value = "/comment/update.do")
+    public ModelAndView commentUpdate(HttpServletRequest request) throws Exception{
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        int commentNumber = Integer.parseInt(request.getParameter("commentNumber"));
+
+        /*
+        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
+         */
+        String memberId = request.getParameter("memberId");
+        util.isMemberId(memberId);
+
+
+        CommentVO commentVO = commentService.selectOne(commentNumber);
+        if(commentVO == null){
+            throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
+        }
+
+        util.isEqualMemberId(commentVO.getUserEmail(), memberId);
+
+        modelAndView.addObject("commentVO", commentVO);
+        modelAndView.setViewName("/comment/updateForm");
+        return modelAndView;
+    }
+
+    /*
+    댓글 수정
+     */
+    @RequestMapping(value = "/comment/update.do", method = RequestMethod.POST)
+    public ModelAndView commentUpdate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        int commentNumber = Integer.parseInt(request.getParameter("commentNumber"));
+
+        /*
+        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
+         */
+        String memberId = request.getParameter("memberId");
+        util.isMemberId(memberId);
+
+
+        CommentVO commentVO = commentService.selectOne(commentNumber);
+        if(commentVO == null){
+            throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
+        }
+
+        util.isEqualMemberId(commentVO.getUserEmail(), memberId);
+
+        String content = request.getParameter("content");
+
+        commentVO = new CommentVO();
+        commentVO.setNumber(commentNumber);
+        commentVO.setContent(content);
+
+        int updateCount = commentService.update(commentVO);
+        if (updateCount == 0) {
+            throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
+        }
+
+        commentVO = commentService.selectOne(commentNumber);
+
+        //modelAndView.addObject("commentVO", commentVO);
+        //modelAndView.setViewName("/comment/update");
+        //return modelAndView;
+
+        return (ModelAndView)new ModelAndView("redirect:/board/read.do?s=" + request.getParameter("s")
+                +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
+    }
+
 
 }
