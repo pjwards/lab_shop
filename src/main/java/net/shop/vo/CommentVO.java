@@ -9,7 +9,7 @@ import java.util.Date;
  * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
  * version
  */
-public class CommentVO {
+public class CommentVO implements ReplyVO{
 
     private int number;
     private int groupNumber;

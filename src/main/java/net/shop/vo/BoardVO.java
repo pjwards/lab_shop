@@ -11,7 +11,7 @@ import java.util.Date;
  * version      :
  */
 
-public class BoardVO {
+public class BoardVO implements ReplyVO{
 
     private int number;
     private int groupNumber;

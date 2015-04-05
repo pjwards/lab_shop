@@ -7,8 +7,8 @@ package net.shop.error;
  * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
  * version
  */
-public class CannotReplyBoardException extends Exception{
-    public CannotReplyBoardException(String msg) {
+public class CannotReplyException extends Exception{
+    public CannotReplyException(String msg) {
         super(msg);
     }
 }

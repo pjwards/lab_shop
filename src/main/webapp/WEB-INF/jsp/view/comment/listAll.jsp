@@ -51,7 +51,14 @@
                         <td colspan="2">
                             <a href="<c:url value="/comment/reply.do?s=${param.s}&p=${param.p}&boardNumber=${param.boardNumber}&parentCommentNumber=${comment.number}"/>">답변하기</a>
                             <a href="<c:url value="/comment/update.do?s=${param.s}&p=${param.p}&boardNumber=${param.boardNumber}&commentNumber=${comment.number}"/> ">수정하기</a>
-                            <a href="<c:url value="/comment/delete.do?s=${param.s}&p=${param.p}&boardNumber=${param.boardNumber}&commentNumber=${comment.number}"/> ">삭제하기</a>
+                            <form action="<c:url value="/comment/delete.do" />" method="post">
+                                <input type="hidden" name="p" value="${param.p}"/>
+                                <input type="hidden" name="s" value="${param.s}"/>
+                                <input type="hidden" name="boardNumber" value="${param.boardNumber}"/>
+                                <input type="hidden" name="commentNumber" value="${comment.number}"/>
+                                <input type="hidden" name="memberId" value="${param.memberId}"/>
+                                <input type="submit" value="삭제하기" >
+                            </form>
                         </td>
                     </tr>
 

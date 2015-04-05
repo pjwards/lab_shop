@@ -261,5 +261,104 @@ public class CommentController {
                 +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
     }
 
+    /*
+    댓글 답글 폼
+     */
+    @RequestMapping(value = "/comment/reply.do")
+    public ModelAndView commentReply(HttpServletRequest request) throws Exception{
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        int parentCommentNumber = Integer.parseInt(request.getParameter("parentCommentNumber"));
+
+        CommentVO parent = commentService.selectOne(parentCommentNumber);
+
+        util.checkParent(parent, parentCommentNumber);
+
+        String searchMaxSeqNum = parent.getSequenceNumber();
+        String searchMinSeqNum = util.getSearchMinSeqNum(parent);
+
+        String lastChildSeq = commentService.selectLastSequenceNumber(searchMaxSeqNum, searchMinSeqNum);
+        String sequenceNumber = util.getSequenceNumber(parent, lastChildSeq);
+
+        modelAndView.setViewName("/comment/replyForm");
+
+        return modelAndView;
+
+    }
+
+    /*
+    댓글 답글
+     */
+    @RequestMapping(value = "/comment/reply.do", method = RequestMethod.POST)
+    public ModelAndView commnetReply(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        /*
+        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
+         */
+        String memberId = request.getParameter("memberId");
+        util.isMemberId(memberId);
+
+        CommentVO commentVO = new CommentVO();
+        commentVO.setContent(request.getParameter("content"));
+        commentVO.setBoardNumber(Integer.parseInt(request.getParameter("boardNumber")));
+        int parentCommentNumber = Integer.parseInt(request.getParameter("parentCommentNumber"));
+
+        CommentVO parent = commentService.selectOne(parentCommentNumber);
+
+        util.checkParent(parent, parentCommentNumber);
+
+        String searchMaxSeqNum = parent.getSequenceNumber();
+        String searchMinSeqNum = util.getSearchMinSeqNum(parent);
+
+        String lastChildSeq = commentService.selectLastSequenceNumber(searchMaxSeqNum, searchMinSeqNum);
+        String sequenceNumber = util.getSequenceNumber(parent, lastChildSeq);
+        int userNumber = userService.selectUserNumberByEmail(memberId);
+
+        commentVO.setGroupNumber(parent.getGroupNumber());
+        commentVO.setSequenceNumber(sequenceNumber);
+        commentVO.setUserNumber(userNumber);
+        commentVO.setUserEmail(memberId);
+        commentVO.setSeparatorName(request.getParameter("s"));
+
+        int commentNumber = commentService.insert(commentVO);
+        if(commentNumber == -1){
+            throw new RuntimeException("DB 삽입 실패 : " + commentNumber);
+        }
+        commentService.increaseCommentCount(Integer.parseInt(request.getParameter("boardNumber")));
+
+        //commentVO.setNumber(commentNumber);
+        //modelAndView.addObject("commentVO", commentVO);
+
+        return (ModelAndView)new ModelAndView("redirect:/board/read.do?s=" + request.getParameter("s")
+                +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
+    }
+
+    /*
+    댓글 삭제
+     */
+    @RequestMapping(value = "/comment/delete.do", method = RequestMethod.POST)
+    public ModelAndView commentDelete(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
+        int commentNumber = Integer.parseInt(request.getParameter("commentNumber"));
+
+        /*
+        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
+         */
+        String memberId = request.getParameter("memberId");
+        util.isMemberId(memberId);
+
+        CommentVO commentVO = commentService.selectOne(commentNumber);
+        util.isEqualMemberId(commentVO.getUserEmail(), memberId);
+
+        commentService.delete(commentNumber);
+        commentService.decreaseCommentCount(boardNumber);
+
+        return (ModelAndView)new ModelAndView("redirect:/board/read.do?s=" + request.getParameter("s")
+                +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
+    }
 
 }
