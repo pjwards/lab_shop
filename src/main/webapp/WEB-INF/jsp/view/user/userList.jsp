@@ -18,6 +18,24 @@
 <title>UserList</title>
 </head>
 <body>
+	<c:if test="${pagingVO.totalPageCount > 0}">
+        <tr>
+            <td colspan="5">
+                    ${pagingVO.firstRow}-${pagingVO.endRow}
+                [${pagingVO.requestPage}/${pagingVO.totalPageCount}]
+            </td>
+        </tr>
+    </c:if>
+    
+    <c:choose>
+        <c:when test="${hasBoard == false}">
+            <tr>
+                <td colspan="5">
+                    게시글이 없습니다.
+                </td>
+            </tr>
+        </c:when>
+        <c:otherwise>
 	<table id="box-table-a" class="table table-hover">
 		<thead>
 			<tr>
@@ -29,41 +47,34 @@
 			</tr>
 		</thead>
 		<tbody>
-	<c:forEach var="list" items="${lists}">
-		<tr>
-			<th scope="row">${list.number }</th>
-			<td>${list.lastName }</td>
-			<td>${list.email }</td>
-		    <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
-		    <td><fmt:formatDate value="${list.lastDate}" pattern="yyyy-MM-dd"/></td>
-		</tr>
-	</c:forEach>
+			<c:forEach var="list" items="${userVOList}">
+			 <tr>
+				<th scope="row">${list.number }</th>
+				<td>${list.lastName }</td>
+				<td>${list.email }</td>
+			    <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
+			    <td><fmt:formatDate value="${list.lastDate}" pattern="yyyy-MM-dd"/></td>
+			 </tr>
+			</c:forEach>
 		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="16" align="center">
-  						<c:if test="${page != 1}">
-							<td><a href="<%=request.getContextPath()%>/user/userList.do?page=${page - 1}">Previous</a></td>
-						</c:if>
-						
-  						<c:forEach begin="1" end="${pages}" var="i">
-							<c:choose>
-								<c:when test="${page eq i}">
-									<td>${i}</td>
-								</c:when>
-								<c:otherwise>
-									<td><a href="<%=request.getContextPath()%>/user/userList.do?page=${i}">${i}</a></td>
-								</c:otherwise>
-							</c:choose>
-						</c:forEach>
-						
-						<c:if test="${page lt pages}">
-							<td><a href="<%=request.getContextPath()%>/user/userList.do?page=${page + 1}">Next</a></td>
-						</c:if>
- 					</td>
-			</tr>
-		</tfoot>
-	</table>
+				<tfoot>
+					<tr>
+					 <td colspan="16" align="center">
+  						 <c:if test="${pagingVO.beginPage > 5}">
+                       		 <a href="<c:url value="userList.do?p=${pagingVO.beginPage-1}"/> ">이전</a>
+                    	 </c:if>
+                 		 <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
+                       		 <a href="<c:url value="userList.do?p=${pno}"/> ">[${pno}]</a>
+             		     </c:forEach>
+               		     <c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
+                  		     <a href="<c:url value="userList.do?p=${pagingVO.endPage + 1}"/> ">다음</a>
+                  		 </c:if>
+ 					  </td>
+					</tr>
+				</tfoot>
+			</table>
+		</c:otherwise>
+	</c:choose>
 	<li><a href="<%=request.getContextPath()%>/main/main.do">Back Home</a></li>
 </body>
 </html>

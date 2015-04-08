@@ -6,6 +6,9 @@ import net.shop.service.UserService;
 import net.shop.util.Util;
 import net.shop.vo.BoardVO;
 import net.shop.vo.PagingVO;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
@@ -122,15 +126,16 @@ public class BoardController {
     게시판 글쓰기
      */
     @RequestMapping(value = "/board/write.do", method = RequestMethod.POST)
-    public ModelAndView boardWrite(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public ModelAndView boardWrite(HttpServletRequest request, HttpServletResponse response,Authentication auth) throws Exception{
         /*
         수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
          */
-        String memberId = request.getParameter("memberId");
+    	UserDetails vo = (UserDetails) auth.getPrincipal();
+        String memberId = vo.getUsername();
         util.isMemberId(memberId);
 
         int groupId = boardService.generateNextGroupNumber("board");
-        int userNumber = userService.selectUserNumberByEmail(memberId);
+        int userNumber = userService.selectOneNo(memberId);
 
         BoardVO boardVO = new BoardVO();
         boardVO.setGroupNumber(groupId);
@@ -192,7 +197,7 @@ public class BoardController {
     게시판 수정 폼
      */
     @RequestMapping(value = "/board/update.do")
-    public ModelAndView boardUpdate(HttpServletRequest request) throws Exception{
+    public ModelAndView boardUpdate(HttpServletRequest request,Authentication auth) throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -201,7 +206,8 @@ public class BoardController {
         /*
         수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
          */
-        String memberId = request.getParameter("memberId");
+        UserDetails vo = (UserDetails) auth.getPrincipal();
+        String memberId = vo.getUsername();
         util.isMemberId(memberId);
 
         BoardVO boardVO = boardService.selectOne(boardNumber);
@@ -220,7 +226,7 @@ public class BoardController {
     게시판 수정
      */
     @RequestMapping(value = "/board/update.do", method = RequestMethod.POST)
-    public ModelAndView boardUpdate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView boardUpdate(HttpServletRequest request, HttpServletResponse response,Authentication auth) throws Exception {
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -229,7 +235,8 @@ public class BoardController {
         /*
         수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
          */
-        String memberId = request.getParameter("memberId");
+        UserDetails vo = (UserDetails) auth.getPrincipal();
+        String memberId = vo.getUsername();
         util.isMemberId(memberId);
 
         BoardVO boardVO = boardService.selectOne(boardNumber);
@@ -291,14 +298,15 @@ public class BoardController {
     게시판 답글
      */
     @RequestMapping(value = "/board/reply.do", method = RequestMethod.POST)
-    public ModelAndView boardReply(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public ModelAndView boardReply(HttpServletRequest request, HttpServletResponse response,Authentication auth) throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
 
         /*
         수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
          */
-        String memberId = request.getParameter("memberId");
+        UserDetails vo = (UserDetails) auth.getPrincipal();
+        String memberId = vo.getUsername();
         util.isMemberId(memberId);
 
         BoardVO boardVO = new BoardVO();
@@ -315,7 +323,7 @@ public class BoardController {
 
         String lastChildSeq = boardService.selectLastSequenceNumber(searchMaxSeqNum, searchMinSeqNum);
         String sequenceNumber = util.getSequenceNumber(parent, lastChildSeq);
-        int userNumber = userService.selectUserNumberByEmail(memberId);
+        int userNumber = userService.selectOneNo(memberId);
 
         boardVO.setGroupNumber(parent.getGroupNumber());
         boardVO.setSequenceNumber(sequenceNumber);
@@ -338,14 +346,15 @@ public class BoardController {
     게시판 삭제
      */
     @RequestMapping(value = "/board/delete.do", method = RequestMethod.POST)
-    public ModelAndView boardDelete(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView boardDelete(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception {
 
         int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
 
         /*
         수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
          */
-        String memberId = request.getParameter("memberId");
+        UserDetails vo = (UserDetails) auth.getPrincipal();
+        String memberId = vo.getUsername();
         util.isMemberId(memberId);
 
         BoardVO boardVO = boardService.selectOne(boardNumber);

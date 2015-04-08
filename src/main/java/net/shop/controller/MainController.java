@@ -2,6 +2,7 @@ package net.shop.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -27,10 +28,12 @@ public class MainController {
 	@RequestMapping(value="/main/main.do")
 	public ModelAndView showMain(Authentication auth) throws Exception{
 		ModelAndView modelAndView = new ModelAndView();
+		
 		if(auth != null){
 			UserDetails vo = (UserDetails) auth.getPrincipal();
 			modelAndView.addObject("vo", vo);
 		}
+		
 		modelAndView.setViewName("/main/main");
 		return modelAndView;
 	}
@@ -42,14 +45,13 @@ public class MainController {
 	
 	@RequestMapping("/main/login.do")
 	public String login(@RequestParam(value = "error", required = false) String error,
-			HttpServletRequest request,Model model) throws Exception{
+			HttpServletRequest request,Model model,Authentication auth) throws Exception{
 		
 		if (error != null) {
 			model.addAttribute("say", "Check your Email and Password again");
 			model.addAttribute("url", request.getContextPath()+"/main/login.do");
 			return "/error/alert";
 		}
-	
 		return "/main/login";
 	}
 }

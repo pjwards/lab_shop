@@ -59,9 +59,18 @@ public class UserServiceImpl implements UserService {
 		return userDAO.delete(email);
 	}
 
-    @Override
-    public int selectUserNumberByEmail(String email) throws Exception {
-        return userDAO.selectUserNumberByEmail(email);
-    }
+	@Override
+	public int updateDate(String email) throws Exception {
+		// TODO Auto-generated method stub
+		return userDAO.updateDate(email);
+	}
+
+	@Override
+	public int selectOneNo(String email) throws Exception {
+		// TODO Auto-generated method stub
+		UserVO userVO = userDAO.selectOne(email);
+		
+		return userVO.getNumber();
+	}
 
 }

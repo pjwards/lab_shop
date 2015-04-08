@@ -7,6 +7,9 @@ import net.shop.service.UserService;
 import net.shop.util.Util;
 import net.shop.vo.CommentVO;
 import net.shop.vo.PagingVO;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
@@ -146,15 +150,16 @@ public class CommentController {
     댓글 글쓰기
      */
     @RequestMapping(value = "/comment/write.do", method = RequestMethod.POST)
-    public ModelAndView commentWrite(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public ModelAndView commentWrite(HttpServletRequest request, HttpServletResponse response,Authentication auth) throws Exception{
         /*
         수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
          */
-        String memberId = request.getParameter("memberId");
+    	UserDetails vo = (UserDetails) auth.getPrincipal();
+        String memberId = vo.getUsername();
         util.isMemberId(memberId);
 
         int groupId = commentService.generateNextGroupNumber("comment");
-        int userNumber = userService.selectUserNumberByEmail(memberId);
+        int userNumber = userService.selectOneNo(memberId);
 
         CommentVO commentVO = new CommentVO();
         commentVO.setGroupNumber(groupId);
@@ -191,7 +196,7 @@ public class CommentController {
     댓글 수정 폼
      */
     @RequestMapping(value = "/comment/update.do")
-    public ModelAndView commentUpdate(HttpServletRequest request) throws Exception{
+    public ModelAndView commentUpdate(HttpServletRequest request,Authentication auth) throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -200,7 +205,8 @@ public class CommentController {
         /*
         수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
          */
-        String memberId = request.getParameter("memberId");
+        UserDetails vo = (UserDetails) auth.getPrincipal();
+        String memberId = vo.getUsername();
         util.isMemberId(memberId);
 
 
@@ -220,7 +226,7 @@ public class CommentController {
     댓글 수정
      */
     @RequestMapping(value = "/comment/update.do", method = RequestMethod.POST)
-    public ModelAndView commentUpdate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView commentUpdate(HttpServletRequest request, HttpServletResponse response,Authentication auth) throws Exception {
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -229,7 +235,8 @@ public class CommentController {
         /*
         수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
          */
-        String memberId = request.getParameter("memberId");
+        UserDetails vo = (UserDetails) auth.getPrincipal();
+        String memberId = vo.getUsername();
         util.isMemberId(memberId);
 
 
@@ -291,14 +298,15 @@ public class CommentController {
     댓글 답글
      */
     @RequestMapping(value = "/comment/reply.do", method = RequestMethod.POST)
-    public ModelAndView commnetReply(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public ModelAndView commnetReply(HttpServletRequest request, HttpServletResponse response,Authentication auth) throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
 
         /*
         수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
          */
-        String memberId = request.getParameter("memberId");
+        UserDetails vo = (UserDetails) auth.getPrincipal();
+        String memberId = vo.getUsername();
         util.isMemberId(memberId);
 
         CommentVO commentVO = new CommentVO();
@@ -315,7 +323,7 @@ public class CommentController {
 
         String lastChildSeq = commentService.selectLastSequenceNumber(searchMaxSeqNum, searchMinSeqNum);
         String sequenceNumber = util.getSequenceNumber(parent, lastChildSeq);
-        int userNumber = userService.selectUserNumberByEmail(memberId);
+        int userNumber = userService.selectOneNo(memberId);
 
         commentVO.setGroupNumber(parent.getGroupNumber());
         commentVO.setSequenceNumber(sequenceNumber);
@@ -340,7 +348,7 @@ public class CommentController {
     댓글 삭제
      */
     @RequestMapping(value = "/comment/delete.do", method = RequestMethod.POST)
-    public ModelAndView commentDelete(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView commentDelete(HttpServletRequest request, HttpServletResponse response,Authentication auth) throws Exception {
 
         int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
         int commentNumber = Integer.parseInt(request.getParameter("commentNumber"));
@@ -348,7 +356,8 @@ public class CommentController {
         /*
         수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
          */
-        String memberId = request.getParameter("memberId");
+        UserDetails vo = (UserDetails) auth.getPrincipal();
+        String memberId = vo.getUsername();
         util.isMemberId(memberId);
 
         CommentVO commentVO = commentService.selectOne(commentNumber);

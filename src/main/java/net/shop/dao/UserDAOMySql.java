@@ -88,14 +88,15 @@ public class UserDAOMySql implements UserDAO {
         }
     }
 
-    @Override
-    public int selectUserNumberByEmail(String email) throws Exception {
-        SqlSession sqlSession = sqlSessionFactory.openSession();
+	@Override
+	public int updateDate(String email) {
+		// TODO Auto-generated method stub
+		SqlSession sqlSession = sqlSessionFactory.openSession();
 
         try{
-            return sqlSession.selectOne("net.UserDao.selectUserNumberByEmail", email);
+            return sqlSession.update("net.UserDao.updateDate", email);
         }finally{
             sqlSession.close();
         }
-    }
+	}
 }

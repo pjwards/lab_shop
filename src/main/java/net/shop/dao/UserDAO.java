@@ -27,9 +27,5 @@ public interface UserDAO {
 
 	public int delete(String email);
 
-    /*
-       Editor : Donghyun Seo
-       Decription : 이메일을 통한 유저 번호 조회
-     */
-    public int selectUserNumberByEmail(String email) throws  Exception;
+	public int updateDate(String email);
 }

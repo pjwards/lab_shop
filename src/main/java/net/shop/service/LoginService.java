@@ -34,11 +34,15 @@ public class LoginService implements UserDetailsService{
 	@Resource(name="passwordEncoder")
 	private ShaPasswordEncoder encoder;
 	
+	@Resource(name = "userService")
+	private UserService userService;
+	
 	@Override
 	public UserDetails loadUserByUsername(String email)throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
 		
 		try {
+			userService.updateDate(email);
 			UserVO userVO = userDAO.selectOne(email);
 			if(userVO == null){
 				return null;

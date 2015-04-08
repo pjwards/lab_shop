@@ -1,9 +1,13 @@
 package net.shop.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.shop.service.LoginService;
 import net.shop.service.UserService;
+import net.shop.util.Util;
+import net.shop.vo.CommentVO;
+import net.shop.vo.PagingVO;
 import net.shop.vo.UserVO;
 
 import org.springframework.security.core.Authentication;
@@ -34,24 +38,41 @@ public class UserController {
 	private UserService userService;
 	@Resource(name = "loginService")
 	private LoginService loginService;
+	@Resource(name = "util")
+    private Util util;
 	
 	@RequestMapping(value= "/user/userList.do")
 	public ModelAndView userList(HttpServletRequest request) throws Exception{
 		ModelAndView modelandview = new ModelAndView();
-		int start = 1;
-		int end = 5;
-		if(request.getParameter("page")!= null){
-			String mid = (String)request.getParameter("page");
-			start = Integer.parseInt(mid);
-		}
 		
-		List<UserVO> lists = userService.selectList((start-1)*end,end);
-		modelandview.addObject("lists", lists);
-		int total = userService.count();
-		int pages = (int)Math.ceil(total*(1.0)/end);
-		modelandview.addObject("pages",pages);
-		modelandview.addObject("page",start);
-		modelandview.setViewName("/user/userList");
+		String requestPageString = request.getParameter("p");
+
+        if(requestPageString == null || requestPageString.equals("")) {
+            requestPageString = "1";
+        }
+
+        int requestPage = Integer.parseInt(requestPageString);
+		
+        if(requestPage <= 0){
+            throw new IllegalArgumentException("requestPage <= 0 : " + requestPage);
+        }
+        
+        int totalCount = userService.count();
+        
+        /*Paging 메소드의 사용 */
+        PagingVO pagingVO = util.paging(requestPage, 5, totalCount);
+        modelandview.addObject("pagingVO", pagingVO);
+        modelandview.setViewName("/user/userList");
+        
+        if(totalCount == 0){
+            modelandview.addObject("userVOList", Collections.<CommentVO>emptyList());
+            request.setAttribute("hasUser", new Boolean(false));
+            return modelandview;
+        }
+        
+		List<UserVO> lists = userService.selectList(pagingVO.getFirstRow()-1,pagingVO.getEndRow());
+		modelandview.addObject("userVOList", lists);
+		request.setAttribute("hasUser", new Boolean(true));
 		
 		return modelandview;
 	}
@@ -80,7 +101,6 @@ public class UserController {
 		}
 		
 		String encode = loginService.encoding(password);
-		//System.out.println(encode);
 		UserVO userVO = new UserVO(firstName,lastName,email,encode);
 		userService.insert(userVO);
 		

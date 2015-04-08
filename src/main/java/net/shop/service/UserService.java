@@ -17,10 +17,16 @@ public interface UserService {
 
     /*
     Editor : Jisung Jeon
-    Decription : Return list that has email and password of this parameters
+    Decription : check the account by email
     */
     public boolean selectOne(String email) throws Exception;
-
+    
+    /*
+    Editor : Jisung Jeon
+    Decription : return user_no
+    */
+    public int selectOneNo(String email) throws Exception;
+    
     /*
     Editor : Jisung Jeon
     Decription : Return lists between start and end
@@ -50,10 +56,10 @@ public interface UserService {
     Decription : Delete the date in DB
     */
     public int delete(String email) throws Exception;
-
+    
     /*
-    Editor : Donghyun Seo
-    Decription : 이메일을 통한 유저 번호 조회
+    Editor : Jisung Jeon
+    Decription : Update last_date when login
     */
-    public int selectUserNumberByEmail(String email) throws  Exception;
+    public int updateDate(String email) throws Exception;
 }

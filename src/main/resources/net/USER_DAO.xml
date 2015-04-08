@@ -42,11 +42,8 @@
       delete from shop_user where email=#{email}
     </delete>
 
-    <!--
-    작성자 : Donghyun Seo
-    설명 : 이메일을 통한 유저 번호 조회
-    -->
-    <select id="selectUserNumberByEmail" parameterType="String" resultType="int">
-        SELECT no FROM shop_user WHERE email = #{email}
-    </select>
+	<update id="updateDate" parameterType="String">
+      update shop_user set last_date=now() where email=#{email}
+    </update>
+
 </mapper>
