@@ -9,6 +9,6 @@
 <body>
 Access is denied
 You don't access it because of authority
-<li><a href="<%=request.getContextPath()%>/main/main.do">Back Home</a></li>
+<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </body>
 </html>

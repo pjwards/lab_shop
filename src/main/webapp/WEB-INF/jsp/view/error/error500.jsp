@@ -8,5 +8,6 @@
 </head>
 <body>
 error500
+<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </body>
 </html>

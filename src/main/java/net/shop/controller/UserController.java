@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * First Editor : Jisung Jeon (cbajs20@gmail.com)
@@ -42,7 +43,15 @@ public class UserController {
     private Util util;
 	
 	@RequestMapping(value= "/user/userList.do")
-	public ModelAndView userList(HttpServletRequest request) throws Exception{
+	public ModelAndView userList(HttpServletRequest request,HttpServletResponse response) throws Exception{
+		/*
+        		웹 브라우저가 게시글 목록을 캐싱하지 않도록 캐시 관련 헤더를 설정
+         */
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.addHeader("Cache-Control", "no-store");
+        response.setDateHeader("Expire", 1L);
+        
 		ModelAndView modelandview = new ModelAndView();
 		
 		String requestPageString = request.getParameter("p");

@@ -3,8 +3,16 @@ package net.shop.util;
 import net.shop.error.*;
 import net.shop.vo.PagingVO;
 import net.shop.vo.ReplyVO;
-import org.springframework.stereotype.Component;
 
+import org.springframework.stereotype.Component;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 
 /**
@@ -165,5 +173,36 @@ public class Util {
         }
         return sequenceNumber;
     }
-
+    
+    /*
+    Editor : Jisung Jeon
+    Decription : upload
+     */
+    public static void fileUpload(MultipartFile multipartFile, String path, String fileName) throws IOException {
+    	 //String originalFileName = multipartFile.getOriginalFilename();
+    	 //String contentType = multipartFile.getContentType();
+    	 long fileSize = multipartFile.getSize();
+    	 InputStream is = null;
+    	 OutputStream out = null;
+    	 
+    	 try{
+    		 if (fileSize > 0) {
+    			 is = multipartFile.getInputStream();
+    			 File realUploadDir = new File(path);
+    			 if (!realUploadDir.exists()) {     //if doesn't exist file in the path, make it
+    				 realUploadDir.mkdirs();
+    			 }
+    			 out = new FileOutputStream(path +"/"+ fileName);
+    			 FileCopyUtils.copy(is, out);       //copy file of InputStream to outputStream
+    		 }else{
+    			 new IOException("Wrong File");
+    		 }
+    	 }catch(IOException e){
+    		 e.printStackTrace();
+    		 new IOException("Upload failed");
+    	 }finally{
+    		 if(out != null){out.close();}
+    		 if(is != null){is.close();}
+    	 }
+    }
 }

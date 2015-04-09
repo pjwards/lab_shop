@@ -19,8 +19,14 @@
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 	        <property name="prefix" value="/WEB-INF/jsp/view/"/>
 	        <property name="suffix" value=".jsp"/>
+	        <property name="order" value="1"/>
 	</bean>
-
+	
+	<!-- Download Resolver -->
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+ 		 <property name="order" value="0"/>
+ 	</bean>
+ 	
     <!-- Exception Resolver -->
     <beans>
         <bean id="exceptionMapping" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
