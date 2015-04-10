@@ -11,9 +11,24 @@
         				   http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
                            
 
-	<!-- scan (if it dosen't, Mapping dosen't work) -->
+	<!-- scan (if this dosen't exist, Mapping dosen't work) -->
 	<context:annotation-config />
 	<context:component-scan base-package="net" />
+	
+	<!-- Define static resource -->
+	<!-- <mvc:resources> requires <mvc:annotation-driven> (or explicitly declared handler mappings, etc) -->
+ 	<mvc:resources location="/resource/" mapping="/resource/**"/>
+ 	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 	
 	<!-- View -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -26,7 +41,7 @@
 	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
  		 <property name="order" value="0"/>
  	</bean>
- 	
+ 	 	
     <!-- Exception Resolver -->
     <beans>
         <bean id="exceptionMapping" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">

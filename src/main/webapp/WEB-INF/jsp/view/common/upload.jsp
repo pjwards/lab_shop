@@ -12,10 +12,8 @@
 	</br>
 	<input type="submit">Upload</input>
 </form>
- 업로드 한 파일 이름 : ${targetFileInfo} <br />
- 업로드된 임시 파일 위치 : ${uploadFilePath} <br />
- 업로드된 이미지파일은 썸네일이 표시됩니다. 썸네일 사이즈는  100x100 입니다. <br />
- <img alt="" src="${imageBase64}">
+
+ <img alt="" src="${image}">
  <a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </body>
 </html>
