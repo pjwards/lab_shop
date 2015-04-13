@@ -35,6 +35,7 @@
     <li><a href="<%=request.getContextPath()%>/board/list.do?s=qna">QnA Board List</a></li>
     <li><a href="<%=request.getContextPath()%>/upload.do">upload</a></li>
     <li><a href="<%=request.getContextPath()%>/download.do">download</a></li>
+    <li><a href="<%=request.getContextPath()%>/goods/list.do">download</a></li>
 </ul>
 </body>
 

@@ -62,7 +62,7 @@
     </update>
 
     <delete id="delete" parameterType="int">
-        DELETE FROM shop_comment WHERE no = #{VALUE }
+        DELETE FROM shop_comment WHERE no = #{VALUE}
     </delete>
 
     <update id="decreaseCommentCount" parameterType="int">

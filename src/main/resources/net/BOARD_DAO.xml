@@ -11,8 +11,10 @@
         <result column="title" property="title"/>
         <result column="content" property="content"/>
         <result column="posting_date" property="postingDate"/>
-        <result column="read_count" property="readCount"/>
         <result column="comment_count" property="commentCount"/>
+        <result column="comment_count" property="commentCount"/>
+        <result column="file_count" property="fileCount"/>
+        <result column="goods_count" property="goodsCount"/>
         <result column="user_no" property="userNumber"/>
         <result column="user_email" property="userEmail"/>
         <result column="separator_name" property="separatorName"/>
@@ -35,8 +37,8 @@
     </select>
 
     <insert id="insert" parameterType="BoardVO">
-        INSERT INTO shop_board (group_no, sequence_no, title, content, posting_date, read_count, comment_count, user_no, user_email, separator_name)
-        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),0,0,#{userNumber},#{userEmail},#{separatorName})
+        INSERT INTO shop_board (group_no, sequence_no, title, content, posting_date, read_count, comment_count, file_count, goods_count, user_no, user_email, separator_name)
+        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),0,0,0,0,#{userNumber},#{userEmail},#{separatorName})
     </insert>
 
     <select id="selectOne" parameterType="int" resultMap="boardResultMap">
@@ -56,7 +58,7 @@
     </update>
 
     <delete id="delete" parameterType="int">
-        DELETE FROM shop_board WHERE no = #{VALUE }
+        DELETE FROM shop_board WHERE no = #{VALUE}
     </delete>
 
     <select id="selectGroupNumber" parameterType="String" resultType="int">

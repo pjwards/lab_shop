@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 @Controller
+@RequestMapping(value= "/user")
 public class UserController {
 	
 	@Resource(name = "userService")
@@ -42,7 +43,7 @@ public class UserController {
 	@Resource(name = "util")
     private Util util;
 	
-	@RequestMapping(value= "/user/userList.do")
+	@RequestMapping(value= "/userList.do")
 	public ModelAndView userList(HttpServletRequest request,HttpServletResponse response) throws Exception{
 		/*
         		웹 브라우저가 게시글 목록을 캐싱하지 않도록 캐시 관련 헤더를 설정
@@ -86,11 +87,11 @@ public class UserController {
 		return modelandview;
 	}
 	
-	@RequestMapping("/user/userAdd.do")
+	@RequestMapping("/userAdd.do")
 	public String userAdd() throws Exception{
 		return "/user/userAdd";
 	}
-	@RequestMapping(value= "/user/userAdd.do", method=RequestMethod.POST)
+	@RequestMapping(value= "/userAdd.do", method=RequestMethod.POST)
 	public String userAdd(@RequestParam("firstName")String firstName,
 			@RequestParam("lastName")String lastName,
 			@RequestParam("email")String email,
@@ -116,11 +117,11 @@ public class UserController {
 		return "redirect:/main/main.do";
 	}
 	
-	@RequestMapping("/user/userEdit.do")
+	@RequestMapping("/userEdit.do")
 	public String userEdit() throws Exception{
 		return "/user/userEdit";
 	}
-	@RequestMapping(value= "/user/userEdit.do", method=RequestMethod.POST)
+	@RequestMapping(value= "/userEdit.do", method=RequestMethod.POST)
 	public String userEdit(@RequestParam("firstName")String firstName,
 			@RequestParam("lastName")String lastName,
 			@RequestParam("password")String password,
@@ -141,7 +142,7 @@ public class UserController {
 		return "redirect:/main/main.do";
 	}
 	
-	@RequestMapping(value= "/user/userDelete.do")
+	@RequestMapping(value= "/userDelete.do")
 	public String userDelete(Authentication auth,HttpServletRequest request) throws Exception{
 		UserDetails vo = (UserDetails) auth.getPrincipal();
 		String email = vo.getUsername();

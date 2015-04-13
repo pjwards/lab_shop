@@ -28,10 +28,10 @@
     </c:if>
     
     <c:choose>
-        <c:when test="${hasBoard == false}">
+        <c:when test="${hasUser == false}">
             <tr>
                 <td colspan="5">
-                    게시글이 없습니다.
+                    사용자가 없습니다.
                 </td>
             </tr>
         </c:when>

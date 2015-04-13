@@ -44,7 +44,6 @@
                 <input type="hidden" name="p" value="${param.p}"/>
                 <input type="hidden" name="s" value="${param.s}"/>
                 <input type="hidden" name="boardNumber" value="${boardVO.number}"/>
-                <input type="hidden" name="memberId" value="${param.memberId}"/>
                 <input type="submit" value="삭제하기" >
             </form>
         </td>

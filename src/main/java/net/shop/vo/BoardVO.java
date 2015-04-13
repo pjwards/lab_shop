@@ -11,7 +11,7 @@ import java.util.Date;
  * version      :
  */
 
-public class BoardVO implements ReplyVO{
+public class BoardVO extends ReplyVO{
 
     private int number;
     private int groupNumber;
@@ -21,6 +21,8 @@ public class BoardVO implements ReplyVO{
     private Date postingDate;
     private int readCount;
     private int commentCount;
+    private int fileCount;
+    private int goodsCount;
     private int userNumber;
     private String userEmail;
     private String separatorName;
@@ -89,6 +91,22 @@ public class BoardVO implements ReplyVO{
         this.commentCount = commentCount;
     }
 
+    public int getFileCount() {
+        return fileCount;
+    }
+
+    public void setFileCount(int fileCount) {
+        this.fileCount = fileCount;
+    }
+
+    public int getGoodsCount() {
+        return goodsCount;
+    }
+
+    public void setGoodsCount(int goodsCount) {
+        this.goodsCount = goodsCount;
+    }
+
     public int getUserNumber() {
         return userNumber;
     }
@@ -111,18 +129,5 @@ public class BoardVO implements ReplyVO{
 
     public void setSeparatorName(String separatorName) {
         this.separatorName = separatorName;
-    }
-
-    /*
-        중첩 레벨을 구해주는 메서드
-         */
-    public int getLevel(){
-        if(sequenceNumber == null)          return -1;
-        if(sequenceNumber.length() != 16)   return -1;
-
-        if(sequenceNumber.endsWith("999999"))   return 0;   // 루트
-        if(sequenceNumber.endsWith("9999"))     return 1;   // 첫 번째 자식
-        if(sequenceNumber.endsWith("99"))       return 2;   // 두 번째 자식
-        return 3;                                           // 세 번째 자식
     }
 }

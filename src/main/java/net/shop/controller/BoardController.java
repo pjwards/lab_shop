@@ -32,6 +32,7 @@ import java.util.List;
  */
 
 @Controller
+@RequestMapping(value = "/board")
 public class BoardController {
 
     @Resource(name = "boardService")
@@ -46,7 +47,7 @@ public class BoardController {
     /*
     게시판 리스트
      */
-    @RequestMapping(value = "/board/list.do")
+    @RequestMapping(value = "/list.do")
     public ModelAndView boardList(HttpServletRequest request, HttpServletResponse response) throws Exception{
         ModelAndView modelAndView = new ModelAndView();
 
@@ -108,14 +109,12 @@ public class BoardController {
     /*
     게시판 글쓰기 폼
      */
-    @RequestMapping(value = "/board/write.do")
-    public ModelAndView boardWrite(HttpServletRequest request) throws Exception{
-        /*
-        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
+    @RequestMapping(value = "/write.do")
+    public ModelAndView boardWrite(HttpServletRequest request, Authentication auth) throws Exception{
 
-        String memberId = request.getParameter("memberId");
+        UserDetails vo = (UserDetails) auth.getPrincipal();
+        String memberId = vo.getUsername();
         util.isMemberId(memberId);
-        */
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/board/writeForm");
@@ -125,11 +124,9 @@ public class BoardController {
     /*
     게시판 글쓰기
      */
-    @RequestMapping(value = "/board/write.do", method = RequestMethod.POST)
-    public ModelAndView boardWrite(HttpServletRequest request, HttpServletResponse response,Authentication auth) throws Exception{
-        /*
-        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
-         */
+    @RequestMapping(value = "/write.do", method = RequestMethod.POST)
+    public ModelAndView boardWrite(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception{
+
     	UserDetails vo = (UserDetails) auth.getPrincipal();
         String memberId = vo.getUsername();
         util.isMemberId(memberId);
@@ -140,7 +137,7 @@ public class BoardController {
         BoardVO boardVO = new BoardVO();
         boardVO.setGroupNumber(groupId);
         DecimalFormat decimalFormat = new DecimalFormat("0000000000");
-        boardVO.setSequenceNumber(decimalFormat.format(groupId) + "999999");
+        boardVO.setSequenceNumber(decimalFormat.format(groupId) + "99");
         boardVO.setTitle(request.getParameter("title"));
         boardVO.setContent(request.getParameter("content"));
         boardVO.setUserNumber(userNumber);
@@ -163,7 +160,7 @@ public class BoardController {
     /*
     게시판 읽기
      */
-    @RequestMapping(value = "/board/read.do")
+    @RequestMapping(value = "/read.do")
     public ModelAndView boardRead(HttpServletRequest request, HttpServletResponse response) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
 
@@ -196,16 +193,13 @@ public class BoardController {
     /*
     게시판 수정 폼
      */
-    @RequestMapping(value = "/board/update.do")
-    public ModelAndView boardUpdate(HttpServletRequest request,Authentication auth) throws Exception{
+    @RequestMapping(value = "/update.do")
+    public ModelAndView boardUpdate(HttpServletRequest request, Authentication auth) throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
 
         int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
 
-        /*
-        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
-         */
         UserDetails vo = (UserDetails) auth.getPrincipal();
         String memberId = vo.getUsername();
         util.isMemberId(memberId);
@@ -225,16 +219,13 @@ public class BoardController {
     /*
     게시판 수정
      */
-    @RequestMapping(value = "/board/update.do", method = RequestMethod.POST)
-    public ModelAndView boardUpdate(HttpServletRequest request, HttpServletResponse response,Authentication auth) throws Exception {
+    @RequestMapping(value = "/update.do", method = RequestMethod.POST)
+    public ModelAndView boardUpdate(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception {
 
         ModelAndView modelAndView = new ModelAndView();
 
         int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
 
-        /*
-        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
-         */
         UserDetails vo = (UserDetails) auth.getPrincipal();
         String memberId = vo.getUsername();
         util.isMemberId(memberId);
@@ -271,7 +262,7 @@ public class BoardController {
     /*
     게시판 답글 폼
      */
-    @RequestMapping(value = "/board/reply.do")
+    @RequestMapping(value = "/reply.do")
     public ModelAndView boardReply(HttpServletRequest request) throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
@@ -297,14 +288,11 @@ public class BoardController {
     /*
     게시판 답글
      */
-    @RequestMapping(value = "/board/reply.do", method = RequestMethod.POST)
-    public ModelAndView boardReply(HttpServletRequest request, HttpServletResponse response,Authentication auth) throws Exception{
+    @RequestMapping(value = "/reply.do", method = RequestMethod.POST)
+    public ModelAndView boardReply(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
 
-        /*
-        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
-         */
         UserDetails vo = (UserDetails) auth.getPrincipal();
         String memberId = vo.getUsername();
         util.isMemberId(memberId);
@@ -345,14 +333,11 @@ public class BoardController {
     /*
     게시판 삭제
      */
-    @RequestMapping(value = "/board/delete.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete.do", method = RequestMethod.POST)
     public ModelAndView boardDelete(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception {
 
         int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
 
-        /*
-        수정 : Member Id 를 세션으로 넣을 경우 수정이 필요함
-         */
         UserDetails vo = (UserDetails) auth.getPrincipal();
         String memberId = vo.getUsername();
         util.isMemberId(memberId);
