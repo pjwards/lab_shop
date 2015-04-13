@@ -21,6 +21,7 @@ create table shop_user (
 	created_date datetime not null,
 	last_date datetime not null,
 	authority varchar(20) not null default 'ROLE_USER',
+	image_path varchar(50) default 'default.jpg',
 	primary key (no),
 	unique index (email)
 );
