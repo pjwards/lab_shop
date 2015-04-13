@@ -9,21 +9,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
-
-<!-- CSS Files -->
-<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.min.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap-theme.css">
-<!-- Javascript -->
-<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
-<script src="<%=request.getContextPath()%>/resource/js/bootstrap.min.js"></script>
-
 <head>
-    <title>Main</title>
+    <title>Index Page</title>
 </head>
 
 <body>
-<h1>Main Page</h1> 
+<h1>테스트 페이지</h1> 
 
 <ul>
 	<li><a href="<%=request.getContextPath()%>/user/userAdd.do">Sign Up</a></li>
@@ -44,6 +35,7 @@
     <li><a href="<%=request.getContextPath()%>/board/list.do?s=qna">QnA Board List</a></li>
     <li><a href="<%=request.getContextPath()%>/upload.do">upload</a></li>
     <li><a href="<%=request.getContextPath()%>/download.do">download</a></li>
+    <li><a href="<%=request.getContextPath()%>/goods/list.do">download</a></li>
 </ul>
 </body>
 

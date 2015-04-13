@@ -9,7 +9,7 @@ import java.util.Date;
  * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
  * version
  */
-public class CommentVO implements ReplyVO{
+public class CommentVO extends ReplyVO{
 
     private int number;
     private int groupNumber;
@@ -91,18 +91,5 @@ public class CommentVO implements ReplyVO{
 
     public void setSeparatorName(String separatorName) {
         this.separatorName = separatorName;
-    }
-
-    /*
-        중첩 레벨을 구해주는 메서드
-         */
-    public int getLevel(){
-        if(sequenceNumber == null)          return -1;
-        if(sequenceNumber.length() != 16)   return -1;
-
-        if(sequenceNumber.endsWith("999999"))   return 0;   // 루트
-        if(sequenceNumber.endsWith("9999"))     return 1;   // 첫 번째 자식
-        if(sequenceNumber.endsWith("99"))       return 2;   // 두 번째 자식
-        return 3;                                           // 세 번째 자식
     }
 }

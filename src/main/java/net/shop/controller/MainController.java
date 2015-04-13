@@ -21,11 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 @Controller
+@RequestMapping(value="/main")
 public class MainController {
 	//private Logger log = Logger.getLogger(this.getClass());
 	
 	/* For showing main page */
-	@RequestMapping(value="/main/main.do")
+	@RequestMapping(value="/main.do")
 	public ModelAndView showMain(Authentication auth) throws Exception{
 		ModelAndView modelAndView = new ModelAndView();
 		
@@ -38,12 +39,12 @@ public class MainController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/main/admin.do")
+	@RequestMapping("/admin.do")
 	public String showAdmin() throws Exception{
 		return "/main/admin";
 	}
 	
-	@RequestMapping("/main/login.do")
+	@RequestMapping("/login.do")
 	public String login(@RequestParam(value = "error", required = false) String error,
 			HttpServletRequest request,Model model,Authentication auth) throws Exception{
 		

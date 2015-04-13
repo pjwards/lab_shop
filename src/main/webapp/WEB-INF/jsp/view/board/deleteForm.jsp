@@ -17,7 +17,6 @@
 <form action="<c:url value="/board/delete.do" />" method="post">
     <input type="hidden" name="s" value="${param.s}"/>
     <input type="hidden" name="boardNumber" value="${param.boardNumber}"/>
-    작성자 : <input type="text" name="memberId"/><br/>
     <input type="submit" value="삭제"/>
 </form>
 

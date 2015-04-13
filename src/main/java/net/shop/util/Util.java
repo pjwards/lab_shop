@@ -104,7 +104,7 @@ public class Util {
         }
 
         int parentLevel = parent.getLevel();
-        if(parentLevel == 3){
+        if(parentLevel == 1){
             throw new CannotReplyException("마지막 레벨 글에는 답글을 달 수 없습니다 : " + parent.getNumber());
         }
     }
@@ -112,6 +112,19 @@ public class Util {
     /*
     최소 순서 번호를 반환한다.
      */
+    public String getSearchMinSeqNum(ReplyVO parent){
+        String parentSeqNum = parent.getSequenceNumber();
+        DecimalFormat decimalFormat = new DecimalFormat("000000000000");
+        long parentSeqLongValue = Long.parseLong(parentSeqNum);
+        long searchMinLongValue = 0;
+        switch (parent.getLevel()){                                             // 0000009999 21
+            case 0:
+                searchMinLongValue = parentSeqLongValue / 100L * 100L;          // 0000009999 00
+                break;
+        }
+        return decimalFormat.format(searchMinLongValue);
+    }
+    /* 최소 순서 번호를 반환한다.(Level 3)
     public String getSearchMinSeqNum(ReplyVO parent){
         String parentSeqNum = parent.getSequenceNumber();
         DecimalFormat decimalFormat = new DecimalFormat("0000000000000000");
@@ -130,10 +143,42 @@ public class Util {
         }
         return decimalFormat.format(searchMinLongValue);
     }
+    */
 
     /*
     순서 번호를 생성한다.
      */
+    public String getSequenceNumber(ReplyVO parent, String lastChildSeq) throws LastChildAleadyExistsException {
+        long parentSeqLong = Long.parseLong(parent.getSequenceNumber());
+        int parentLevel = parent.getLevel();
+
+        long decUnit = 0;
+        if(parentLevel == 0){
+            decUnit = 1L;
+        }
+
+        String sequenceNumber = null;
+
+        DecimalFormat decimalFormat = new DecimalFormat("000000000000");
+        if(lastChildSeq == null){   // 답변글이 없음
+            sequenceNumber = decimalFormat.format(parentSeqLong - decUnit);
+        } else {    // 답변글이 있음
+            // 마지막 답변글인지 확인
+            String orderOfLastChildSeq = null;
+            if(parentLevel == 0){
+                orderOfLastChildSeq = lastChildSeq.substring(10, 12);       // 0000000000 00
+                sequenceNumber = lastChildSeq;
+            }
+            if(orderOfLastChildSeq.equals("00")){
+                throw new LastChildAleadyExistsException("마지막 자식글이 이미 존재합니다 : " + lastChildSeq);
+            }
+            long seq = Long.parseLong(sequenceNumber) - decUnit;
+            sequenceNumber = decimalFormat.format(seq);
+        }
+        return sequenceNumber;
+    }
+
+    /* 순서 번호를 생성한다.(Level 3)
     public String getSequenceNumber(ReplyVO parent, String lastChildSeq) throws LastChildAleadyExistsException {
         long parentSeqLong = Long.parseLong(parent.getSequenceNumber());
         int parentLevel = parent.getLevel();
@@ -173,6 +218,7 @@ public class Util {
         }
         return sequenceNumber;
     }
+     */
     
     /*
     Editor : Jisung Jeon

@@ -56,7 +56,6 @@
                                 <input type="hidden" name="s" value="${param.s}"/>
                                 <input type="hidden" name="boardNumber" value="${param.boardNumber}"/>
                                 <input type="hidden" name="commentNumber" value="${comment.number}"/>
-                                <input type="hidden" name="memberId" value="${param.memberId}"/>
                                 <input type="submit" value="삭제하기" >
                             </form>
                         </td>
@@ -80,7 +79,6 @@
                     <input type="hidden" name="boardNumber" value="${param.boardNumber}">
                     <input type="hidden" name="s" value="${param.s}"/>
                     <input type="hidden" name="p" value="${param.p}"/>
-                    작성자 : <input type="text" name="memberId"/><br/>
                     내용: <br/>
                     <textarea name="content" cols="40" rows="5"></textarea>
                     <br/>

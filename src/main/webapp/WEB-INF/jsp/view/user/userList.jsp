@@ -28,10 +28,10 @@
     </c:if>
     
     <c:choose>
-        <c:when test="${hasBoard == false}">
+        <c:when test="${hasUser == false}">
             <tr>
                 <td colspan="5">
-                    게시글이 없습니다.
+                    사용자가 없습니다.
                 </td>
             </tr>
         </c:when>
@@ -54,7 +54,6 @@
 				<td>${list.email }</td>
 			    <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
 			    <td><fmt:formatDate value="${list.lastDate}" pattern="yyyy-MM-dd"/></td>
-			    <td><img alt="" src="<%=request.getContextPath()%>/resource/upload/${list.imagePath}"></td>
 			 </tr>
 			</c:forEach>
 		</tbody>
@@ -76,6 +75,6 @@
 			</table>
 		</c:otherwise>
 	</c:choose>
-	<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
+	<li><a href="<%=request.getContextPath()%>/main/main.do">Back Home</a></li>
 </body>
 </html>
