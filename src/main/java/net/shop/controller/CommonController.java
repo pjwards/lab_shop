@@ -43,7 +43,7 @@ public class CommonController {
 	@SuppressWarnings("static-access")
 	@RequestMapping(value="/upload.do",method=RequestMethod.POST)
 	public String upload(@RequestParam(value="file1",required=false) MultipartFile multipartFile, Model model, HttpServletRequest request) throws Exception{
-		Calendar cal = Calendar.getInstance();
+		/*Calendar cal = Calendar.getInstance();
 		String loadPath = "/home/jisung/git/lab_shop/src/main/webapp/resource/upload/";
 	    String fileName = multipartFile.getOriginalFilename();
 	    String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
@@ -54,8 +54,19 @@ public class CommonController {
 		{
 	    	imageUtil.resizeImage(loadPath+replaceName, loadPath+tempName+"_thum.jpg", 100);
 	    	model.addAttribute("image",request.getContextPath()+"/resource/upload/"+tempName+"_thum.jpg" );//later -> load url in db
+		}*/
+		String fileExt = multipartFile.getOriginalFilename().substring( multipartFile.getOriginalFilename().lastIndexOf( ".") + 1, multipartFile.getOriginalFilename().length());
+		
+		File uploadFile =  File.createTempFile( "/home/jisung/", "." + fileExt);
+		multipartFile.transferTo( uploadFile);
+		
+		File thumbnail =  new File ("/home/jisung/a.jpg");
+		if ( imageUtil.isImageFile ( fileExt))
+		{
+			imageUtil.uploadImage( uploadFile, thumbnail, 100, 100);
+			//String imageBase64 = ImageUtils.encodeToString( thumbnail, fileExt);
+			//model.addAttribute("imageBase64", "data:image/png;base64," + imageBase64);
 		}
-	    
 		return "/common/upload";
 	}
 	

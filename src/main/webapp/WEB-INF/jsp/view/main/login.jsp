@@ -20,6 +20,6 @@
     <input type="password" name="password" id="password" required="required" placeholder="password" autocomplete="off"><br>
     <button type="submit" class="btn btn-primary btn-lg active">Sign In</button><br>
 </form>
-<li><a href="<%=request.getContextPath()%>/main/main.do">Back Home</a></li>
+<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </body>
 </html>

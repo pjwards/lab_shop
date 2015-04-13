@@ -13,6 +13,7 @@
         <result column="created_date" property="createdDate"/>
         <result column="last_date" property="lastDate"/>
         <result column="authority" property="authority"/>
+        <result column="image_path" property="imagePath"/>
     </resultMap>
     
 	<!-- Don't use parameterMap -->
@@ -29,12 +30,12 @@
     </select>
 
     <insert id="insert" parameterType="UserVO">
-      insert into shop_user (first_name,last_name,email,password,created_date,last_date)
-      values(#{firstName},#{lastName},#{email},#{password},now(),now())
+      insert into shop_user (first_name,last_name,email,password,created_date,last_date,image_path)
+      values(#{firstName},#{lastName},#{email},#{password},now(),now(),#{imagePath})
     </insert>
 
     <update id="update" parameterType="UserVO">
-      update shop_user set first_name=#{firstName},last_name=#{lastName},password=#{password}
+      update shop_user set first_name=#{firstName},last_name=#{lastName},password=#{password},image_path=#{imagePath}
       where email=#{email}
     </update>
 

@@ -1,10 +1,13 @@
 package net.shop.controller;
 
+import java.io.File;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
 import net.shop.service.LoginService;
 import net.shop.service.UserService;
+import net.shop.util.ImageUtil;
 import net.shop.util.Util;
 import net.shop.vo.CommentVO;
 import net.shop.vo.PagingVO;
@@ -17,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -34,13 +38,19 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class UserController {
-	
+	public static final String loadPath = "/home/jisung/git/lab_shop/src/main/webapp/resource/upload/";				
+
 	@Resource(name = "userService")
 	private UserService userService;
+	
 	@Resource(name = "loginService")
 	private LoginService loginService;
+	
 	@Resource(name = "util")
     private Util util;
+	
+	@Resource(name = "imageUtil")
+	private ImageUtil imageUtil;
 	
 	@RequestMapping(value= "/user/userList.do")
 	public ModelAndView userList(HttpServletRequest request,HttpServletResponse response) throws Exception{
@@ -90,12 +100,16 @@ public class UserController {
 	public String userAdd() throws Exception{
 		return "/user/userAdd";
 	}
+	@SuppressWarnings("static-access")
 	@RequestMapping(value= "/user/userAdd.do", method=RequestMethod.POST)
 	public String userAdd(@RequestParam("firstName")String firstName,
 			@RequestParam("lastName")String lastName,
 			@RequestParam("email")String email,
 			@RequestParam("password")String password,
+			@RequestParam(value="thumnail",required=false) MultipartFile multipartFile,
 			Model model,HttpServletRequest request) throws Exception{
+		
+		String imagePath = "default.jpg";
 		
 		if(firstName.length() < 3 || password.length()<3|| email.length()<6 || lastName.length() < 3){
 			model.addAttribute("say", "Wrong Input");
@@ -109,22 +123,60 @@ public class UserController {
 			return "/error/alert";
 		}
 		
+		//upload thumnail
+		if ( multipartFile.getSize() > 0 ) {
+			String fileName = multipartFile.getOriginalFilename();
+			if ( imageUtil.isImageFile ( fileName))
+			{
+				Calendar cal = Calendar.getInstance();
+				//String loadPath = "/home/jisung/git/lab_shop/src/main/webapp/resource/upload/";				
+				String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
+				File uploadFile =  File.createTempFile( "/home/jisung/", fileType);
+				multipartFile.transferTo( uploadFile);
+				String tempName =  cal.getTimeInMillis() + "";
+				String replaceName = tempName+"_thum"+ fileType;
+				File thumbnail =  new File (loadPath+replaceName);
+				imageUtil.uploadImage( uploadFile, thumbnail, 100, 100);
+				imagePath = replaceName;
+			}
+			else{
+				model.addAttribute("say", "Wrong Image");
+				model.addAttribute("url", request.getContextPath()+"/user/userAdd.do");
+				return "/error/alert";
+			}
+		}
+		
 		String encode = loginService.encoding(password);
-		UserVO userVO = new UserVO(firstName,lastName,email,encode);
+		UserVO userVO = new UserVO(firstName,lastName,email,encode,imagePath);
 		userService.insert(userVO);
 		
 		return "redirect:/main/main.do";
 	}
 	
 	@RequestMapping("/user/userEdit.do")
-	public String userEdit() throws Exception{
+	public String userEdit(Authentication auth,Model model) throws Exception{
+		UserDetails vo = (UserDetails) auth.getPrincipal();
+		UserVO userVO = userService.selectOneVo(vo.getUsername());
+		model.addAttribute("uservo", userVO);
 		return "/user/userEdit";
 	}
+	@SuppressWarnings("static-access")
 	@RequestMapping(value= "/user/userEdit.do", method=RequestMethod.POST)
 	public String userEdit(@RequestParam("firstName")String firstName,
 			@RequestParam("lastName")String lastName,
 			@RequestParam("password")String password,
+			@RequestParam(value="thumnail",required=false) MultipartFile multipartFile,
 			Model model,Authentication auth,HttpServletRequest request) throws Exception{
+		
+		UserDetails vo = (UserDetails) auth.getPrincipal();
+		String email = vo.getUsername();
+		UserVO userVO = userService.selectOneVo(email);
+		String imagePath = userVO.getImagePath();
+		
+		if(firstName.isEmpty() || lastName.isEmpty()){
+			firstName = userVO.getFirstName();
+			lastName = userVO.getLastName();
+		}
 		
 		if(firstName.length() < 3 || password.length()<3 || lastName.length() < 3){
 			model.addAttribute("say", "Wrong Input");
@@ -132,12 +184,35 @@ public class UserController {
 			return "/error/alert";
 		}
 		
-		UserDetails vo = (UserDetails) auth.getPrincipal();
-		String email = vo.getUsername();
-		String encode = loginService.encoding(password);
-		UserVO userVO = new UserVO(firstName,lastName,email,encode);
-		userService.update(userVO);
+		//upload thumnail
+		if ( multipartFile.getSize() > 0 ) {
+			String fileName = multipartFile.getOriginalFilename();
+			if ( imageUtil.isImageFile (fileName))
+			{
+				Calendar cal = Calendar.getInstance();
+				//String loadPath = "/home/jisung/git/lab_shop/src/main/webapp/resource/upload/";				
+				String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
+				File uploadFile =  File.createTempFile( "/home/jisung/", fileType);
+				multipartFile.transferTo( uploadFile);
+				String tempName =  cal.getTimeInMillis() + "";
+				String replaceName = tempName+"_thum"+ fileType;
+				File thumbnail =  new File (loadPath+replaceName);
+				imageUtil.uploadImage( uploadFile, thumbnail, 100, 100);
+				imagePath = replaceName;
+			}
+			else{
+				model.addAttribute("say", "Wrong Image");
+				model.addAttribute("url", request.getContextPath()+"/user/userAdd.do");
+				return "/error/alert";
+			}
+		}
 		
+		
+		String encode = loginService.encoding(password);
+
+		UserVO loadVO = new UserVO(firstName,lastName,email,encode,imagePath);
+		userService.update(loadVO);
+	
 		return "redirect:/main/main.do";
 	}
 	

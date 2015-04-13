@@ -25,6 +25,7 @@ public class UserVO implements Serializable{
 	private Date createdDate;
 	private Date lastDate;
 	private String authority;
+	private String imagePath;
 	
 	public UserVO(){}
 	
@@ -41,6 +42,14 @@ public class UserVO implements Serializable{
 		this.email = email;
 		this.password = password;
 		this.lastDate = lastDate;
+	}
+	
+	public UserVO(String firstname,String lastname,String email, String password,String imagePath){
+		this.firstName = firstname;
+		this.lastName = lastname;
+		this.email = email;
+		this.password = password;
+		this.imagePath = imagePath;
 	}
 	
     public String getAuthority() {
@@ -106,5 +115,13 @@ public class UserVO implements Serializable{
     public void setLastDate(Date lastDate) {
         this.lastDate = lastDate;
     }
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
 
 }

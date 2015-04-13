@@ -54,6 +54,7 @@
 				<td>${list.email }</td>
 			    <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
 			    <td><fmt:formatDate value="${list.lastDate}" pattern="yyyy-MM-dd"/></td>
+			    <td><img alt="" src="<%=request.getContextPath()%>/resource/upload/${list.imagePath}"></td>
 			 </tr>
 			</c:forEach>
 		</tbody>
@@ -75,6 +76,6 @@
 			</table>
 		</c:otherwise>
 	</c:choose>
-	<li><a href="<%=request.getContextPath()%>/main/main.do">Back Home</a></li>
+	<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </body>
 </html>

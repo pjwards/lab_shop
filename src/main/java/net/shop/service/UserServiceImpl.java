@@ -73,4 +73,11 @@ public class UserServiceImpl implements UserService {
 		return userVO.getNumber();
 	}
 
+	@Override
+	public UserVO selectOneVo(String email) throws Exception {
+		// TODO Auto-generated method stub
+		UserVO userVO = userDAO.selectOne(email);
+		return userVO;
+	}
+
 }

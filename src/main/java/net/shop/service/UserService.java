@@ -14,7 +14,11 @@ import net.shop.vo.UserVO;
  */
 
 public interface UserService {
-
+	/*
+    Editor : Jisung Jeon
+    Decription : return UserVO
+    */
+	public UserVO selectOneVo(String email) throws Exception;
     /*
     Editor : Jisung Jeon
     Decription : check the account by email
@@ -62,4 +66,6 @@ public interface UserService {
     Decription : Update last_date when login
     */
     public int updateDate(String email) throws Exception;
+    
+  
 }

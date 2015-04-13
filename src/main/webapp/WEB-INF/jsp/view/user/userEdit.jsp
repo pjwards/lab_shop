@@ -16,12 +16,13 @@
 <title>Edit</title>
 </head>
 <body>
-	<form action="" method="post" >
-		<input type="text" class="form-control" name="firstName" maxlength="10" required="required" placeholder="Write your First name" autocomplete="off"><br>
-		<input type="text" class="form-control" name="lastName" maxlength="10" required="required" placeholder="Write your Last name" autocomplete="off"><br>
-		<input type="text" class="form-control" name="password" maxlength="10" required="required" placeholder="Write Password" autocomplete="off"><br>
+	<form action="" method="post" enctype="multipart/form-data">
+		<input type="text" class="form-control" name="firstName" maxlength="10" required="required" placeholder="Write your First name" autocomplete="off" value="${uservo.firstName}"><br>
+		<input type="text" class="form-control" name="lastName" maxlength="10" required="required" placeholder="Write your Last name" autocomplete="off" value="${uservo.lastName}"><br>
+		<input type="password" class="form-control" name="password" maxlength="10" required="required" placeholder="Write Password" autocomplete="off" ><br>
+		<input type="file" name="thumnail"/><br>
 		<button type="submit" class="btn btn-primary" value="submit">Submit</button>
 	</form>
-	<li><a href="<%=request.getContextPath()%>/main/main.do">Back Home</a></li>
+	<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </body>
 </html>
