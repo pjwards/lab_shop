@@ -21,8 +21,21 @@
       select * from shop_user where email=#{email}
     </select>
 
-    <select id="selectList" resultMap="userResultMap">
-      select * from shop_user limit #{offset},#{limit}
+    <select id="selectList" parameterType="map" resultMap="userResultMap">
+      select * from shop_user 
+      <if test="keyword != NULL">
+      where last_name like #{keyword} or email like #{keyword} or authority like #{keyword}
+      </if>
+      order by 
+      <choose>
+      	<when test="order == 'creDate_asc'">created_date asc</when>
+      	<when test="order == 'creDate_desc'">created_date desc</when>
+      	<when test="order == 'lastDate_asc'">last_date asc</when>
+      	<when test="order == 'lastDate_desc'">last_date desc</when>
+      	<when test="order == 'no_asc'">no asc</when>
+      	<otherwise>no desc</otherwise>
+ 	  </choose>
+ 	  limit #{offset},#{limit} 
     </select>
 
     <select id="count" resultType="int">

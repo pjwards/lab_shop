@@ -11,10 +11,30 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
 <html>
-<head>
+<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#search_btn").click(function(){
+		if($("#q").val() == ''){
+			alert("Enter Keyword");
+			$("#q").focus();
+			return false;
+		}else{
+			var act = 'userList.do?q='+$("#q").val();
+			$("#search").attr('action',act).submit();
+		}
+	});
+});
+
+function search_enter(form){
+	var keycode = window.event.keyCode;
+	if(keycode == 13) $("#search_btn").click();
+}
+</script>
+
 <title>UserList</title>
 </head>
 <body>
@@ -39,11 +59,48 @@
 	<table id="box-table-a" class="table table-hover">
 		<thead>
 			<tr>
-				<th scope="col">No</th>
+				<th scope="col">
+				<c:choose>
+					<c:when test="${order == 'no_asc' }">
+						<a href="userList.do?order=no_desc">No up</a> 
+					</c:when>
+					<c:when test="${order == 'no_desc' }">
+						<a href="userList.do?order=no_asc">No down</a> 
+					</c:when>
+					<c:otherwise>
+						<a href="userList.do?order=no_asc">No</a>
+					</c:otherwise>
+				</c:choose>
+				</th>
 				<th scope="col">Lastname</th>
 				<th scope="col">Email</th>
-				<th scope="col">Created_Date</th>
-				<th scope="col">Last_Date</th>
+				<th scope="col">Authority</th>
+				<th scope="col">
+				<c:choose>
+					<c:when test="${order == 'creDate_asc'}">
+						<a href="userList.do?order=creDate_desc">Created_Date up</a> 
+					</c:when>
+					<c:when test="${order == 'creDate_desc'}">
+						<a href="userList.do?order=creDate_asc">Created_Date down</a> 
+					</c:when>
+					<c:otherwise>
+						<a href="userList.do?order=creDate_asc">Created_Date</a>
+					</c:otherwise>
+				</c:choose>
+				</th>
+				<th scope="col">
+				<c:choose>
+					<c:when test="${order == 'lastDate_asc'}">
+						<a href="userList.do?order=lastDate_desc">Last_Date up</a> 
+					</c:when>
+					<c:when test="${order == 'lastDate_desc'}">
+						<a href="userList.do?order=lastDate_asc">Last_Date down</a> 
+					</c:when>
+					<c:otherwise>
+						<a href="userList.do?order=lastDate_asc">Last_Date</a>
+					</c:otherwise>
+				</c:choose>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -52,6 +109,7 @@
 				<th scope="row">${list.number }</th>
 				<td>${list.lastName }</td>
 				<td>${list.email }</td>
+				<td>${list.authority }
 			    <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
 			    <td><fmt:formatDate value="${list.lastDate}" pattern="yyyy-MM-dd"/></td>
 			    <td><img alt="" src="<%=request.getContextPath()%>/resource/upload/${list.imagePath}"></td>
@@ -62,13 +120,13 @@
 					<tr>
 					 <td colspan="16" align="center">
   						 <c:if test="${pagingVO.beginPage > 5}">
-                       		 <a href="<c:url value="userList.do?p=${pagingVO.beginPage-1}"/> ">이전</a>
+                       		 <a href="<c:url value="userList.do?q=${keyword }&order=${order}&p=${pagingVO.beginPage-1}"/> ">이전</a>
                     	 </c:if>
                  		 <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
-                       		 <a href="<c:url value="userList.do?p=${pno}"/> ">[${pno}]</a>
+                       		 <a href="<c:url value="userList.do?q=${keyword }&order=${order}&p=${pno}"/> ">[${pno}]</a>
              		     </c:forEach>
                		     <c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
-                  		     <a href="<c:url value="userList.do?p=${pagingVO.endPage + 1}"/> ">다음</a>
+                  		     <a href="<c:url value="userList.do?q=${keyword }&order=${order}&p=${pagingVO.endPage + 1}"/> ">다음</a>
                   		 </c:if>
  					  </td>
 					</tr>
@@ -77,5 +135,10 @@
 		</c:otherwise>
 	</c:choose>
 	<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
+	
+	<form id="search" method="post">
+		<input type="text" name="search_word" id="q" onkeypress="search_enter(document.q);"/>
+		<input type="button" value="search" id="search_btn"/>
+	</form>
 </body>
 </html>

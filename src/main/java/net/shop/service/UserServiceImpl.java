@@ -1,5 +1,6 @@
 package net.shop.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -35,8 +36,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserVO> selectList(int start, int end) throws Exception {
-		return userDAO.selectList(start,end);
+	public List<UserVO> selectList(int start, int end, String order,String keyword) throws Exception {
+		HashMap<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("order", order);
+		paraMap.put("offset", start);
+		paraMap.put("limit", end);
+		paraMap.put("keyword", keyword);
+		return userDAO.selectListMap(paraMap);
 	}
 
 	@Override

@@ -2,12 +2,12 @@ package net.shop.dao;
 
 import net.shop.vo.UserVO;
 
-import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -33,16 +33,6 @@ public class UserDAOMySql implements UserDAO {
 
         try{
             return sqlSession.selectOne("net.UserDao.selectOne",email);
-        }finally{
-            sqlSession.close();
-        }
-    }
-
-    public List<UserVO> selectList(int start, int end) {
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        RowBounds rowBounds = new RowBounds(start,end);
-        try{
-            return sqlSession.selectList("net.UserDao.selectList", rowBounds);
         }finally{
             sqlSession.close();
         }
@@ -98,5 +88,19 @@ public class UserDAOMySql implements UserDAO {
         }finally{
             sqlSession.close();
         }
+	}
+
+	@Override
+	public List<UserVO> selectListMap(HashMap<String, Object> paraMap)
+			throws Exception {
+		// TODO Auto-generated method stub
+		 SqlSession sqlSession = sqlSessionFactory.openSession();
+	  
+	     try{
+	         return sqlSession.selectList("net.UserDao.selectList", paraMap);
+	     }finally{
+	    	 sqlSession.close();
+	     }
+		
 	}
 }

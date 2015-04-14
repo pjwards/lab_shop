@@ -54,7 +54,10 @@ public class UserController {
 	private ImageUtil imageUtil;
 	
 	@RequestMapping(value= "/userList.do")
-	public ModelAndView userList(HttpServletRequest request,HttpServletResponse response) throws Exception{
+	public ModelAndView userList(@RequestParam(value="p",required=false) String p,
+			@RequestParam(value="order",required=false) String order,
+			@RequestParam(value="q",required=false) String q,
+			HttpServletRequest request,HttpServletResponse response) throws Exception{
 		/*
         		웹 브라우저가 게시글 목록을 캐싱하지 않도록 캐시 관련 헤더를 설정
          */
@@ -65,12 +68,20 @@ public class UserController {
         
 		ModelAndView modelandview = new ModelAndView();
 		
-		String requestPageString = request.getParameter("p");
-
+		String requestPageString = p;		//paging
+		String orderCond = order;			//lining up
+		String keyword = q;					//searching
+		
         if(requestPageString == null || requestPageString.equals("")) {
             requestPageString = "1";
         }
-
+        if(orderCond == null || orderCond.equals("")) {
+        	orderCond = "no_asc";
+        }
+        if(keyword == null || keyword.equals("")) {
+        	keyword = null;
+        }
+        
         int requestPage = Integer.parseInt(requestPageString);
 		
         if(requestPage <= 0){
@@ -90,8 +101,10 @@ public class UserController {
             return modelandview;
         }
         
-		List<UserVO> lists = userService.selectList(pagingVO.getFirstRow()-1,pagingVO.getEndRow());
+		List<UserVO> lists = userService.selectList(pagingVO.getFirstRow()-1,pagingVO.getEndRow(),orderCond,keyword);
 		modelandview.addObject("userVOList", lists);
+		modelandview.addObject("order", orderCond);
+		modelandview.addObject("keyword", keyword);
 		request.setAttribute("hasUser", new Boolean(true));
 		
 		return modelandview;

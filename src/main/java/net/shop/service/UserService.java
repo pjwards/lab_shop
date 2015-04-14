@@ -35,7 +35,7 @@ public interface UserService {
     Editor : Jisung Jeon
     Decription : Return lists between start and end
     */
-    public List<UserVO> selectList(int start,int end) throws Exception;
+    public List<UserVO> selectList(int start,int end,String order,String keyword) throws Exception;
 
     /*
     Editor : Jisung Jeon
