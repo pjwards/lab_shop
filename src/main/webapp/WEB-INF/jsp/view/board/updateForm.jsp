@@ -10,7 +10,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>수정하기</title>
+    <title>글 수정</title>
 </head>
 <body>
 

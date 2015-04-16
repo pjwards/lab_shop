@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.GoodsDao">
+    <resultMap type="GoodsVO" id="goodsResultMap">
+        <id column="no" property="number"/>
+        <result column="name" property="name"/>
+        <result column="size" property="size"/>
+        <result column="material" property="material"/>
+        <result column="component" property="component"/>
+        <result column="options" property="options"/>
+        <result column="manufacturer" property="manufacturer"/>
+        <result column="madein" property="madein"/>
+        <result column="description" property="description"/>
+        <result column="price" property="price"/>
+        <result column="stock" property="stock"/>
+        <result column="user_no" property="userNumber"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="created_date" property="createdDate"/>
+    </resultMap>
+
+    <select id="selectCount" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM shop_goods
+    </select>
+
+    <select id="selectOne" parameterType="int" resultMap="goodsResultMap">
+        SELECT * FROM shop_goods WHERE no = #{VALUE}
+    </select>
+
+    <select id="selectList" parameterType="hashmap" resultMap="goodsResultMap">
+        SELECT * FROM shop_goods WHERE user_email = #{memberId} ORDER BY no DESC LIMIT #{rowBounds.offset},#{rowBounds.limit}
+    </select>
+
+    <insert id="insert" parameterType="GoodsVO">
+        INSERT INTO shop_goods (name, size, material, component, options, manufacturer, madein, description, price, stock, user_no, user_email, created_date)
+        VALUE (#{name},#{size},#{material},#{component},#{options},#{manufacturer},#{madein},#{description},#{price},#{stock},#{userNumber},#{userEmail},now())
+    </insert>
+
+    <insert id="insertBoardGoods" parameterType="hashmap">
+        INSERT INTO shop_board_goods (board_no, goods_no) VALUE (#{boardNumber},#{goodsNumber})
+    </insert>
+
+    <update id="update" parameterType="GoodsVO">
+        UPDATE shop_goods SET name=#{name},size=#{size},material=#{material},component=#{component},options=#{options}
+        ,manufacturer=#{manufacturer},madein=#{madein},description=#{description},price=#{price},stock=#{stock}
+        WHERE no = #{number}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM shop_goods WHERE no = #{VALUE}
+    </delete>
+
+    <update id="increaseGoodsCount" parameterType="int">
+        UPDATE shop_board SET goods_count = goods_count + 1 WHERE no = #{VALUE}
+    </update>
+
+    <update id="decreaseGoodsCount" parameterType="int">
+        UPDATE shop_board SET goods_count = goods_count - 1 WHERE no = #{VALUE}
+    </update>
+</mapper>
