@@ -6,14 +6,14 @@ apply plugin: 'war'
 apply plugin: 'idea'
 
 compileJava.options.encoding = 'UTF-8'
-sourceCompatibility = 1.8
+sourceCompatibility = 1.7
 version = '1.0'
 
 eclipse{
 	wtp{
 		facet{
 			facet name: 'jst.web', version: '3.0'
-			facet name: 'jst.java', version: '1.8'
+			facet name: 'jst.java', version: '1.7'
 		}
 	}
 }

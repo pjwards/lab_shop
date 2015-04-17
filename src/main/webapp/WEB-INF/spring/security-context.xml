@@ -22,20 +22,29 @@
 		    default-target-url="/main/main.do" 
 			authentication-failure-url="/main/login.do?error" 
 			username-parameter="email"
-			password-parameter="password" />
+			password-parameter="password"
+			authentication-success-handler-ref="savedRequestAwareAuthenticationSuccessHandler" />
+		
 		<logout logout-success-url="/main/main.do" delete-cookies="JSESSIONID" invalidate-session="true"/>
+		
 		<session-management
 			session-authentication-strategy-ref="sess" />
+			
+		<!-- enable remember-me (7 days) -->
+		<remember-me token-validity-seconds="691200"
+		remember-me-parameter="remember-me" data-source-ref="dataSource" />
 	</http>
-	
+
  	<!-- beans -->
 	<b:bean id="sess"
 		class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
 		<b:property name="maximumSessions" value="1" />
 		<b:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
 	</b:bean>
+	
 	<b:bean id="sessionRegistry"
 		class="org.springframework.security.core.session.SessionRegistryImpl" />
+		
 	<b:bean id="passwordEncoder"
 		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
 		

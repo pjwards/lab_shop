@@ -13,7 +13,7 @@
 	<input type="submit">Upload</input>
 </form>
 
- <img alt="" src="${image}">
+ <img alt="" src="${imageBase64}">
  <a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </body>
 </html>

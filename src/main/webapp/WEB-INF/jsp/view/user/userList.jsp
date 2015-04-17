@@ -62,10 +62,10 @@ function search_enter(form){
 				<th scope="col">
 				<c:choose>
 					<c:when test="${order == 'no_asc' }">
-						<a href="userList.do?order=no_desc">No up</a> 
+						<a href="userList.do?q=${keyword }&order=no_desc">No up</a> 
 					</c:when>
 					<c:when test="${order == 'no_desc' }">
-						<a href="userList.do?order=no_asc">No down</a> 
+						<a href="userList.do?q=${keyword }&order=no_asc">No down</a> 
 					</c:when>
 					<c:otherwise>
 						<a href="userList.do?order=no_asc">No</a>
@@ -78,10 +78,10 @@ function search_enter(form){
 				<th scope="col">
 				<c:choose>
 					<c:when test="${order == 'creDate_asc'}">
-						<a href="userList.do?order=creDate_desc">Created_Date up</a> 
+						<a href="userList.do?q=${keyword }&order=creDate_desc">Created_Date up</a> 
 					</c:when>
 					<c:when test="${order == 'creDate_desc'}">
-						<a href="userList.do?order=creDate_asc">Created_Date down</a> 
+						<a href="userList.do?q=${keyword }&order=creDate_asc">Created_Date down</a> 
 					</c:when>
 					<c:otherwise>
 						<a href="userList.do?order=creDate_asc">Created_Date</a>
@@ -91,10 +91,10 @@ function search_enter(form){
 				<th scope="col">
 				<c:choose>
 					<c:when test="${order == 'lastDate_asc'}">
-						<a href="userList.do?order=lastDate_desc">Last_Date up</a> 
+						<a href="userList.do?q=${keyword }&order=lastDate_desc">Last_Date up</a> 
 					</c:when>
 					<c:when test="${order == 'lastDate_desc'}">
-						<a href="userList.do?order=lastDate_asc">Last_Date down</a> 
+						<a href="userList.do?q=${keyword }&order=lastDate_asc">Last_Date down</a> 
 					</c:when>
 					<c:otherwise>
 						<a href="userList.do?order=lastDate_asc">Last_Date</a>

@@ -26,6 +26,15 @@ create table shop_user (
 	unique index (email)
 );
 
+
+CREATE TABLE persistent_logins (
+    username VARCHAR(64) NOT NULL,
+    series VARCHAR(64) NOT NULL,
+    token VARCHAR(64) NOT NULL,
+    last_used TIMESTAMP NOT NULL,
+    PRIMARY KEY (series)
+);
+
 create table shop_board (
 	no int not null auto_increment,
 	group_no int not null,

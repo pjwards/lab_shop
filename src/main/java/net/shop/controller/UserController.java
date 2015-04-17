@@ -13,7 +13,9 @@ import net.shop.vo.CommentVO;
 import net.shop.vo.PagingVO;
 import net.shop.vo.UserVO;
 
+import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * First Editor : Jisung Jeon (cbajs20@gmail.com)
@@ -168,12 +171,20 @@ public class UserController {
 	}
 	
 	@RequestMapping("/userEdit.do")
-	public String userEdit(Authentication auth,Model model) throws Exception{
-		UserDetails vo = (UserDetails) auth.getPrincipal();
-		UserVO userVO = userService.selectOneVo(vo.getUsername());
-		model.addAttribute("uservo", userVO);
-		return "/user/userEdit";
+	public String userEdit(Authentication auth,Model model,HttpServletRequest request) throws Exception{
+		if (isRememberMeAuthenticated()) {
+			//send login for update
+			setRememberMeTargetUrlToSession(request);
+			model.addAttribute("loginUpdate", true);
+			return "/main/login";
+		} else {
+			UserDetails vo = (UserDetails) auth.getPrincipal();
+			UserVO userVO = userService.selectOneVo(vo.getUsername());
+			model.addAttribute("uservo", userVO);
+			return "/user/userEdit";
+		}
 	}
+	
 	@SuppressWarnings("static-access")
 	@RequestMapping(value= "/userEdit.do", method=RequestMethod.POST)
 	public String userEdit(@RequestParam("firstName")String firstName,
@@ -235,5 +246,29 @@ public class UserController {
 		userService.delete(email);
 		request.getSession().invalidate();
 		return "redirect:/main/main.do";
+	}
+	
+	/**
+	 * Check if user is login by remember me cookie
+	 */
+	private boolean isRememberMeAuthenticated() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication.getPrincipal() == null) {
+			//System.out.println("false");
+			return false;
+		}
+		//System.out.println("true");
+		return RememberMeAuthenticationToken.class.isAssignableFrom(authentication.getClass());
+		
+	}
+	
+	/**
+	 * save targetURL in session
+	 */
+	private void setRememberMeTargetUrlToSession(HttpServletRequest request){
+		HttpSession session = request.getSession(false);
+		if(session!=null){
+			session.setAttribute("targetUrl", "/user/userEdit");
+		}
 	}
 }
