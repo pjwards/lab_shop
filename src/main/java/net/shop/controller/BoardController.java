@@ -8,15 +8,14 @@ import net.shop.vo.BoardVO;
 import net.shop.vo.PagingVO;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
@@ -48,35 +47,19 @@ public class BoardController {
     게시판 리스트
      */
     @RequestMapping(value = "/list.do")
-    public ModelAndView boardList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public ModelAndView boardList(@RequestParam(value = "p", required = false) Integer requestPage,
+                                  @RequestParam(value = "s", required = false) String separator) throws Exception{
+
         ModelAndView modelAndView = new ModelAndView();
 
-        /*
-        웹 브라우저가 게시글 목록을 캐싱하지 않도록 캐시 관련 헤더를 설정
-         */
-        response.setHeader("Pragma", "No-cache");
-        response.setHeader("Cache-Control", "no-cache");
-        response.addHeader("Cache-Control", "no-store");
-        response.setDateHeader("Expire", 1L);
-
-        String requestPageString = request.getParameter("p");
-        String separatorName = request.getParameter("s");
-
-        if(requestPageString == null || requestPageString.equals("")) {
-            requestPageString = "1";
-        }
-
-        int requestPage = Integer.parseInt(requestPageString);
-
-        if(requestPage <= 0){
-            return (ModelAndView)new ModelAndView("redirect:/board/list.do?s=" + request.getParameter("s"));
-        }
+        if(requestPage == null) requestPage = 1;
+        if(requestPage <= 0) return (ModelAndView)new ModelAndView("redirect:/board/list.do?s=" + separator);
 
         int totalCount;
-        if(separatorName  == null || separatorName.equals(""))  {
+        if(separator  == null || separator.equals(""))  {
             totalCount = boardService.selectCount();
         } else {
-            totalCount = boardService.selectCount(separatorName);
+            totalCount = boardService.selectCount(separator);
         }
 
         /*Paging 메소드의 사용 */
@@ -89,19 +72,19 @@ public class BoardController {
          */
         if(totalCount == 0){
             modelAndView.addObject("boardVOList", Collections.<BoardVO>emptyList());
-            modelAndView.addObject("hasBoard", new Boolean(false));
+            modelAndView.addObject("hasBoard", false);
             return modelAndView;
         }
 
         List<BoardVO> boardVOList;
-        if(separatorName  == null || separatorName.equals(""))  {
+        if(separator  == null || separator.equals(""))  {
             boardVOList = boardService.selectList(pagingVO.getFirstRow(), pagingVO.getEndRow());
         } else {
-            boardVOList = boardService.selectList(pagingVO.getFirstRow(), pagingVO.getEndRow(), separatorName);
+            boardVOList = boardService.selectList(pagingVO.getFirstRow(), pagingVO.getEndRow(), separator);
         }
 
         modelAndView.addObject("boardVOList", boardVOList);
-        modelAndView.addObject("hasBoard", new Boolean(true));
+        modelAndView.addObject("hasBoard", true);
 
         return modelAndView;
     }
@@ -110,26 +93,23 @@ public class BoardController {
     게시판 글쓰기 폼
      */
     @RequestMapping(value = "/write.do")
-    public ModelAndView boardWrite(HttpServletRequest request, Authentication auth) throws Exception{
+    public String boardWrite(Authentication auth) throws Exception{
 
-        UserDetails vo = (UserDetails) auth.getPrincipal();
-        String memberId = vo.getUsername();
-        util.isMemberId(memberId);
+        util.isMemberId(auth);
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/board/writeForm");
-        return modelAndView;
+        return "/board/writeForm";
     }
 
     /*
     게시판 글쓰기
      */
     @RequestMapping(value = "/write.do", method = RequestMethod.POST)
-    public ModelAndView boardWrite(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception{
+    public String boardWrite(@RequestParam(value = "title", required = true) String title,
+                                   @RequestParam(value = "content", required = true ) String content,
+                                   @RequestParam(value = "s", required = true, defaultValue = "default") String separator,
+                                   Authentication auth) throws Exception{
 
-    	UserDetails vo = (UserDetails) auth.getPrincipal();
-        String memberId = vo.getUsername();
-        util.isMemberId(memberId);
+        String memberId = util.isMemberId(auth);
 
         int groupId = boardService.generateNextGroupNumber("board");
         int userNumber = userService.selectOneNo(memberId);
@@ -138,56 +118,36 @@ public class BoardController {
         boardVO.setGroupNumber(groupId);
         DecimalFormat decimalFormat = new DecimalFormat("0000000000");
         boardVO.setSequenceNumber(decimalFormat.format(groupId) + "99");
-        boardVO.setTitle(request.getParameter("title"));
-        boardVO.setContent(request.getParameter("content"));
+        boardVO.setTitle(title);
+        boardVO.setContent(content);
         boardVO.setUserNumber(userNumber);
         boardVO.setUserEmail(memberId);
-        boardVO.setSeparatorName(request.getParameter("s"));
+        boardVO.setSeparatorName(separator);
 
         boardService.insert(boardVO);
 
-        /*
-        글쓰기 완료 페이지 구현을 위한 부분
-         */
-        //int boardNumber = boardService.selectLastBoardNumberByEmail(request.getParameter("memberId"));
-        //boardVO.setNumber(boardNumber);
-        //request.setAttribute("postedBoardVO", boardVO);
-        //return "/board/write";
-
-        return (ModelAndView)new ModelAndView("redirect:/board/list.do?s=" + request.getParameter("s"));
+        return "redirect:/board/list.do?s=" + separator;
     }
 
     /*
     게시판 읽기
      */
     @RequestMapping(value = "/read.do")
-    public ModelAndView boardRead(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ModelAndView modelAndView = new ModelAndView();
-
-        /*
-        웹 브라우저가 게시글 목록을 캐싱하지 않도록 캐시 관련 헤더를 설정
-         */
-        response.setHeader("Pragma", "No-cache");
-        response.setHeader("Cache-Control", "no-cache");
-        response.addHeader("Cache-Control", "no-store");
-        response.setDateHeader("Expire", 1L);
-
-        int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
+    public String boardRead(@RequestParam(value = "boardNumber", required = true) Integer boardNumber,
+                            @RequestParam(value = "s", required = false) String separator,
+                            @RequestParam(value = "p", required = false) String page,
+                            HttpServletRequest request) throws Exception {
 
         BoardVO boardVO = boardService.selectOne(boardNumber);
 
-        if(boardVO == null){
-            throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
-        }
+        if(boardVO == null) throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
 
         boardService.increaseReadCount(boardNumber);
         boardVO.setReadCount(boardVO.getReadCount() + 1);
 
         request.setAttribute("boardVO", boardVO);
-        //modelAndView.setViewName("/board/read");
 
-        return (ModelAndView)new ModelAndView("forward:/comment/listAll.do?s=" + request.getParameter("s")
-                +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
+        return "forward:/comment/listAll.do?s=" + separator +"&p=" + page +"&boardNumber=" + boardNumber;
     }
 
     /*
@@ -200,14 +160,10 @@ public class BoardController {
 
         int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
 
-        UserDetails vo = (UserDetails) auth.getPrincipal();
-        String memberId = vo.getUsername();
-        util.isMemberId(memberId);
+        String memberId = util.isMemberId(auth);
 
         BoardVO boardVO = boardService.selectOne(boardNumber);
-        if(boardVO == null){
-            throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
-        }
+        if(boardVO == null) throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
 
         util.isEqualMemberId(boardVO.getUserEmail(), memberId);
 
@@ -220,25 +176,19 @@ public class BoardController {
     게시판 수정
      */
     @RequestMapping(value = "/update.do", method = RequestMethod.POST)
-    public ModelAndView boardUpdate(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception {
+    public String boardUpdate(@RequestParam(value = "boardNumber", required = true) Integer boardNumber,
+                              @RequestParam(value = "title", required = true) String title,
+                              @RequestParam(value = "content", required = true) String content,
+                              @RequestParam(value = "s", required = false) String separator,
+                              @RequestParam(value = "p", required = false) String page,
+                              Authentication auth) throws Exception {
 
-        ModelAndView modelAndView = new ModelAndView();
-
-        int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
-
-        UserDetails vo = (UserDetails) auth.getPrincipal();
-        String memberId = vo.getUsername();
-        util.isMemberId(memberId);
+        String memberId = util.isMemberId(auth);
 
         BoardVO boardVO = boardService.selectOne(boardNumber);
-        if(boardVO == null){
-            throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
-        }
+        if(boardVO == null) throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
 
         util.isEqualMemberId(boardVO.getUserEmail(), memberId);
-
-        String title = request.getParameter("title");
-        String content = request.getParameter("content");
 
         boardVO = new BoardVO();
         boardVO.setNumber(boardNumber);
@@ -250,24 +200,17 @@ public class BoardController {
             throw new BoardNotFoundException("게시글이 존재하지 않음 : "+ boardNumber);
         }
 
-        boardVO = boardService.selectOne(boardNumber);
-
-        modelAndView.addObject("boardVO", boardVO);
-        //modelAndView.setViewName("/board/update");
-
-        return (ModelAndView)new ModelAndView("redirect:/board/read.do?s=" + request.getParameter("s")
-                +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
+        return "redirect:/board/read.do?s=" + separator + "&p=" + page +"&boardNumber=" + boardNumber;
     }
 
     /*
     게시판 답글 폼
      */
     @RequestMapping(value = "/reply.do")
-    public ModelAndView boardReply(HttpServletRequest request) throws Exception{
+    public ModelAndView boardReply(@RequestParam(value = "parentBoardNumber", required = true) Integer parentBoardNumber)
+            throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
-
-        int parentBoardNumber = Integer.parseInt(request.getParameter("parentBoardNumber"));
 
         BoardVO parent = boardService.selectOne(parentBoardNumber);
 
@@ -289,18 +232,17 @@ public class BoardController {
     게시판 답글
      */
     @RequestMapping(value = "/reply.do", method = RequestMethod.POST)
-    public ModelAndView boardReply(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception{
+    public String boardReply(@RequestParam(value = "parentBoardNumber", required = true) Integer parentBoardNumber,
+                             @RequestParam(value = "title", required = true) String title,
+                             @RequestParam(value = "content", required = true) String content,
+                             @RequestParam(value = "s", required = true, defaultValue = "default") String separator,
+                             Authentication auth) throws Exception{
 
-        ModelAndView modelAndView = new ModelAndView();
-
-        UserDetails vo = (UserDetails) auth.getPrincipal();
-        String memberId = vo.getUsername();
-        util.isMemberId(memberId);
+        String memberId = util.isMemberId(auth);
 
         BoardVO boardVO = new BoardVO();
-        boardVO.setTitle(request.getParameter("title"));
-        boardVO.setContent(request.getParameter("content"));
-        int parentBoardNumber = Integer.parseInt(request.getParameter("parentBoardNumber"));
+        boardVO.setTitle(title);
+        boardVO.setContent(content);
 
         BoardVO parent = boardService.selectOne(parentBoardNumber);
 
@@ -317,37 +259,32 @@ public class BoardController {
         boardVO.setSequenceNumber(sequenceNumber);
         boardVO.setUserNumber(userNumber);
         boardVO.setUserEmail(memberId);
-        boardVO.setSeparatorName(request.getParameter("s"));
+        boardVO.setSeparatorName(separator);
 
         int boardNumber = boardService.insert(boardVO);
         if(boardNumber == -1){
             throw new RuntimeException("DB 삽입 실패 : " + boardNumber);
         }
 
-        //boardVO.setNumber(boardNumber);
-        //modelAndView.addObject("boardVO", boardVO);
-
-        return (ModelAndView)new ModelAndView("redirect:/board/list.do?s=" + request.getParameter("s"));
+        return "redirect:/board/list.do?s=" + separator;
     }
 
     /*
     게시판 삭제
      */
     @RequestMapping(value = "/delete.do", method = RequestMethod.POST)
-    public ModelAndView boardDelete(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception {
+    public String boardDelete(@RequestParam(value = "boardNumber", required = true) Integer boardNumber,
+                              @RequestParam(value = "s", required = false) String separator,
+                              @RequestParam(value = "p", required = false) String page,
+                              Authentication auth) throws Exception {
 
-        int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
-
-        UserDetails vo = (UserDetails) auth.getPrincipal();
-        String memberId = vo.getUsername();
-        util.isMemberId(memberId);
+        String memberId = util.isMemberId(auth);
 
         BoardVO boardVO = boardService.selectOne(boardNumber);
         util.isEqualMemberId(boardVO.getUserEmail(), memberId);
 
         boardService.delete(boardNumber);
 
-        return (ModelAndView)new ModelAndView("redirect:/board/list.do?s=" + request.getParameter("s")
-        +"&p=" + request.getParameter("p"));
+        return "redirect:/board/list.do?s=" + separator + "&p=" + page;
     }
 }

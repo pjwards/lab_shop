@@ -61,13 +61,6 @@ public class UserController {
 			@RequestParam(value="order",required=false) String order,
 			@RequestParam(value="q",required=false) String q,
 			HttpServletRequest request,HttpServletResponse response) throws Exception{
-		/*
-        		웹 브라우저가 게시글 목록을 캐싱하지 않도록 캐시 관련 헤더를 설정
-         */
-        response.setHeader("Pragma", "No-cache");
-        response.setHeader("Cache-Control", "no-cache");
-        response.addHeader("Cache-Control", "no-store");
-        response.setDateHeader("Expire", 1L);
         
 		ModelAndView modelandview = new ModelAndView();
 		
@@ -100,7 +93,7 @@ public class UserController {
         
         if(totalCount == 0){
             modelandview.addObject("userVOList", Collections.<CommentVO>emptyList());
-            request.setAttribute("hasUser", new Boolean(false));
+            request.setAttribute("hasUser", false);
             return modelandview;
         }
         
@@ -108,7 +101,7 @@ public class UserController {
 		modelandview.addObject("userVOList", lists);
 		modelandview.addObject("order", orderCond);
 		modelandview.addObject("keyword", keyword);
-		request.setAttribute("hasUser", new Boolean(true));
+		request.setAttribute("hasUser", true);
 		
 		return modelandview;
 	}

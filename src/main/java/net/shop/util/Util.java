@@ -4,6 +4,8 @@ import net.shop.error.*;
 import net.shop.vo.PagingVO;
 import net.shop.vo.ReplyVO;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -84,6 +86,18 @@ public class Util {
         if(memberId == null || memberId.equals("")){
             throw new MemberIdNotFoundException("로그인을 하지 않았습니다.");
         }
+    }
+
+    public String isMemberId(Authentication auth) throws MemberIdNotFoundException{
+
+        UserDetails vo = (UserDetails) auth.getPrincipal();
+        String memberId = vo.getUsername();
+
+        if(memberId == null || memberId.equals("")){
+            throw new MemberIdNotFoundException("로그인을 하지 않았습니다.");
+        }
+
+        return memberId;
     }
 
     /*

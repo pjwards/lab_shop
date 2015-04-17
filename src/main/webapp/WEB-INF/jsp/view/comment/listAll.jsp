@@ -26,7 +26,7 @@
         <c:forEach var="comment" items="${commentVOList}" varStatus="status">
             <div style="border: 1px solid; margin-left: ${comment.level * 30}px; width: 50%;">
                 <table>
-
+                    ${comment.level}
                     <tr>
                         <td>작성자</td>
                         <td>${comment.userEmail}</td>

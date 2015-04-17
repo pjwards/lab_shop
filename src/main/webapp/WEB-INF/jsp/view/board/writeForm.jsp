@@ -11,6 +11,7 @@
 <html>
 <head>
     <title>글쓰기</title>
+    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
 </head>
 <body>
 
@@ -19,8 +20,15 @@
     제목 : <input type="text" name="title" size="100"/><br/>
     <!--카테고리 : <input type="text" name="separator"/><br/>-->
     글내용: <br/>
-    <textarea name="content" cols="40" rows="5"></textarea>
+    <textarea name="content" id="content" cols="10" rows="80"></textarea>
     <br/>
+
+    <script>
+        // Replace the <textarea id="editor1"> with a CKEditor
+        // instance, using default configuration.
+        CKEDITOR.replace( 'content' );
+    </script>
+
     <input type="submit" value="전송">
 </form>
 

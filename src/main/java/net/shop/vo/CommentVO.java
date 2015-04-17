@@ -13,7 +13,6 @@ public class CommentVO extends ReplyVO{
 
     private int number;
     private int groupNumber;
-    private String sequenceNumber;
     private String content;
     private Date postingDate;
     private int userNumber;

@@ -9,15 +9,13 @@ import net.shop.vo.CommentVO;
 import net.shop.vo.PagingVO;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
@@ -48,28 +46,13 @@ public class CommentController {
     댓글 리스트
      */
     @RequestMapping(value = "/listAll.do")
-    public ModelAndView commentListAll(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView commentListAll(@RequestParam(value = "boardNumber", required = true) Integer boardNumber)
+            throws Exception {
+
         ModelAndView modelAndView = new ModelAndView();
 
-        /*
-        웹 브라우저가 게시글 목록을 캐싱하지 않도록 캐시 관련 헤더를 설정
-         */
-        response.setHeader("Pragma", "No-cache");
-        response.setHeader("Cache-Control", "no-cache");
-        response.addHeader("Cache-Control", "no-store");
-        response.setDateHeader("Expire", 1L);
-
-        String boardNumberString = request.getParameter("boardNumber");
-
-        if(boardNumberString == null || boardNumberString.equals("")) {
-            throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumberString);
-        }
-
-        int boardNumber = Integer.parseInt(boardNumberString);
-
-        if(boardNumber < 0){
-            throw new IllegalArgumentException("board number < 1 : " + boardNumber);
-        }
+        if(boardNumber == null) throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
+        if(boardNumber < 0) throw new IllegalArgumentException("board number < 1 : " + boardNumber);
 
         int totalCount = commentService.selectCount(boardNumber);
 
@@ -77,13 +60,13 @@ public class CommentController {
 
         if(totalCount == 0){
             modelAndView.addObject("commentVOList", Collections.<CommentVO>emptyList());
-            request.setAttribute("hasComment", new Boolean(false));
+            modelAndView.addObject("hasComment", false);
             return modelAndView;
         }
 
         List<CommentVO> commentVOList = commentService.selectList(boardNumber);
-        request.setAttribute("commentVOList", commentVOList);
-        request.setAttribute("hasComment", new Boolean(true));
+        modelAndView.addObject("commentVOList", commentVOList);
+        modelAndView.addObject("hasComment", true);
 
         return modelAndView;
     }
@@ -92,40 +75,18 @@ public class CommentController {
     댓글 리스트
      */
     @RequestMapping(value = "/list.do")
-    public ModelAndView commentList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView commentList(@RequestParam(value = "cp", required = true) Integer requestPage,
+                                    @RequestParam(value = "boardNumber", required = true) Integer boardNumber)
+            throws Exception {
+
         ModelAndView modelAndView = new ModelAndView();
 
-        /*
-        웹 브라우저가 댓글 목록을 캐싱하지 않도록 캐시 관련 헤더를 설정
-         */
-        response.setHeader("Pragma", "No-cache");
-        response.setHeader("Cache-Control", "no-cache");
-        response.addHeader("Cache-Control", "no-store");
-        response.setDateHeader("Expire", 1L);
+        if(requestPage == null) requestPage = 1;
+        if(requestPage <= 0) throw new IllegalArgumentException("requestPage <= 0 : " + requestPage);
 
-        String requestPageString = request.getParameter("cp");
 
-        if(requestPageString == null || requestPageString.equals("")) {
-            requestPageString = "1";
-        }
-
-        int requestPage = Integer.parseInt(requestPageString);
-
-        if(requestPage <= 0){
-            throw new IllegalArgumentException("requestPage <= 0 : " + requestPage);
-        }
-
-        String boardNumberString = request.getParameter("boardNumber");
-
-        if(boardNumberString == null || boardNumberString.equals("")) {
-            throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumberString);
-        }
-
-        int boardNumber = Integer.parseInt(boardNumberString);
-
-        if(boardNumber < 0){
-            throw new IllegalArgumentException("board number < 1 : " + boardNumber);
-        }
+        if(boardNumber == null) throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
+        if(boardNumber < 0) throw new IllegalArgumentException("board number < 1 : " + boardNumber);
 
         int totalCount = commentService.selectCount(boardNumber);
 
@@ -136,13 +97,13 @@ public class CommentController {
 
         if(totalCount == 0){
             modelAndView.addObject("commentVOList", Collections.<CommentVO>emptyList());
-            request.setAttribute("hasComment", new Boolean(false));
+            modelAndView.addObject("hasComment", false);
             return modelAndView;
         }
 
         List<CommentVO> commentVOList = commentService.selectList(boardNumber, pagingVO.getFirstRow(), pagingVO.getEndRow());
-        request.setAttribute("commentVOList", commentVOList);
-        request.setAttribute("hasComment", new Boolean(true));
+        modelAndView.addObject("commentVOList", commentVOList);
+        modelAndView.addObject("hasComment", true);
 
         return modelAndView;
     }
@@ -151,11 +112,13 @@ public class CommentController {
     댓글 글쓰기
      */
     @RequestMapping(value = "/write.do", method = RequestMethod.POST)
-    public ModelAndView commentWrite(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception{
+    public String commentWrite(@RequestParam(value = "content", required = true) String content,
+                               @RequestParam(value = "boardNumber", required = true ) Integer boardNumber,
+                               @RequestParam(value = "s", required = true, defaultValue = "default") String separator,
+                               @RequestParam(value = "p", required = false) String page,
+                               Authentication auth) throws Exception{
 
-    	UserDetails vo = (UserDetails) auth.getPrincipal();
-        String memberId = vo.getUsername();
-        util.isMemberId(memberId);
+        String memberId = util.isMemberId(auth);
 
         int groupId = commentService.generateNextGroupNumber("comment");
         int userNumber = userService.selectOneNo(memberId);
@@ -164,17 +127,16 @@ public class CommentController {
         commentVO.setGroupNumber(groupId);
         DecimalFormat decimalFormat = new DecimalFormat("0000000000");
         commentVO.setSequenceNumber(decimalFormat.format(groupId) + "99");
-        commentVO.setContent(request.getParameter("content"));
+        commentVO.setContent(content);
         commentVO.setUserNumber(userNumber);
         commentVO.setUserEmail(memberId);
-        commentVO.setBoardNumber(Integer.parseInt(request.getParameter("boardNumber")));
-        commentVO.setSeparatorName(request.getParameter("s"));
+        commentVO.setBoardNumber(boardNumber);
+        commentVO.setSeparatorName(separator);
 
         commentService.insert(commentVO);
-        commentService.increaseCommentCount(Integer.parseInt(request.getParameter("boardNumber")));
+        commentService.increaseCommentCount(boardNumber);
 
-        return (ModelAndView)new ModelAndView("redirect:/board/read.do?s=" + request.getParameter("s")
-                +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
+        return "redirect:/board/read.do?s=" + separator + "&p=" + page +"&boardNumber=" + boardNumber;
     }
 
     /*
@@ -183,10 +145,7 @@ public class CommentController {
     public CommentVO commentRead(int commentNumber) throws Exception {
 
         CommentVO commentVO = commentService.selectOne(commentNumber);
-
-        if(commentVO == null){
-            throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
-        }
+        if(commentVO == null) throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
 
         return commentVO;
     }
@@ -195,21 +154,15 @@ public class CommentController {
     댓글 수정 폼
      */
     @RequestMapping(value = "/update.do")
-    public ModelAndView commentUpdate(HttpServletRequest request, Authentication auth) throws Exception{
+    public ModelAndView commentUpdate(@RequestParam(value = "commentNumber", required = true) Integer commentNumber,
+                                      Authentication auth) throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
 
-        int commentNumber = Integer.parseInt(request.getParameter("commentNumber"));
-
-        UserDetails vo = (UserDetails) auth.getPrincipal();
-        String memberId = vo.getUsername();
-        util.isMemberId(memberId);
-
+        String memberId = util.isMemberId(auth);
 
         CommentVO commentVO = commentService.selectOne(commentNumber);
-        if(commentVO == null){
-            throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
-        }
+        if(commentVO == null) throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
 
         util.isEqualMemberId(commentVO.getUserEmail(), memberId);
 
@@ -222,54 +175,38 @@ public class CommentController {
     댓글 수정
      */
     @RequestMapping(value = "/update.do", method = RequestMethod.POST)
-    public ModelAndView commentUpdate(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception {
+    public String commentUpdate(@RequestParam(value = "commentNumber", required = true) Integer commentNumber,
+                                @RequestParam(value = "boardNumber", required = true) String boardNumber,
+                                @RequestParam(value = "content", required = true) String content,
+                                @RequestParam(value = "p", required = false) String page,
+                                @RequestParam(value = "s", required = false) String separator,
+                                Authentication auth) throws Exception {
 
-        ModelAndView modelAndView = new ModelAndView();
-
-        int commentNumber = Integer.parseInt(request.getParameter("commentNumber"));
-
-        UserDetails vo = (UserDetails) auth.getPrincipal();
-        String memberId = vo.getUsername();
-        util.isMemberId(memberId);
-
+        String memberId = util.isMemberId(auth);
 
         CommentVO commentVO = commentService.selectOne(commentNumber);
-        if(commentVO == null){
-            throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
-        }
+        if(commentVO == null) throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
 
         util.isEqualMemberId(commentVO.getUserEmail(), memberId);
-
-        String content = request.getParameter("content");
 
         commentVO = new CommentVO();
         commentVO.setNumber(commentNumber);
         commentVO.setContent(content);
 
         int updateCount = commentService.update(commentVO);
-        if (updateCount == 0) {
-            throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
-        }
+        if (updateCount == 0) throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
 
-        commentVO = commentService.selectOne(commentNumber);
+        commentService.selectOne(commentNumber);
 
-        //modelAndView.addObject("commentVO", commentVO);
-        //modelAndView.setViewName("/comment/update");
-        //return modelAndView;
-
-        return (ModelAndView)new ModelAndView("redirect:/board/read.do?s=" + request.getParameter("s")
-                +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
+        return "redirect:/board/read.do?s=" + separator + "&p=" + page +"&boardNumber=" + boardNumber;
     }
 
     /*
     댓글 답글 폼
      */
     @RequestMapping(value = "/reply.do")
-    public ModelAndView commentReply(HttpServletRequest request) throws Exception{
-
-        ModelAndView modelAndView = new ModelAndView();
-
-        int parentCommentNumber = Integer.parseInt(request.getParameter("parentCommentNumber"));
+    public String commentReply(@RequestParam(value = "parentCommentNumber", required = true) Integer parentCommentNumber)
+            throws Exception{
 
         CommentVO parent = commentService.selectOne(parentCommentNumber);
 
@@ -281,9 +218,7 @@ public class CommentController {
         String lastChildSeq = commentService.selectLastSequenceNumber(searchMaxSeqNum, searchMinSeqNum);
         String sequenceNumber = util.getSequenceNumber(parent, lastChildSeq);
 
-        modelAndView.setViewName("/comment/replyForm");
-
-        return modelAndView;
+        return "/comment/replyForm";
 
     }
 
@@ -291,18 +226,18 @@ public class CommentController {
     댓글 답글
      */
     @RequestMapping(value = "/reply.do", method = RequestMethod.POST)
-    public ModelAndView commnetReply(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception{
+    public String commentReply(@RequestParam(value = "content", required = true) String content,
+                               @RequestParam(value = "boardNumber", required = true) Integer boardNumber,
+                               @RequestParam(value = "parentCommentNumber", required = true) Integer parentCommentNumber,
+                               @RequestParam(value = "s", required = true, defaultValue = "default") String separator,
+                               @RequestParam(value = "p", required = false) String page,
+                               Authentication auth) throws Exception{
 
-        ModelAndView modelAndView = new ModelAndView();
-
-        UserDetails vo = (UserDetails) auth.getPrincipal();
-        String memberId = vo.getUsername();
-        util.isMemberId(memberId);
+        String memberId = util.isMemberId(auth);
 
         CommentVO commentVO = new CommentVO();
-        commentVO.setContent(request.getParameter("content"));
-        commentVO.setBoardNumber(Integer.parseInt(request.getParameter("boardNumber")));
-        int parentCommentNumber = Integer.parseInt(request.getParameter("parentCommentNumber"));
+        commentVO.setContent(content);
+        commentVO.setBoardNumber(boardNumber);
 
         CommentVO parent = commentService.selectOne(parentCommentNumber);
 
@@ -319,33 +254,26 @@ public class CommentController {
         commentVO.setSequenceNumber(sequenceNumber);
         commentVO.setUserNumber(userNumber);
         commentVO.setUserEmail(memberId);
-        commentVO.setSeparatorName(request.getParameter("s"));
+        commentVO.setSeparatorName(separator);
 
         int commentNumber = commentService.insert(commentVO);
-        if(commentNumber == -1){
-            throw new RuntimeException("DB 삽입 실패 : " + commentNumber);
-        }
-        commentService.increaseCommentCount(Integer.parseInt(request.getParameter("boardNumber")));
+        if(commentNumber == -1) throw new RuntimeException("DB 삽입 실패 : " + commentNumber);
+        commentService.increaseCommentCount(boardNumber);
 
-        //commentVO.setNumber(commentNumber);
-        //modelAndView.addObject("commentVO", commentVO);
-
-        return (ModelAndView)new ModelAndView("redirect:/board/read.do?s=" + request.getParameter("s")
-                +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
+        return "redirect:/board/read.do?s=" + separator + "&p=" + page + "&boardNumber=" + boardNumber;
     }
 
     /*
     댓글 삭제
      */
     @RequestMapping(value = "/delete.do", method = RequestMethod.POST)
-    public ModelAndView commentDelete(HttpServletRequest request, HttpServletResponse response, Authentication auth) throws Exception {
+    public String commentDelete(@RequestParam(value = "boardNumber", required = true) Integer boardNumber,
+                                @RequestParam(value = "commentNumber", required = true) Integer commentNumber,
+                                @RequestParam(value = "p", required = false) String page,
+                                @RequestParam(value = "s", required = false) String separator,
+                                Authentication auth) throws Exception {
 
-        int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
-        int commentNumber = Integer.parseInt(request.getParameter("commentNumber"));
-
-        UserDetails vo = (UserDetails) auth.getPrincipal();
-        String memberId = vo.getUsername();
-        util.isMemberId(memberId);
+        String memberId = util.isMemberId(auth);
 
         CommentVO commentVO = commentService.selectOne(commentNumber);
         util.isEqualMemberId(commentVO.getUserEmail(), memberId);
@@ -353,8 +281,7 @@ public class CommentController {
         commentService.delete(commentNumber);
         commentService.decreaseCommentCount(boardNumber);
 
-        return (ModelAndView)new ModelAndView("redirect:/board/read.do?s=" + request.getParameter("s")
-                +"&p=" + request.getParameter("p") +"&boardNumber=" + request.getParameter("boardNumber"));
+        return "redirect:/board/read.do?s=" + separator + "&p=" + page +"&boardNumber=" + boardNumber;
     }
 
 }

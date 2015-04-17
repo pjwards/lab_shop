@@ -43,6 +43,18 @@
 	
 	<!-- beans -->
 	<bean id="loginService" class="net.shop.service.LoginService"></bean>
+
+    <!-- Set Header No Cache -->
+    <mvc:annotation-driven/>
+    <mvc:interceptors>
+        <bean id="webContentInterceptor"
+              class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+            <property name="cacheSeconds" value="0"/>
+            <property name="useExpiresHeader" value="true"/>
+            <property name="useCacheControlHeader" value="true"/>
+            <property name="useCacheControlNoStore" value="true"/>
+        </bean>
+    </mvc:interceptors>
 	
 	<!-- If request parameter "targetUrl" is existed, then forward to this url. For update login form--> 
 	<bean id="savedRequestAwareAuthenticationSuccessHandler"

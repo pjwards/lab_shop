@@ -15,7 +15,6 @@ public class BoardVO extends ReplyVO{
 
     private int number;
     private int groupNumber;
-    private String sequenceNumber;
     private String title;
     private String content;
     private Date postingDate;
