@@ -60,4 +60,7 @@
       update shop_user set last_date=now() where email=#{email}
     </update>
 
+	<update id="updateAuth" parameterType="map">
+	  update shop_user set authority=#{authority} where email=#{email}
+	</update>
 </mapper>

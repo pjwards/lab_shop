@@ -28,8 +28,18 @@
 				</property>
 			</bean>
 		</mvc:message-converters>
-	</mvc:annotation-driven>
-	
+	</mvc:annotation-driven>	
+	<!-- Set Header No Cache -->
+    <mvc:interceptors>
+        <bean id="webContentInterceptor"
+              class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+            <property name="cacheSeconds" value="0"/>
+            <property name="useExpiresHeader" value="true"/>
+            <property name="useCacheControlHeader" value="true"/>
+            <property name="useCacheControlNoStore" value="true"/>
+        </bean>
+    </mvc:interceptors>
+    
 	<!-- View -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 	        <property name="prefix" value="/WEB-INF/jsp/view/"/>

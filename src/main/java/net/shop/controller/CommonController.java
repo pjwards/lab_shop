@@ -5,7 +5,6 @@ import java.util.Calendar;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import net.shop.util.ImageUtil;
 import net.shop.util.Util;
@@ -43,8 +42,7 @@ public class CommonController {
 
 	@SuppressWarnings("static-access")
 	@RequestMapping(value="/upload.do",method=RequestMethod.POST)
-	public String upload(@RequestParam(value="file1",required=false) MultipartFile multipartFile, Model model, HttpServletRequest request,
-			HttpServletResponse response) throws Exception{
+	public String upload(@RequestParam(value="file1",required=false) MultipartFile multipartFile, Model model) throws Exception{
 		Calendar cal = Calendar.getInstance();
 		String loadPath = "/home/jisung/git/lab_shop/src/main/webapp/resource/upload/";
 	    String fileName = multipartFile.getOriginalFilename();

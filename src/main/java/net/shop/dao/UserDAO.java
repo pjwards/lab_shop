@@ -29,4 +29,6 @@ public interface UserDAO {
 	public int delete(String email);
 
 	public int updateDate(String email);
+
+	public int updateAuth(HashMap<String,Object> paraMap);
 }

@@ -103,4 +103,16 @@ public class UserDAOMySql implements UserDAO {
 	     }
 		
 	}
+
+	@Override
+	public int updateAuth(HashMap<String,Object> paraMap) {
+		// TODO Auto-generated method stub
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.update("net.UserDao.updateAuth", paraMap);
+        }finally{
+            sqlSession.close();
+        }
+	}
 }

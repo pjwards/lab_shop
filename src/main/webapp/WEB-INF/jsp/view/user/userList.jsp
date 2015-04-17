@@ -12,9 +12,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <head>
+<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#search_btn").click(function(){
@@ -26,6 +27,16 @@ $(document).ready(function(){
 			var act = 'userList.do?q='+$("#q").val();
 			$("#search").attr('action',act).submit();
 		}
+	});
+	
+	$("a#give_auth").click(function(){
+		var auth = prompt("what authority? user/admin");
+		if(auth == null){
+			return false;
+		}
+		var email = $("a#give_auth").attr("vals");
+		var link = 'giveAuth.do?email='+email+'&auth='+auth;
+		$(location).attr('href', link);
 	});
 });
 
@@ -75,6 +86,7 @@ function search_enter(form){
 				<th scope="col">Lastname</th>
 				<th scope="col">Email</th>
 				<th scope="col">Authority</th>
+				<th scope="col">Change Auth</th>
 				<th scope="col">
 				<c:choose>
 					<c:when test="${order == 'creDate_asc'}">
@@ -109,7 +121,8 @@ function search_enter(form){
 				<th scope="row">${list.number }</th>
 				<td>${list.lastName }</td>
 				<td>${list.email }</td>
-				<td>${list.authority }
+				<td>${list.authority }</td>
+				<td><a href="#" id="give_auth" vals="${list.email }">Img</a></td>
 			    <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
 			    <td><fmt:formatDate value="${list.lastDate}" pattern="yyyy-MM-dd"/></td>
 			    <td><img alt="" src="<%=request.getContextPath()%>/resource/upload/${list.imagePath}"></td>

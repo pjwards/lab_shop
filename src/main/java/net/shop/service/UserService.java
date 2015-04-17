@@ -67,5 +67,9 @@ public interface UserService {
     */
     public int updateDate(String email) throws Exception;
     
-  
+    /*
+    Editor : Jisung Jeon
+    Decription : Update authority
+    */
+    public int updateAuth(String email, String auth) throws Exception;
 }

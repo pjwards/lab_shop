@@ -86,4 +86,13 @@ public class UserServiceImpl implements UserService {
 		return userVO;
 	}
 
+	@Override
+	public int updateAuth(String email,String auth) throws Exception {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("email", email);
+		paraMap.put("authority",auth);
+		return userDAO.updateAuth(paraMap);
+	}
+
 }

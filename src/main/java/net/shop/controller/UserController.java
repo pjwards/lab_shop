@@ -240,7 +240,25 @@ public class UserController {
 		request.getSession().invalidate();
 		return "redirect:/main/main.do";
 	}
-	
+	//chage Authority
+	@RequestMapping(value="/giveAuth.do")
+	public String userGiveAuth(@RequestParam("email")String email,
+			@RequestParam("auth")String auth) throws Exception{
+		if(auth == null) auth="user";
+		
+		String trimAuth = auth.toLowerCase();
+		String putAuth = null;
+		
+		if(trimAuth.compareTo("admin") == 0){
+			putAuth = "ROLE_ADMIN";
+		}else{
+			putAuth = "ROLE_USER";
+		}
+
+		userService.updateAuth(email, putAuth);
+		return "redirect:/user/userList.do";
+	}
+
 	/**
 	 * Check if user is login by remember me cookie
 	 */
