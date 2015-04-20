@@ -120,6 +120,11 @@ public class UserController {
 			Model model,HttpServletRequest request) throws Exception{
 		
 		String imagePath = "default.jpg";
+		if(firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()){
+			model.addAttribute("say", "Wrong Input");
+			model.addAttribute("url", request.getContextPath()+"/user/userAdd.do");
+			return "/error/alert";
+		}
 		
 		if(firstName.length() < 3 || password.length()<3|| email.length()<6 || lastName.length() < 3){
 			model.addAttribute("say", "Wrong Input");
@@ -177,12 +182,10 @@ public class UserController {
 			return "/user/userEdit";
 		}
 	}
-	
 	@SuppressWarnings("static-access")
 	@RequestMapping(value= "/userEdit.do", method=RequestMethod.POST)
 	public String userEdit(@RequestParam("firstName")String firstName,
 			@RequestParam("lastName")String lastName,
-			@RequestParam("password")String password,
 			@RequestParam(value="thumnail",required=false) MultipartFile multipartFile,
 			Model model,Authentication auth,HttpServletRequest request) throws Exception{
 		
@@ -196,7 +199,7 @@ public class UserController {
 			lastName = userVO.getLastName();
 		}
 		
-		if(firstName.length() < 3 || password.length()<3 || lastName.length() < 3){
+		if(firstName.length() < 3 || lastName.length() < 3){
 			model.addAttribute("say", "Wrong Input");
 			model.addAttribute("url", request.getContextPath()+"/user/userEdit.do");
 			return "/error/alert";
@@ -224,22 +227,28 @@ public class UserController {
 				return "/error/alert";
 			}
 		}
-		String encode = loginService.encoding(password);
 
-		UserVO loadVO = new UserVO(firstName,lastName,email,encode,imagePath);
+		UserVO loadVO = new UserVO(firstName,lastName,email,imagePath);
 		userService.update(loadVO);
 	
 		return "redirect:/main/main.do";
 	}
 	
-	@RequestMapping(value= "/userDelete.do")
+	@RequestMapping("/userDelete.do")
+	public String userDelete() throws Exception{
+		return "/user/userDelete";
+	}
+	@RequestMapping(value= "/userDelete.do", method=RequestMethod.POST)
 	public String userDelete(Authentication auth,HttpServletRequest request) throws Exception{
+		String reason = request.getParameter("check");
+		System.out.println(reason);
 		UserDetails vo = (UserDetails) auth.getPrincipal();
 		String email = vo.getUsername();
 		userService.delete(email);
 		request.getSession().invalidate();
 		return "redirect:/main/main.do";
 	}
+	
 	//chage Authority
 	@RequestMapping(value="/giveAuth.do")
 	public String userGiveAuth(@RequestParam("email")String email,
@@ -258,7 +267,43 @@ public class UserController {
 		userService.updateAuth(email, putAuth);
 		return "redirect:/user/userList.do";
 	}
-
+	
+	//ajax chage password
+	@RequestMapping(value="/changePwd.do", method=RequestMethod.POST)
+	public void changePwd(@RequestParam("password") String password,
+			HttpServletResponse response,Authentication auth
+			) throws Exception {
+		
+		if(password.length() < 3 || password.isEmpty()){
+			response.getWriter().print("404");
+			return;
+		}
+		
+		UserDetails vo = (UserDetails) auth.getPrincipal();
+		String email = vo.getUsername();
+		String encode = loginService.encoding(password);
+		userService.updatePassword(email, encode);
+		response.getWriter().print("Successfully Changed");
+	}
+	
+	//ajax check Email
+	@RequestMapping(value="/checkEmail.do", method=RequestMethod.POST)
+	public void checkEmail(@RequestParam("email") String email,
+			HttpServletResponse response) throws Exception {
+		
+		if(email.length() < 3 || email.isEmpty()){
+			response.getWriter().print("404");
+			return;
+		}
+		
+		if (userService.selectOne(email)){
+			response.getWriter().print("400");
+			return;
+		}else{
+			response.getWriter().print("You can use this email");
+		}
+		
+	}
 	/**
 	 * Check if user is login by remember me cookie
 	 */

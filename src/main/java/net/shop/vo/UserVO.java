@@ -29,13 +29,17 @@ public class UserVO implements Serializable{
 	
 	public UserVO(){}
 	
-	public UserVO(String firstname,String lastname,String email, String password){
+	public UserVO(String firstname,String lastname,String email){
 		this.firstName = firstname;
 		this.lastName = lastname;
 		this.email = email;
-		this.password = password;
 	}
-	
+	public UserVO(String firstname,String lastname,String email, String imagePath){
+		this.firstName = firstname;
+		this.lastName = lastname;
+		this.email = email;
+		this.imagePath = imagePath;
+	}
 	public UserVO(String firstname,String lastname,String email, String password,Date lastDate){
 		this.firstName = firstname;
 		this.lastName = lastname;
@@ -43,7 +47,6 @@ public class UserVO implements Serializable{
 		this.password = password;
 		this.lastDate = lastDate;
 	}
-	
 	public UserVO(String firstname,String lastname,String email, String password,String imagePath){
 		this.firstName = firstname;
 		this.lastName = lastname;

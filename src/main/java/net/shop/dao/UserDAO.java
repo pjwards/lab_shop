@@ -30,5 +30,5 @@ public interface UserDAO {
 
 	public int updateDate(String email);
 
-	public int updateAuth(HashMap<String,Object> paraMap);
+	public int updateData(HashMap<String,Object> paraMap);
 }

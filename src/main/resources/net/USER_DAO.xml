@@ -48,7 +48,7 @@
     </insert>
 
     <update id="update" parameterType="UserVO">
-      update shop_user set first_name=#{firstName},last_name=#{lastName},password=#{password},image_path=#{imagePath}
+      update shop_user set first_name=#{firstName},last_name=#{lastName},image_path=#{imagePath}
       where email=#{email}
     </update>
 
@@ -60,7 +60,12 @@
       update shop_user set last_date=now() where email=#{email}
     </update>
 
-	<update id="updateAuth" parameterType="map">
-	  update shop_user set authority=#{authority} where email=#{email}
+	<update id="updateData" parameterType="map">
+	  update shop_user 
+	  <set>
+	  	<if test="authority != null">authority=#{authority},</if>
+	  	<if test="password != null">password=#{password}</if>
+	  </set>
+	  where email=#{email}
 	</update>
 </mapper>

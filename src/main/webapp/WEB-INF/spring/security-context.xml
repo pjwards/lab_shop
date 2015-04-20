@@ -13,6 +13,7 @@
 		<intercept-url pattern="/user/userList.do" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/user/userEdit.do" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/user/userDelete.do" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/user/giveAuth.do" access="hasRole('ROLE_ADMIN')" />
 		
 		<form-login 
 		    login-page="/main/login.do" 

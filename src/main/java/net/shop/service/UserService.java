@@ -72,4 +72,10 @@ public interface UserService {
     Decription : Update authority
     */
     public int updateAuth(String email, String auth) throws Exception;
+    
+    /*
+    Editor : Jisung Jeon
+    Decription : Update password
+    */
+    public int updatePassword(String email,String password) throws Exception;
 }

@@ -31,8 +31,7 @@
 		<c:when test="${vo != null }">
 			<c:url value="/j_spring_security_logout" var="logoutUrl" />
 			<li><a href="${logoutUrl}">Log Out</a></li>
-			<li><a href="<%=request.getContextPath()%>/user/userEdit.do">User Info Edit</a></li>
-			<li><a href="<%=request.getContextPath()%>/user/userDelete.do">Delete Account</a></li>	
+			<li><a href="<%=request.getContextPath()%>/user/userEdit.do">User Info Edit</a></li>	
 		</c:when>
 		<c:otherwise>
 			<li><a href="<%=request.getContextPath()%>/main/login.do">Sign In</a></li>

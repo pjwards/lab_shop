@@ -66,12 +66,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int updateDate(String email) throws Exception {
-		// TODO Auto-generated method stub
-		return userDAO.updateDate(email);
-	}
-
-	@Override
 	public int selectOneNo(String email) throws Exception {
 		// TODO Auto-generated method stub
 		UserVO userVO = userDAO.selectOne(email);
@@ -85,14 +79,29 @@ public class UserServiceImpl implements UserService {
 		UserVO userVO = userDAO.selectOne(email);
 		return userVO;
 	}
-
+	
+	@Override
+	public int updateDate(String email) throws Exception {
+		// TODO Auto-generated method stub
+		return userDAO.updateDate(email);
+	}
+	
 	@Override
 	public int updateAuth(String email,String auth) throws Exception {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("email", email);
 		paraMap.put("authority",auth);
-		return userDAO.updateAuth(paraMap);
+		return userDAO.updateData(paraMap);
+	}
+
+	@Override
+	public int updatePassword(String email, String password) throws Exception {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("email", email);
+		paraMap.put("password",password);
+		return userDAO.updateData(paraMap);
 	}
 
 }
