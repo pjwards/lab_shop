@@ -31,7 +31,8 @@
 		<c:when test="${vo != null }">
 			<c:url value="/j_spring_security_logout" var="logoutUrl" />
 			<li><a href="${logoutUrl}">Log Out</a></li>
-			<li><a href="<%=request.getContextPath()%>/user/userEdit.do">User Info Edit</a></li>	
+			<li><a href="<%=request.getContextPath()%>/user/userEdit.do">User Info Edit</a></li>
+			<li><a href="<%=request.getContextPath()%>/user/wishlist.do">wishlist</a></li>	
 		</c:when>
 		<c:otherwise>
 			<li><a href="<%=request.getContextPath()%>/main/login.do">Sign In</a></li>
@@ -44,6 +45,7 @@
     <li><a href="<%=request.getContextPath()%>/upload.do">upload</a></li>
     <li><a href="<%=request.getContextPath()%>/download.do">download</a></li>
     <li><a href="<%=request.getContextPath()%>/goods/list.do">Goods List</a></li>
+    <li><a href="<%=request.getContextPath()%>/admin/search.do">Search users</a></li>
 </ul>
 </body>
 

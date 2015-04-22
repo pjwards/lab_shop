@@ -9,9 +9,9 @@ import net.shop.service.LoginService;
 import net.shop.service.UserService;
 import net.shop.util.ImageUtil;
 import net.shop.util.Util;
-import net.shop.vo.CommentVO;
 import net.shop.vo.PagingVO;
 import net.shop.vo.UserVO;
+import net.shop.vo.WishlistVO;
 
 import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -92,12 +92,17 @@ public class UserController {
         modelandview.setViewName("/user/userList");
         
         if(totalCount == 0){
-            modelandview.addObject("userVOList", Collections.<CommentVO>emptyList());
+            modelandview.addObject("userVOList", Collections.<UserVO>emptyList());
             request.setAttribute("hasUser", false);
             return modelandview;
         }
         
 		List<UserVO> lists = userService.selectList(pagingVO.getFirstRow()-1,pagingVO.getEndRow(),orderCond,keyword);
+		if(lists.isEmpty()){
+			request.setAttribute("hasUser", false);
+            return modelandview;
+		}
+		
 		modelandview.addObject("userVOList", lists);
 		modelandview.addObject("order", orderCond);
 		modelandview.addObject("keyword", keyword);
@@ -116,11 +121,15 @@ public class UserController {
 			@RequestParam("lastName")String lastName,
 			@RequestParam("email")String email,
 			@RequestParam("password")String password,
+			@RequestParam("address")String address,
+			@RequestParam("postcode")String postcode,
 			@RequestParam(value="thumnail",required=false) MultipartFile multipartFile,
 			Model model,HttpServletRequest request) throws Exception{
 		
 		String imagePath = "default.jpg";
-		if(firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()){
+		int intcode;
+		
+		if(firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty() || postcode.isEmpty()){
 			model.addAttribute("say", "Wrong Input");
 			model.addAttribute("url", request.getContextPath()+"/user/userAdd.do");
 			return "/error/alert";
@@ -128,6 +137,20 @@ public class UserController {
 		
 		if(firstName.length() < 3 || password.length()<3|| email.length()<6 || lastName.length() < 3){
 			model.addAttribute("say", "Wrong Input");
+			model.addAttribute("url", request.getContextPath()+"/user/userAdd.do");
+			return "/error/alert";
+		}
+		
+		try{
+			intcode = Integer.parseInt(postcode);
+		}catch(Exception e){
+			model.addAttribute("say", "Wrong Postcode");
+			model.addAttribute("url", request.getContextPath()+"/user/userAdd.do");
+			return "/error/alert";
+		}
+		
+		if (intcode>999999 || intcode<100000) {
+			model.addAttribute("say", "Wrong Postcode");
 			model.addAttribute("url", request.getContextPath()+"/user/userAdd.do");
 			return "/error/alert";
 		}
@@ -144,7 +167,6 @@ public class UserController {
 			if ( imageUtil.isImageFile ( fileName))
 			{
 				Calendar cal = Calendar.getInstance();
-				//String loadPath = "/home/jisung/git/lab_shop/src/main/webapp/resource/upload/";				
 				String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
 				File uploadFile =  File.createTempFile( "/home/jisung/", fileType);
 				multipartFile.transferTo( uploadFile);
@@ -162,7 +184,7 @@ public class UserController {
 		}
 		
 		String encode = loginService.encoding(password);
-		UserVO userVO = new UserVO(firstName,lastName,email,encode,imagePath);
+		UserVO userVO = new UserVO(firstName,lastName,email,encode,address,intcode,imagePath);
 		userService.insert(userVO);
 		
 		return "redirect:/main/main.do";
@@ -186,6 +208,8 @@ public class UserController {
 	@RequestMapping(value= "/userEdit.do", method=RequestMethod.POST)
 	public String userEdit(@RequestParam("firstName")String firstName,
 			@RequestParam("lastName")String lastName,
+			@RequestParam("address")String address,
+			@RequestParam("postcode")String postcode,
 			@RequestParam(value="thumnail",required=false) MultipartFile multipartFile,
 			Model model,Authentication auth,HttpServletRequest request) throws Exception{
 		
@@ -193,13 +217,28 @@ public class UserController {
 		String email = vo.getUsername();
 		UserVO userVO = userService.selectOneVo(email);
 		String imagePath = userVO.getImagePath();
+		int intcode;
 		
-		if(firstName.isEmpty() || lastName.isEmpty()){
+		if(firstName.isEmpty() || lastName.isEmpty() || address.isEmpty()){
 			firstName = userVO.getFirstName();
 			lastName = userVO.getLastName();
+			address = userVO.getAddress();
+		}
+		try{
+			intcode = Integer.parseInt(postcode);
+		}catch(Exception e){
+			model.addAttribute("say", "Wrong Postcode");
+			model.addAttribute("url", request.getContextPath()+"/user/userAdd.do");
+			return "/error/alert";
 		}
 		
-		if(firstName.length() < 3 || lastName.length() < 3){
+		if (intcode>999999 || intcode<100000) {
+			model.addAttribute("say", "Wrong Postcode");
+			model.addAttribute("url", request.getContextPath()+"/user/userAdd.do");
+			return "/error/alert";
+		}
+		
+		if(firstName.length() < 3 || lastName.length() < 3 || address.length()<3){
 			model.addAttribute("say", "Wrong Input");
 			model.addAttribute("url", request.getContextPath()+"/user/userEdit.do");
 			return "/error/alert";
@@ -211,7 +250,6 @@ public class UserController {
 			if ( imageUtil.isImageFile (fileName))
 			{
 				Calendar cal = Calendar.getInstance();
-				//String loadPath = "/home/jisung/git/lab_shop/src/main/webapp/resource/upload/";				
 				String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
 				File uploadFile =  File.createTempFile( "/home/jisung/", fileType);
 				multipartFile.transferTo( uploadFile);
@@ -228,7 +266,7 @@ public class UserController {
 			}
 		}
 
-		UserVO loadVO = new UserVO(firstName,lastName,email,imagePath);
+		UserVO loadVO = new UserVO(firstName,lastName,email,address,intcode,imagePath);
 		userService.update(loadVO);
 	
 		return "redirect:/main/main.do";
@@ -255,7 +293,7 @@ public class UserController {
 			@RequestParam("auth")String auth) throws Exception{
 		if(auth == null) auth="user";
 		
-		String trimAuth = auth.toLowerCase();
+		String trimAuth = auth;
 		String putAuth = null;
 		
 		if(trimAuth.compareTo("admin") == 0){
@@ -268,7 +306,102 @@ public class UserController {
 		return "redirect:/user/userList.do";
 	}
 	
-	//ajax chage password
+	//ajax add wishlist
+	@RequestMapping(value="/addWishlist.do", method=RequestMethod.POST)
+	public void addWishlist(@RequestParam("email")String email,
+	@RequestParam("check")String check, @RequestParam("no")String number,
+	HttpServletResponse response) throws Exception{
+		
+		if(check == null) check="no";
+		
+		if(check.compareTo("yes") != 0){
+			response.getWriter().print("404");
+			return;
+		}
+		int no = Integer.parseInt(number);
+		
+		if(userService.checkWishlist(email,no)){
+			response.getWriter().print("400");
+			return;
+		}
+		userService.addWishlist(email,no);
+		response.getWriter().print("200");
+	}
+	
+	@RequestMapping(value="/wishlist.do")
+	public ModelAndView WishlistDAO(@RequestParam(value="p",required=false) String p,
+			@RequestParam(value="q",required=false) String q,
+			HttpServletRequest request,HttpServletResponse response) throws Exception {
+		ModelAndView modelandview = new ModelAndView();
+		String requestPageString = p;		//paging
+		String keyword = q;					//searching
+		
+		if(requestPageString == null || requestPageString.equals("")) {
+            requestPageString = "1";
+        }
+        if(keyword == null || keyword.equals("")) {
+        	keyword = null;
+        }
+        
+        int requestPage = Integer.parseInt(requestPageString);
+        
+        if(requestPage <= 0){
+            throw new IllegalArgumentException("requestPage <= 0 : " + requestPage);
+        }
+        
+        int totalCount = userService.count();
+        
+        /*Paging 메소드의 사용 */
+        PagingVO pagingVO = util.paging(requestPage, 5, totalCount);
+        modelandview.addObject("pagingVO", pagingVO);
+        modelandview.setViewName("/user/wishlist");
+        
+        if(totalCount == 0){
+            modelandview.addObject("wishlist", Collections.<UserVO>emptyList());
+            request.setAttribute("hasUser", false);
+            return modelandview;
+        }
+        
+        List<WishlistVO> lists = userService.wishList(pagingVO.getFirstRow()-1,pagingVO.getEndRow(),keyword);
+        if(lists.isEmpty()){
+			request.setAttribute("hasUser", false);
+            return modelandview;
+		}
+        modelandview.addObject("wishlist", lists);
+		modelandview.addObject("keyword", keyword);
+		request.setAttribute("hasUser", true);
+		
+		return modelandview; 
+	}
+	
+	//delete wishlist
+	@RequestMapping(value="/delWishlist.do")
+	public String delWishlist(@RequestParam("choice")String choice,
+			@RequestParam("email")String email,@RequestParam("no")String number,
+			HttpServletRequest request, Model model) throws Exception{
+		
+		if(choice == null || choice.isEmpty()){
+			model.addAttribute("say", "Wrong Input");
+			model.addAttribute("url", request.getContextPath()+"/user/wishlist.do");
+			return "/error/alert";
+		}
+		
+		if(choice.compareTo("yes") != 0){
+			return "redirect:/user/wishlist.do";
+		}
+		
+		int no = Integer.parseInt(number);
+		
+		if(userService.delWishlist(email,no) == 0){
+			model.addAttribute("say", "Wrong already deleted");
+			model.addAttribute("url", request.getContextPath()+"/user/wishlist.do");
+			return "/error/alert";
+		}
+		
+		return "redirect:/user/wishlist.do";	
+	}
+	
+	//ajax change password
 	@RequestMapping(value="/changePwd.do", method=RequestMethod.POST)
 	public void changePwd(@RequestParam("password") String password,
 			HttpServletResponse response,Authentication auth
@@ -304,6 +437,8 @@ public class UserController {
 		}
 		
 	}
+	
+	
 	/**
 	 * Check if user is login by remember me cookie
 	 */

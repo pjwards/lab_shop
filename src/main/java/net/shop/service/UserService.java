@@ -3,6 +3,7 @@ package net.shop.service;
 import java.util.List;
 
 import net.shop.vo.UserVO;
+import net.shop.vo.WishlistVO;
 
 /**
  * First Editor : Jisung Jeon (cbajs20@gmail.com)
@@ -33,7 +34,7 @@ public interface UserService {
     
     /*
     Editor : Jisung Jeon
-    Decription : Return lists between start and end
+    Decription : Return lists that are searched and lined up between start and end
     */
     public List<UserVO> selectList(int start,int end,String order,String keyword) throws Exception;
 
@@ -78,4 +79,34 @@ public interface UserService {
     Decription : Update password
     */
     public int updatePassword(String email,String password) throws Exception;
+    
+    /*
+    Editor : Jisung Jeon
+    Decription : add data in wishlist
+    */
+	public int addWishlist(String email, int number);
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : count in wishlist
+    */
+	public int wishCount();
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : list of wishlist
+    */
+	public List<WishlistVO> wishList(int start, int end, String keyword);
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : delete data in wishlist
+    */
+	public int delWishlist(String email, int number);
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : check the data of list
+    */
+	public boolean checkWishlist(String email, int number);
 }

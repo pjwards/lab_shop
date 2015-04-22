@@ -30,8 +30,8 @@ $(document).ready(function(){
 	});
 	
 	$("a#give_auth").click(function(){
-		var auth = prompt("what authority? user/admin");
-		if(auth == null){
+		var auth = prompt("what authority? user/admin").trim().toLowerCase();
+		if(auth == ""){
 			return false;
 		}
 		var email = $("a#give_auth").attr("vals");
@@ -129,29 +129,30 @@ function search_enter(form){
 			 </tr>
 			</c:forEach>
 		</tbody>
-				<tfoot>
-					<tr>
-					 <td colspan="16" align="center">
-  						 <c:if test="${pagingVO.beginPage > 5}">
-                       		 <a href="<c:url value="userList.do?q=${keyword }&order=${order}&p=${pagingVO.beginPage-1}"/> ">이전</a>
-                    	 </c:if>
-                 		 <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
-                       		 <a href="<c:url value="userList.do?q=${keyword }&order=${order}&p=${pno}"/> ">[${pno}]</a>
-             		     </c:forEach>
-               		     <c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
-                  		     <a href="<c:url value="userList.do?q=${keyword }&order=${order}&p=${pagingVO.endPage + 1}"/> ">다음</a>
-                  		 </c:if>
- 					  </td>
-					</tr>
-				</tfoot>
-			</table>
+		<tfoot>
+			<tr>
+				<td colspan="16" align="center">
+  				 <c:if test="${pagingVO.beginPage > 5}">
+                    	 <a href="<c:url value="userList.do?q=${keyword }&order=${order}&p=${pagingVO.beginPage-1}"/> ">이전</a>
+                 </c:if>
+                 <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
+                     	 <a href="<c:url value="userList.do?q=${keyword }&order=${order}&p=${pno}"/> ">[${pno}]</a>
+             	 </c:forEach>
+                 <c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
+                  		 <a href="<c:url value="userList.do?q=${keyword }&order=${order}&p=${pagingVO.endPage + 1}"/> ">다음</a>
+                 </c:if>
+ 				</td>
+			</tr>
+		</tfoot>
+	</table>
 		</c:otherwise>
 	</c:choose>
-	<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
-	
+
 	<form id="search" method="post">
 		<input type="text" name="search_word" id="q" onkeypress="search_enter(document.q);"/>
 		<input type="button" value="search" id="search_btn"/>
 	</form>
+	
+	<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </body>
 </html>

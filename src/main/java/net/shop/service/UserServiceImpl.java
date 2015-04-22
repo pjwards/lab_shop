@@ -6,10 +6,12 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import net.shop.dao.UserDAO;
+import net.shop.dao.WishlistDAO;
 
 import org.springframework.stereotype.Service;
 
 import net.shop.vo.UserVO;
+import net.shop.vo.WishlistVO;
 
 /**
  * First Editor : Jisung Jeon (cbajs20@gmail.com)
@@ -25,6 +27,9 @@ public class UserServiceImpl implements UserService {
 
 	@Resource(name="userDAO")
 	private UserDAO userDAO;
+	
+	@Resource(name="wishlistDAO")
+	private WishlistDAO wishlistDAO;
 	
 	@Override
 	public boolean selectOne(String email) throws Exception {
@@ -102,6 +107,53 @@ public class UserServiceImpl implements UserService {
 		paraMap.put("email", email);
 		paraMap.put("password",password);
 		return userDAO.updateData(paraMap);
+	}
+
+	@Override
+	public int addWishlist(String email, int number) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("userEmail", email);
+		paraMap.put("goodsNumber",number);
+		return wishlistDAO.insert(paraMap);
+	}
+
+	@Override
+	public int wishCount() {
+		// TODO Auto-generated method stub
+		return wishlistDAO.count();
+	}
+
+	@Override
+	public List<WishlistVO> wishList(int start, int end, String keyword) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("offset", start);
+		paraMap.put("limit", end);
+		paraMap.put("keyword", keyword);
+		return wishlistDAO.selectListMap(paraMap);
+	}
+
+	@Override
+	public int delWishlist(String email, int number) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("userEmail", email);
+		paraMap.put("goodsNumber",number);
+		return wishlistDAO.delete(paraMap);
+	}
+
+	@Override
+	public boolean checkWishlist(String email, int number) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("userEmail", email);
+		paraMap.put("goodsNumber",number);
+		WishlistVO wishlistVO = wishlistDAO.selectOne(paraMap);
+		if(wishlistVO != null){
+			return true;
+		}
+		return false;
 	}
 
 }

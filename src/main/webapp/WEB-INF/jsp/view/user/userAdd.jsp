@@ -44,7 +44,7 @@ $(function(){
 		
 		if(!validateEmail(email)){
 			$("#email").focus();
-			$("#email").empty();
+			$("#email").val('');
 			alert("Please write down available form of email");
 			return false;
 		}
@@ -59,9 +59,11 @@ $(function(){
 				if(result === "404"){
 					alert("Failed! Try again");
 					$("#email").focus();
+					$("#email").val('');
 				}else if(result === "400"){
 					alert("This email is used");
 					$("#email").focus();
+					$("#email").val('');
 				}else{
 					check = 1;
 					$("#txt").text(result);
@@ -71,8 +73,17 @@ $(function(){
 	});
 	
 	$("#submit_form").on("submit",function(){
+		var postcode = $("#postcode").val();
+		var trimcode = postcode.trim();
+		
+		if(trimcode.length !== 6){
+			alert("Check your postcode again");
+			$("#postcode").focus();
+			return false;
+		}
+		
 		if(check !== 1){
-			alert("You should check your email before signing up");
+			alert("Check your email again");
 			$("#email").focus();
 			return false;
 		}
@@ -82,11 +93,13 @@ $(function(){
 </head>
 <body>
 	<form action="" method="post" enctype="multipart/form-data" id="submit_form" name="submit_form">
-		<input type="text" class="form-control" name="firstName" maxlength="10" required="required" placeholder="Write your First name" autocomplete="off"><br>
-		<input type="text" class="form-control" name="lastName" maxlength="10" required="required" placeholder="Write your Last name" autocomplete="off"><br>
-		<input type="text" class="form-control" id ="email" name="email" maxlength="50" required="required" placeholder="Write Email " autocomplete="off">
+		<input type="text" class="form-control" name="firstName" maxlength="50" required="required" placeholder="First name" autocomplete="off"><br>
+		<input type="text" class="form-control" name="lastName" maxlength="50" required="required" placeholder="Last name" autocomplete="off"><br>
+		<input type="text" class="form-control" id="email" name="email" maxlength="250" required="required" placeholder="Email " autocomplete="off">
 		<input type="button" class="btn btn-primary btn-sm" id="check_email" name="check_email" value="Check" ><p id="txt"></p><br>
-		<input type="password" class="form-control" name="password" maxlength="10" required="required" placeholder="Write Password" autocomplete="off"><br>
+		<input type="password" class="form-control" name="password" maxlength="20" required="required" placeholder="Password" autocomplete="off"><br>
+		<input type="text" class="form-control" name="address" maxlength="250" required="required" placeholder="Address" autocomplete="off"><br>
+		<input type="text" class="form-control" id="postcode" name="postcode" maxlength="6" required="required" placeholder="Postcode" autocomplete="off"><br>
 		<input type="file" name="thumnail"/><br>
 		<button type="submit" class="btn btn-primary" value="submit">Submit</button>
 	</form>

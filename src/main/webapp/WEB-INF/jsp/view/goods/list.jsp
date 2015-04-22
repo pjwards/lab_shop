@@ -1,6 +1,6 @@
 <%--
  * First Editor : Donghyun Seo (egaoneko@naver.com)
- * Last Editor  : 
+ * Last Editor  : jisung jeon
  * Date         : 4/16/15 | 11:54 AM
  * Description  : 
  * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
@@ -11,7 +11,41 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
+<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+
     <title>상품 목록</title>
+    
+<script type="text/javascript">
+$(document).ready(function(){
+	$("a#addWish").click(function(){
+		var check = prompt("Do you want to add this in wishlist? yes/no").trim().toLowerCase();
+		
+		if(check === ""){
+			alert("Wrong Input");
+			return false;
+		}
+		if(check !== "yes"){
+			return false;
+		}
+		
+		var data = $("a#addWish").attr("vals");
+		var arr = data.split('/');
+		
+		$.ajax({
+			type:"POST",
+			url:"<%=request.getContextPath()%>/user/addWishlist.do",
+			data:{ email : arr[0], check : check, no : arr[1] },
+			success:function(result){
+				if(result === "400"){
+					alert("Already existed");
+				}else if(result === "200"){
+					alert("Added in wishlist");
+				}
+			}
+		});
+	});
+});
+</script>
 </head>
 <body>
 <table border="1">
@@ -70,7 +104,9 @@
                     <td>${list.stock}</td>
                     <td>${list.userEmail}</td>
                     <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
+                    <td><a href="#" id="addWish" vals="${list.userEmail }/${list.number}">WishList</a></td>
                 </tr>
+                
             </c:forEach>
 
             <%-- Paging --%>

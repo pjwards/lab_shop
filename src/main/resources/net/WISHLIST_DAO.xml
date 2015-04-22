@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="net.WishlistDao">
+    <resultMap type="WishlistVO" id="wishlistResultMap">
+    	<result column="goods_no" property="goodsNumber"/>
+    	<result column="user_email" property="userEmail"/>
+    	<result column="no" property="no"/>
+    	<result column="name" property="name"/>
+    	<result column="manufacturer" property="manufacturer"/>
+    	<result column="price" property="price"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="map">
+      insert into shop_wishlist (goods_no, user_email)
+      values(#{goodsNumber},#{userEmail})
+    </insert>
+    
+    <select id="count" resultType="int">
+      select count(*) from shop_wishlist
+    </select>
+    
+    <select id="selectList" parameterType="map" resultMap="wishlistResultMap">
+      select no, name, manufacturer, price, wish.user_email from shop_wishlist as wish 
+      inner join shop_goods as goods on wish.goods_no=goods.no
+      <if test="keyword != NULL">
+      where name like #{keyword}
+      </if>
+      order by no desc
+ 	  limit #{offset},#{limit} 
+    </select>
+    
+    <delete id="delete" parameterType="map">
+      delete from shop_wishlist where user_email=#{userEmail} and goods_no=#{goodsNumber}
+    </delete>
+    
+    <select id="selectOne" parameterType="map" resultMap="wishlistResultMap">
+      select * from shop_wishlist where user_email=#{userEmail} and goods_no=#{goodsNumber}
+    </select>
+</mapper>

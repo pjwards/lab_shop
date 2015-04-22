@@ -37,6 +37,8 @@ $(function(){
 		
 		if(pass1 !== pass2){
 			$("#password").focus();
+			$("#password").val('');
+			$("#password_chk").val('');
 			alert("Two password are different");
 			return false;
 		}
@@ -51,6 +53,8 @@ $(function(){
 				if(result === "404"){
 					alert("Failed! Try again");
 					$("#password").focus();
+					$("#password").val('');
+					$("#password_chk").val('');
 				}else{
 					$("#txt").text(result);
 				}
@@ -58,29 +62,43 @@ $(function(){
 		});
 	
 	});
+	
+	$("#edit_form").on("submit",function(){
+		var postcode = $("#postcode").val();
+		var trimcode = postcode.trim();
+		
+		if(trimcode.length !== 6){
+			alert("Check your postcode again");
+			$("#postcode").focus();
+			return false;
+		}
+		
+	});
 });
 </script>
 </head>
 <body>
 <h1>Edit Profile</h1>
-	<form action="" method="post" id="edit" name="edit" enctype="multipart/form-data">
-		<input type="text" name="firstName" maxlength="10" required="required"  placeholder="Write your First name" autocomplete="off" value="${uservo.firstName}">
+	<form action="" method="post" id="edit_form" name="edit_form" enctype="multipart/form-data">
+		<input type="text" name="firstName" maxlength="50" required="required"  autocomplete="off" value="${uservo.firstName}">
 		<br><br>
-		<input type="text" name="lastName" maxlength="10" required="required"  placeholder="Write your Last name" autocomplete="off" value="${uservo.lastName}">	
+		<input type="text" name="lastName" maxlength="50" required="required"  autocomplete="off" value="${uservo.lastName}">	
 		<br><br>
 		<button type="button" class="btn btn-primary btn-xs" id="password_btn" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Change Password</button><br>
 		<div class="collapse" id="collapseExample">
   			<div class="well">
     				<fieldset>
     					<legend>Chage password</legend>
-    						<input type="password" class="form-control" id="password" name="password" maxlength="10" required="required" placeholder="Write Password" autocomplete="off" >
-    						<input type="password" class="form-control" id="password_chk" name="password2" maxlength="10" required="required" placeholder="Write it one more time" autocomplete="off" >
+    						<input type="password" class="form-control" id="password" name="password" maxlength="20" required="required" placeholder="Password" autocomplete="off" >
+    						<input type="password" class="form-control" id="password_chk" name="password2" maxlength="20" required="required" placeholder="Password again" autocomplete="off" >
     						<input type="button" class="btn btn-primary btn-sm" id="input_pwd" name="input_pwd" value="Submit" >
     						<p id="txt"></p>
     				</fieldset>
   			</div>
 		</div>
 		<br>
+		<input type="text" class="form-control" name="address" maxlength="250" required="required" autocomplete="off" value="${uservo.address}"><br>
+		<input type="text" class="form-control" id="postcode" name="postcode" maxlength="6" required="required" autocomplete="off" value="${uservo.postcode}"><br>
 		<input type="file" name="thumnail"/>
 		<br>
 		<button type="submit" class="btn btn-primary" value="submit">Submit</button>	 

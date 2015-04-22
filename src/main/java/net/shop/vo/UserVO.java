@@ -22,6 +22,8 @@ public class UserVO implements Serializable{
 	private String lastName;
 	private String email;
 	private String password;
+	private String address;
+	private int postcode;
 	private Date createdDate;
 	private Date lastDate;
 	private String authority;
@@ -34,10 +36,12 @@ public class UserVO implements Serializable{
 		this.lastName = lastname;
 		this.email = email;
 	}
-	public UserVO(String firstname,String lastname,String email, String imagePath){
+	public UserVO(String firstname,String lastname,String email,String address,int postcode, String imagePath){
 		this.firstName = firstname;
 		this.lastName = lastname;
 		this.email = email;
+		this.address = address;
+		this.postcode = postcode;
 		this.imagePath = imagePath;
 	}
 	public UserVO(String firstname,String lastname,String email, String password,Date lastDate){
@@ -47,15 +51,33 @@ public class UserVO implements Serializable{
 		this.password = password;
 		this.lastDate = lastDate;
 	}
-	public UserVO(String firstname,String lastname,String email, String password,String imagePath){
+	public UserVO(String firstname,String lastname,String email, String password,String address,int postcode,String imagePath){
 		this.firstName = firstname;
 		this.lastName = lastname;
 		this.email = email;
 		this.password = password;
+		this.address = address;
+		this.postcode = postcode;
 		this.imagePath = imagePath;
 	}
 	
-    public String getAuthority() {
+    public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public int getPostcode() {
+		return postcode;
+	}
+
+	public void setPostcode(int postcode) {
+		this.postcode = postcode;
+	}
+
+	public String getAuthority() {
 		return authority;
 	}
 

@@ -14,10 +14,12 @@ insert into shop_no_sequence values ('comment', 0);
 
 create table shop_user (
 	no int not null auto_increment,
-	first_name varchar(20) not null,
-	last_name varchar(20) not null,
-	email varchar(50) not null,
+	first_name varchar(50) not null,
+	last_name varchar(50) not null,
+	email varchar(255) not null,
 	password varchar(50) not null,
+	address varchar(255) not null,
+	postcode int not null,
 	created_date datetime not null,
 	last_date datetime not null,
 	authority varchar(20) not null default 'ROLE_USER',
@@ -97,5 +99,26 @@ create table shop_board_goods (
 	board_no int not null,
 	goods_no int not null,
 	foreign key(board_no) references shop_board(no),
+	foreign key(goods_no) references shop_goods(no)
+);
+
+create table shop_orders(
+	no int not null auto_increment,
+	order_date datetime not null,
+	order_now varchar(50) not null,
+	user_email varchar(255) not null,
+	user_name varchar(50) not null,
+	user_address varchar(255) not null,
+	user_postcode int not null,
+	goods_no int not null,
+	primary key (no),
+	foreign key(goods_no) references shop_goods(no)
+);
+
+create table shop_wishlist(
+	goods_no int not null,
+	user_email varchar(255) not null,
+	index (user_email),
+	foreign key(user_email) references shop_user(email) on delete cascade,
 	foreign key(goods_no) references shop_goods(no)
 );
