@@ -33,7 +33,7 @@ public class OrdersDAOMySql implements OrdersDAO {
 	}
 
 	@Override
-	public int count() {
+	public int count() throws Exception{
 		// TODO Auto-generated method stub
 		SqlSession sqlSession = sqlSessionFactory.openSession();
 
@@ -42,6 +42,18 @@ public class OrdersDAOMySql implements OrdersDAO {
         }finally{
             sqlSession.close();
         }
+	}
+
+	@Override
+	public int delete(HashMap<String, Object> paraMap) {
+		// TODO Auto-generated method stub
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+
+		try{
+			return sqlSession.insert("net.OrdersDao.delete", paraMap);
+		}finally{
+			sqlSession.close();
+		}
 	}
 
 }

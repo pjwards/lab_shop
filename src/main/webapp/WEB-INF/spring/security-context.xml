@@ -16,6 +16,7 @@
 		<intercept-url pattern="/user/giveAuth.do" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/admin/search.do" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/user/wishlist.do" access="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
+		<intercept-url pattern="/user/orders.do" access="hasRole('ROLE_USER')" />
 		
 		<form-login 
 		    login-page="/main/login.do" 

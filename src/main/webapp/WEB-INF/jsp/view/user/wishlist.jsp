@@ -69,7 +69,7 @@ function search_enter(form){
 		<thead>
 			<tr>
 				<th scope="col">Name</th>
-				<th scope="col">Manufacturer</th>
+				<th scope="col">Brand</th>
 				<th scope="col">Price</th>
 			</tr>
 		</thead>
@@ -103,7 +103,7 @@ function search_enter(form){
 	</c:choose>
 	
 	<form id="search" method="post">
-		<input type="text" name="search_word" id="q" onkeypress="search_enter(document.q);"/>
+		<input type="text" name="search_word" id="q" onkeypress="search_enter(document.q);" autocomplete="off"/>
 		<input type="button" value="search" id="search_btn"/>
 	</form>
 	

@@ -5,11 +5,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import net.shop.dao.OrdersDAO;
 import net.shop.dao.UserDAO;
 import net.shop.dao.WishlistDAO;
 
 import org.springframework.stereotype.Service;
 
+import net.shop.vo.OrdersVO;
 import net.shop.vo.UserVO;
 import net.shop.vo.WishlistVO;
 
@@ -30,6 +32,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Resource(name="wishlistDAO")
 	private WishlistDAO wishlistDAO;
+	
+	@Resource(name="ordersDAO")
+	private OrdersDAO ordersDAO;
 	
 	@Override
 	public boolean selectOne(String email) throws Exception {
@@ -110,7 +115,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int addWishlist(String email, int number) {
+	public int addWishlist(String email, int number) throws Exception{
 		// TODO Auto-generated method stub
 		HashMap<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("userEmail", email);
@@ -119,13 +124,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int wishCount() {
+	public int wishCount() throws Exception{
 		// TODO Auto-generated method stub
 		return wishlistDAO.count();
 	}
 
 	@Override
-	public List<WishlistVO> wishList(int start, int end, String keyword) {
+	public List<WishlistVO> wishList(int start, int end, String keyword) throws Exception{
 		// TODO Auto-generated method stub
 		HashMap<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("offset", start);
@@ -135,7 +140,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int delWishlist(String email, int number) {
+	public int delWishlist(String email, int number) throws Exception{
 		// TODO Auto-generated method stub
 		HashMap<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("userEmail", email);
@@ -144,7 +149,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean checkWishlist(String email, int number) {
+	public boolean checkWishlist(String email, int number) throws Exception{
 		// TODO Auto-generated method stub
 		HashMap<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("userEmail", email);
@@ -154,6 +159,31 @@ public class UserServiceImpl implements UserService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public List<OrdersVO> ordersList(int start, int end,String email) throws Exception{
+		// TODO Auto-generated method stub
+		HashMap<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("offset", start);
+		paraMap.put("limit", end);
+		paraMap.put("userEmail", email);
+		return ordersDAO.selectListMap(paraMap);
+	}
+
+	@Override
+	public int orderCount() throws Exception {
+		// TODO Auto-generated method stub
+		return ordersDAO.count();
+	}
+
+	@Override
+	public int delorderlist(String email, int no) throws Exception {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("userEmail", email);
+		paraMap.put("goodsNumber",no);
+		return ordersDAO.delete(paraMap);
 	}
 
 }

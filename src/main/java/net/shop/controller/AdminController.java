@@ -32,10 +32,6 @@ public class AdminController {
 	@Resource(name = "util")
     private Util util;
 	
-	/*@RequestMapping("/search.do")
-	public String searchUser() throws Exception{
-		return "/admin/searchUser";
-	}*/
 	@RequestMapping("/search.do")
 	public ModelAndView searchUser(@RequestParam(value="p",required=false) String p,
 			@RequestParam(value="q",required=false) String q,

@@ -13,15 +13,29 @@
     	<result column="user_address" property="userAddress"/>
     	<result column="user_postcode" property="userPostcode"/>
     	<result column="goods_no" property="goodsNumber"/>
+    	<result column="name" property="goodsName"/>
+    	<result column="options" property="goodsOptions"/>
+    	<result column="manufacturer" property="manufacturer"/>
+    	<result column="price" property="goodsPrice"/>
     </resultMap>
 
 	<select id="selectList" parameterType="map" resultMap="ordersResultMap">
-      select * from shop_orders 
+      select orders.no, orders.order_date, orders.user_email, orders.user_name, orders.order_now,
+      	orders.goods_no, goods.name, goods.options, goods.manufacturer, goods.price
+      from shop_orders as orders inner join shop_goods as goods on orders.goods_no=goods.no
       <if test="keyword != NULL">
-      where user_email like #{keyword} or user_name like #{keyword} or no like #{keyword}
+      where orders.user_email like #{keyword} or orders.user_name like #{keyword} or orders.no like #{keyword}
       </if>
+      <if test="userEmail != NULL">
+      where orders.user_email like #{userEmail}
+      </if>
+      order by orders.no desc
  	  limit #{offset},#{limit} 
     </select>
+    
+    <delete id="delete" parameterType="map">
+      delete from shop_orders where user_email=#{userEmail} and goods_no=#{goodsNumber}
+    </delete>
     
     <select id="count" resultType="int">
       select count(*) from shop_orders

@@ -17,6 +17,10 @@ public class OrdersVO {
 	private int goodsNumber;
 	private String userAddress;
 	private int userPostcode;
+	private String goodsName;
+	private String goodsOptions;
+	private String manufacturer;
+	private int goodsPrice;
 	
 	public int getNumber() {
 		return number;
@@ -66,4 +70,29 @@ public class OrdersVO {
 	public void setUserPostcode(int userPostcode) {
 		this.userPostcode = userPostcode;
 	}
+	public String getGoodsName() {
+		return goodsName;
+	}
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+	public String getGoodsOptions() {
+		return goodsOptions;
+	}
+	public void setGoodsOptions(String goodsOptions) {
+		this.goodsOptions = goodsOptions;
+	}
+	public String getManufacturer() {
+		return manufacturer;
+	}
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+	public int getGoodsPrice() {
+		return goodsPrice;
+	}
+	public void setGoodsPrice(int goodsPrice) {
+		this.goodsPrice = goodsPrice;
+	}
+	
 }

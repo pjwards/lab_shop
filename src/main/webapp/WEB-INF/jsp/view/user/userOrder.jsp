@@ -1,48 +1,43 @@
 <%--
  * First Editor : Jisung Jeon (cbajs20@gmail.com)
  * Last Editor  :
- * Date         : 2015-04-21
+ * Date         : 2015-04-23
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
 
-<title>Search USER</title>
+<title>Your Orders</title>
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$("#search_btn").click(function(){
-		if($("#q").val() == ''){
-			alert("Enter Keyword");
-			$("#q").focus();
+	$("a#del_order").click(function(){
+		var choice = prompt("Delete this? yes/no").trim().toLowerCase();
+		
+		if(choice === ""){
 			return false;
-		}else{
-			var act = 'search.do?q='+$("#q").val();
-			$("#search").attr('action',act).submit();
 		}
+		if(choice !== "yes"){
+			return false;
+		}
+		
+		var data = $("a#del_order").attr("vals");
+		var arr = data.split('/');
+		
+		var link = 'delOrderlist.do?&email='+arr[0]+'&no='+arr[1]+'&choice='+choice;
+		$(location).attr('href', link);
 	});
-	
 });
-
-function search_enter(form){
-	var keycode = window.event.keyCode;
-	if(keycode == 13) $("#search_btn").click();
-}
 </script>
 </head>
 <body>
 
-<h1>Search</h1>
-<form id="search" method="post">
-		<input type="text" name="search_word" id="q" onkeypress="search_enter(document.q);" autocomplete="off"/>
-		<input type="button" value="search" id="search_btn"/>
-</form>
+<h1>Orders</h1>
 
 <c:choose>
 	<c:when test="${lists == NULL}">
@@ -65,26 +60,24 @@ function search_enter(form){
 		<thead>
 			<tr>
 				<th scope="col">Order Number</th>
-				<th scope="col">Order Date</th>
 				<th scope="col">Order Status</th>
-				<th scope="col">User email</th>
-				<th scope="col">User name</th>
-				<th scope="col">Product ID</th>
 				<th scope="col">Product</th>
+				<th scope="col">Brand</th>
+				<th scope="col">Price</th>
 				<th scope="col">Options</th>
+				<th scope="col">Cancel</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach var="list" items="${lists}">
 			 <tr>
 				<th scope="row">${list.number }</th>
-				<td><fmt:formatDate value="${list.orderDate}" pattern="yyyy-MM-dd"/></td>
 				<td>${list.orderNow }</td>
-				<td>${list.userEmail }</td>
-				<td>${list.userName }</td>
-				<td>${list.goodsNumber }</td>
 				<td>${list.goodsName }</td>
+				<td>${list.manufacturer }</td>
+				<td>${list.goodsPrice }</td>
 				<td>${list.goodsOptions }</td>
+				<td><a href="#" id="del_order" vals="${list.userEmail }/${list.number}">Cancel</a></td>
 			 </tr>
 			</c:forEach>
 		</tbody>

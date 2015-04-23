@@ -149,7 +149,7 @@ function search_enter(form){
 	</c:choose>
 
 	<form id="search" method="post">
-		<input type="text" name="search_word" id="q" onkeypress="search_enter(document.q);"/>
+		<input type="text" name="search_word" id="q" onkeypress="search_enter(document.q);" autocomplete="off"/>
 		<input type="button" value="search" id="search_btn"/>
 	</form>
 	

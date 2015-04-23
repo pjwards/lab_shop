@@ -12,13 +12,13 @@ Date         : 2015-04-21
 */
 public interface WishlistDAO {
 
-	public int insert(HashMap<String,Object> paraMap);
+	public int insert(HashMap<String,Object> paraMap) throws Exception;
 
-	public int count();
+	public int count() throws Exception;
 
-	public List<WishlistVO> selectListMap(HashMap<String, Object> paraMap);
+	public List<WishlistVO> selectListMap(HashMap<String, Object> paraMap) throws Exception;
 
-	public int delete(HashMap<String, Object> paraMap);
+	public int delete(HashMap<String, Object> paraMap) throws Exception;
 
-	public WishlistVO selectOne(HashMap<String, Object> paraMap);
+	public WishlistVO selectOne(HashMap<String, Object> paraMap) throws Exception;
 }

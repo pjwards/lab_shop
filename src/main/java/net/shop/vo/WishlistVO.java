@@ -1,5 +1,11 @@
 package net.shop.vo;
 
+/*
+First Editor : Jisung Jeon (cbajs20@gmail.com)
+Last Editor  :
+Date         : 2015-04-21
+*/
+
 public class WishlistVO {
 
 	private int goodsNumber;
@@ -7,7 +13,7 @@ public class WishlistVO {
 	private int no;
 	private String name;
 	private String manufacturer;
-	private String price;
+	private int price;
 	
 	public int getNo() {
 		return no;
@@ -27,10 +33,10 @@ public class WishlistVO {
 	public void setManufacturer(String manufacturer) {
 		this.manufacturer = manufacturer;
 	}
-	public String getPrice() {
+	public int getPrice() {
 		return price;
 	}
-	public void setPrice(String price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 	public int getGoodsNumber() {

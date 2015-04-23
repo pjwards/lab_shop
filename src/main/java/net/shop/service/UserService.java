@@ -2,6 +2,7 @@ package net.shop.service;
 
 import java.util.List;
 
+import net.shop.vo.OrdersVO;
 import net.shop.vo.UserVO;
 import net.shop.vo.WishlistVO;
 
@@ -84,29 +85,47 @@ public interface UserService {
     Editor : Jisung Jeon
     Decription : add data in wishlist
     */
-	public int addWishlist(String email, int number);
+	public int addWishlist(String email, int number) throws Exception;
 	
 	/*
     Editor : Jisung Jeon
     Decription : count in wishlist
     */
-	public int wishCount();
+	public int wishCount() throws Exception;
 	
 	/*
     Editor : Jisung Jeon
     Decription : list of wishlist
     */
-	public List<WishlistVO> wishList(int start, int end, String keyword);
+	public List<WishlistVO> wishList(int start, int end, String keyword) throws Exception;
 	
 	/*
     Editor : Jisung Jeon
     Decription : delete data in wishlist
     */
-	public int delWishlist(String email, int number);
+	public int delWishlist(String email, int number) throws Exception;
 	
 	/*
     Editor : Jisung Jeon
     Decription : check the data of list
     */
-	public boolean checkWishlist(String email, int number);
+	public boolean checkWishlist(String email, int number) throws Exception;
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : list of orderlist
+    */
+	public List<OrdersVO> ordersList(int start, int end,String email) throws Exception;
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : count in orderlist
+    */
+	public int orderCount() throws Exception;
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : delete data in orderlist
+    */
+	public int delorderlist(String email, int no) throws Exception;
 }

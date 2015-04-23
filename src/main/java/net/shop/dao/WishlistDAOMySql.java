@@ -26,7 +26,7 @@ public class WishlistDAOMySql implements WishlistDAO {
     }
     
 	@Override
-	public int insert(HashMap<String,Object> paraMap) {
+	public int insert(HashMap<String,Object> paraMap) throws Exception{
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
         try{
@@ -37,7 +37,7 @@ public class WishlistDAOMySql implements WishlistDAO {
     }
 
 	@Override
-	public int count() {
+	public int count() throws Exception{
 		// TODO Auto-generated method stub
 		SqlSession sqlSession = sqlSessionFactory.openSession();
 
@@ -49,7 +49,7 @@ public class WishlistDAOMySql implements WishlistDAO {
 	}
 
 	@Override
-	public List<WishlistVO> selectListMap(HashMap<String, Object> paraMap) {
+	public List<WishlistVO> selectListMap(HashMap<String, Object> paraMap) throws Exception{
 		// TODO Auto-generated method stub
 		SqlSession sqlSession = sqlSessionFactory.openSession();
 		  
@@ -61,7 +61,7 @@ public class WishlistDAOMySql implements WishlistDAO {
 	}
 
 	@Override
-	public int delete(HashMap<String, Object> paraMap) {
+	public int delete(HashMap<String, Object> paraMap) throws Exception{
 		// TODO Auto-generated method stub
 		SqlSession sqlSession = sqlSessionFactory.openSession();
 
@@ -73,7 +73,7 @@ public class WishlistDAOMySql implements WishlistDAO {
 	}
 
 	@Override
-	public WishlistVO selectOne(HashMap<String, Object> paraMap) {
+	public WishlistVO selectOne(HashMap<String, Object> paraMap) throws Exception{
 		// TODO Auto-generated method stub
 		SqlSession sqlSession = sqlSessionFactory.openSession();
 

@@ -9,6 +9,7 @@ import net.shop.service.LoginService;
 import net.shop.service.UserService;
 import net.shop.util.ImageUtil;
 import net.shop.util.Util;
+import net.shop.vo.OrdersVO;
 import net.shop.vo.PagingVO;
 import net.shop.vo.UserVO;
 import net.shop.vo.WishlistVO;
@@ -349,7 +350,7 @@ public class UserController {
             throw new IllegalArgumentException("requestPage <= 0 : " + requestPage);
         }
         
-        int totalCount = userService.count();
+        int totalCount = userService.wishCount();
         
         /*Paging 메소드의 사용 */
         PagingVO pagingVO = util.paging(requestPage, 5, totalCount);
@@ -438,7 +439,74 @@ public class UserController {
 		
 	}
 	
+	//orderlist
+	@RequestMapping("/orders.do")
+	public ModelAndView searchUser(@RequestParam(value="p",required=false) String p,
+			HttpServletRequest request,HttpServletResponse response, Authentication auth) throws Exception{
+		
+		ModelAndView modelandview = new ModelAndView();
+		String requestPageString = p;		//paging
+		UserDetails vo = (UserDetails) auth.getPrincipal();
+		String email = vo.getUsername();
 	
+		if(requestPageString == null || requestPageString.equals("")) {
+            requestPageString = "1";
+        }
+		
+		int requestPage = Integer.parseInt(requestPageString);
+		
+        if(requestPage <= 0){
+            throw new IllegalArgumentException("requestPage <= 0 : " + requestPage);
+        }
+        
+		int totalCount = userService.orderCount();
+		
+		/*Paging 메소드의 사용 */
+        PagingVO pagingVO = util.paging(requestPage, 5, totalCount);
+        modelandview.addObject("pagingVO", pagingVO);
+        modelandview.setViewName("/user/userOrder");
+        if(totalCount == 0){
+            modelandview.addObject("lists", null);
+            return modelandview;
+        }
+        
+		List<OrdersVO> lists = userService.ordersList(pagingVO.getFirstRow()-1,pagingVO.getEndRow(),email);
+		if(lists.isEmpty()){
+			modelandview.addObject("lists", null);
+            return modelandview;
+		}
+		modelandview.addObject("lists", lists);
+
+		return modelandview;
+	}
+	
+	//delete orderlist
+	@RequestMapping(value="/delOrderlist.do")
+	public String delOrderlist(@RequestParam("choice")String choice,
+			@RequestParam("email")String email,@RequestParam("no")String number,
+			HttpServletRequest request, Model model) throws Exception{
+			
+		if(choice == null || choice.isEmpty()){
+			model.addAttribute("say", "Wrong Input");
+			model.addAttribute("url", request.getContextPath()+"/user/orders.do");
+			return "/error/alert";
+		}
+			
+		if(choice.compareTo("yes") != 0){
+			return "redirect:/user/orders.do";
+		}
+			
+		int no = Integer.parseInt(number);
+			
+		if(userService.delorderlist(email,no) == 0){
+			model.addAttribute("say", "Wrong already deleted");
+			model.addAttribute("url", request.getContextPath()+"/user/orders.do");
+			return "/error/alert";
+		}
+			
+		return "redirect:/user/orders.do";	
+	}
+		
 	/**
 	 * Check if user is login by remember me cookie
 	 */
