@@ -48,6 +48,16 @@ public class UserDAOMySql implements UserDAO {
         }
     }
 
+    public int count(String keyword) {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectOne("net.UserDao.countByKeyword",keyword);
+        }finally{
+            sqlSession.close();
+        }
+    }
+    
     public int insert(UserVO userVO) {
         SqlSession sqlSession = sqlSessionFactory.openSession();
 

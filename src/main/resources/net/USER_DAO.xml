@@ -44,6 +44,10 @@
       select count(*) from shop_user
     </select>
 
+	<select id="countByKeyword" parameterType="String" resultType="int">
+      select count(*) from shop_user where last_name like #{keyword} or email like #{keyword} or authority like #{keyword}
+    </select>
+    
     <insert id="insert" parameterType="UserVO">
       insert into shop_user (first_name,last_name,email,password,address,postcode,created_date,last_date,image_path)
       values(#{firstName},#{lastName},#{email},#{password},#{address},#{postcode},now(),now(),#{imagePath})

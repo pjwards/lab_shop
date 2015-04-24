@@ -44,6 +44,12 @@ public interface UserService {
     Decription : Return the total counts of lists
     */
     public int count() throws Exception;
+    
+    /*
+    Editor : Jisung Jeon
+    Decription : Return the total counts of resulted lists
+    */
+    public int count(String keyword) throws Exception;
 
     /*
     Editor : Jisung Jeon
@@ -95,6 +101,12 @@ public interface UserService {
 	
 	/*
     Editor : Jisung Jeon
+    Decription : count in resulted wishlist
+    */
+	public int wishCount(String keyword) throws Exception;
+	
+	/*
+    Editor : Jisung Jeon
     Decription : list of wishlist
     */
 	public List<WishlistVO> wishList(int start, int end, String keyword) throws Exception;
@@ -122,6 +134,12 @@ public interface UserService {
     Decription : count in orderlist
     */
 	public int orderCount() throws Exception;
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : count in resulted orderlist
+    */
+	public int orderCount(String keyword) throws Exception;
 	
 	/*
     Editor : Jisung Jeon

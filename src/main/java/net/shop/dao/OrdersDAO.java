@@ -16,6 +16,8 @@ public interface OrdersDAO {
 	public List<OrdersVO> selectListMap(HashMap<String,Object> paraMap) throws Exception;
 
 	public int count()throws Exception;
+	
+	public int count(String keyword) throws Exception;
 
 	public int delete(HashMap<String, Object> paraMap);
 

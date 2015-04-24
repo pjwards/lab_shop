@@ -21,6 +21,8 @@ public interface UserDAO {
 	public List<UserVO> selectListMap(HashMap<String,Object> paraMap) throws Exception;
 
 	public int count();
+	
+	public int count(String keyword);
 
 	public int insert(UserVO userVO);
 

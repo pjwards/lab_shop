@@ -49,6 +49,18 @@ public class WishlistDAOMySql implements WishlistDAO {
 	}
 
 	@Override
+	public int count(String keyword) throws Exception{
+		// TODO Auto-generated method stub
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectOne("net.WishlistDao.countByKeyword",keyword);
+        }finally{
+            sqlSession.close();
+        }
+	}
+	
+	@Override
 	public List<WishlistVO> selectListMap(HashMap<String, Object> paraMap) throws Exception{
 		// TODO Auto-generated method stub
 		SqlSession sqlSession = sqlSessionFactory.openSession();

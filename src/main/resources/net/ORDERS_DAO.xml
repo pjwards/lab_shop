@@ -40,4 +40,9 @@
     <select id="count" resultType="int">
       select count(*) from shop_orders
     </select>
+    
+    <select id="countByKeyword" parameterType="String" resultType="int">
+      select count(*) from shop_orders
+      where user_email like #{keyword} or user_name like #{keyword} or no like #{keyword}
+    </select>
 </mapper>

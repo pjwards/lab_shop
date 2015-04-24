@@ -29,9 +29,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int count() throws Exception {
+	public int count(String keyword) throws Exception {
 		// TODO Auto-generated method stub
-		return ordersDAO.count();
+		return ordersDAO.count(keyword);
 	}
 
 }

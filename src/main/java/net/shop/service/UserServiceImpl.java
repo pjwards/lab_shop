@@ -61,6 +61,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public int count(String keyword) throws Exception {
+		return userDAO.count(keyword);
+	}
+	
+	@Override
 	public int insert(UserVO userVO) throws Exception {
 		return userDAO.insert(userVO);
 	}
@@ -130,6 +135,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public int wishCount(String keyword) throws Exception{
+		// TODO Auto-generated method stub
+		return wishlistDAO.count(keyword);
+	}
+	
+	@Override
 	public List<WishlistVO> wishList(int start, int end, String keyword) throws Exception{
 		// TODO Auto-generated method stub
 		HashMap<String, Object> paraMap = new HashMap<String, Object>();
@@ -175,6 +186,12 @@ public class UserServiceImpl implements UserService {
 	public int orderCount() throws Exception {
 		// TODO Auto-generated method stub
 		return ordersDAO.count();
+	}
+	
+	@Override
+	public int orderCount(String keyword) throws Exception {
+		// TODO Auto-generated method stub
+		return ordersDAO.count(keyword);
 	}
 
 	@Override

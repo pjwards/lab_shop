@@ -21,6 +21,6 @@ public interface AdminService {
     Editor : Jisung Jeon
     Decription : Return the total counts of lists
     */
-    public int count() throws Exception;
+    public int count(String keyword) throws Exception;
 
 }

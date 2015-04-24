@@ -43,7 +43,19 @@ public class OrdersDAOMySql implements OrdersDAO {
             sqlSession.close();
         }
 	}
+	
+	@Override
+	public int count(String keyword) throws Exception {
+		// TODO Auto-generated method stub
+		SqlSession sqlSession = sqlSessionFactory.openSession();
 
+        try{
+            return sqlSession.selectOne("net.OrdersDao.countByKeyword",keyword);
+        }finally{
+            sqlSession.close();
+        }
+	}
+	
 	@Override
 	public int delete(HashMap<String, Object> paraMap) {
 		// TODO Auto-generated method stub
@@ -55,5 +67,4 @@ public class OrdersDAOMySql implements OrdersDAO {
 			sqlSession.close();
 		}
 	}
-
 }

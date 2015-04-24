@@ -6,6 +6,7 @@ import net.shop.service.UserService;
 import net.shop.util.Util;
 import net.shop.vo.GoodsVO;
 import net.shop.vo.PagingVO;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -232,4 +234,5 @@ public class GoodsController {
 
         return "redirect:/goods/list.do?p=" + page;
     }
+    
 }

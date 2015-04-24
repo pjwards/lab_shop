@@ -15,6 +15,8 @@ public interface WishlistDAO {
 	public int insert(HashMap<String,Object> paraMap) throws Exception;
 
 	public int count() throws Exception;
+	
+	public int count(String keyword) throws Exception;
 
 	public List<WishlistVO> selectListMap(HashMap<String, Object> paraMap) throws Exception;
 

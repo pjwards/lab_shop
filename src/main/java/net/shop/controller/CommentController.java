@@ -283,5 +283,5 @@ public class CommentController {
 
         return "redirect:/board/read.do?s=" + separator + "&p=" + page +"&boardNumber=" + boardNumber;
     }
-
+   
 }

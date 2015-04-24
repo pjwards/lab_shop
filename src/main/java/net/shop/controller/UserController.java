@@ -85,8 +85,13 @@ public class UserController {
             throw new IllegalArgumentException("requestPage <= 0 : " + requestPage);
         }
         
-        int totalCount = userService.count();
-        
+        int totalCount;
+        if(keyword  == null || keyword.equals(""))  {
+            totalCount = userService.count();
+        } else {
+            totalCount = userService.count(keyword);
+        }
+
         /*Paging 메소드의 사용 */
         PagingVO pagingVO = util.paging(requestPage, 5, totalCount);
         modelandview.addObject("pagingVO", pagingVO);
@@ -278,11 +283,16 @@ public class UserController {
 		return "/user/userDelete";
 	}
 	@RequestMapping(value= "/userDelete.do", method=RequestMethod.POST)
-	public String userDelete(Authentication auth,HttpServletRequest request) throws Exception{
+	public String userDelete(Authentication auth,HttpServletRequest request, Model model) throws Exception{
 		String reason = request.getParameter("check");
 		System.out.println(reason);
 		UserDetails vo = (UserDetails) auth.getPrincipal();
 		String email = vo.getUsername();
+		if(userService.orderCount(email)!=0){
+			model.addAttribute("say", "You have orders");
+			model.addAttribute("url", request.getContextPath()+"/main/main.do");
+			return "/error/alert";
+		}
 		userService.delete(email);
 		request.getSession().invalidate();
 		return "redirect:/main/main.do";
@@ -350,7 +360,12 @@ public class UserController {
             throw new IllegalArgumentException("requestPage <= 0 : " + requestPage);
         }
         
-        int totalCount = userService.wishCount();
+        int totalCount;
+        if(keyword  == null || keyword.equals(""))  {
+            totalCount = userService.wishCount();
+        } else {
+            totalCount = userService.wishCount(keyword);
+        }
         
         /*Paging 메소드의 사용 */
         PagingVO pagingVO = util.paging(requestPage, 5, totalCount);

@@ -58,7 +58,7 @@ public class AdminController {
             throw new IllegalArgumentException("requestPage <= 0 : " + requestPage);
         }
         
-		int totalCount = adminService.count();
+		int totalCount = adminService.count(keyword);
 		
 		/*Paging 메소드의 사용 */
         PagingVO pagingVO = util.paging(requestPage, 5, totalCount);
