@@ -4,18 +4,23 @@ import net.shop.error.GoodsNotFoundException;
 import net.shop.service.GoodsService;
 import net.shop.service.UserService;
 import net.shop.util.Util;
+import net.shop.vo.CartVO;
 import net.shop.vo.GoodsVO;
 import net.shop.vo.PagingVO;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -235,4 +240,88 @@ public class GoodsController {
         return "redirect:/goods/list.do?p=" + page;
     }
     
+    //cart list
+    @RequestMapping("/cart.do")
+	public String userDelete() throws Exception{
+		return "/goods/cart";
+	}
+  
+    //add cart
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value="/addCart.do")
+    public String addCart(@RequestParam(value="number") int number,Model model,
+    		@RequestParam(value="quantity") String quantity,HttpSession session,
+    		@RequestParam(value = "p", required = false) String page,HttpServletRequest request)throws Exception{
+    
+    	GoodsVO goodsVO = goodsService.selectOne(number);
+    	
+    	if(quantity == null || quantity.isEmpty()){
+			model.addAttribute("say", "Wrong Input");
+			model.addAttribute("url", request.getContextPath()+"/goods/list.do");
+			return "/error/alert";
+		}
+    	
+    	
+    	String termQan = quantity.trim().toLowerCase();
+    	int quan = 1;
+    	try{
+    		quan = Integer.parseInt(termQan);
+    	}catch(Exception e){
+    		model.addAttribute("say", "Wrong Input");
+			model.addAttribute("url", request.getContextPath()+"/goods/list.do");
+			return "/error/alert";
+    	}
+    	
+    	if(session.getAttribute("cart") == null){
+    		List<CartVO> cart = new ArrayList<CartVO>();
+    		cart.add(new CartVO(goodsVO, quan));
+    		session.setAttribute("cart", cart);
+    	}else{
+    		List<CartVO> cart = (List<CartVO>)session.getAttribute("cart");
+    		int index = isExsisting(number, session);
+    		if(index == -1){
+    			cart.add(new CartVO(goodsVO, quan));
+    		}
+    		//int amount = cart.get(index).getQuantity() + 1;
+    		//cart.get(index).setQuantity(amount);
+    		session.setAttribute("cart", cart);
+    	}
+    	
+    	return "redirect:/goods/read.do?p=" + page + "&goodsNumber=" + number;
+    }
+    
+    //delete cart
+  	@SuppressWarnings("unchecked")
+	@RequestMapping(value="/delCart.do")
+  	public String delCart(@RequestParam("choice")String choice,@RequestParam("no")String number,
+  			HttpServletRequest request, Model model, HttpSession session) throws Exception{
+  		
+  		if(choice == null || choice.isEmpty()){
+  			model.addAttribute("say", "Wrong Input");
+  			model.addAttribute("url", request.getContextPath()+"/user/wishlist.do");
+  			return "/error/alert";
+  		}
+  		
+  		if(choice.compareTo("yes") != 0){
+  			return "redirect:/user/wishlist.do";
+  		}
+  		
+  		int no = Integer.parseInt(number);
+		List<CartVO> cart = (List<CartVO>)session.getAttribute("cart");
+		int index = isExsisting(no, session);
+		cart.remove(index);
+		session.setAttribute("cart", cart);
+
+  		return "/goods/cart";	
+  	}
+  	
+  	//check if data of id exists
+    @SuppressWarnings("unchecked")
+	private int isExsisting(int id, HttpSession session){
+		List<CartVO> cart = (List<CartVO>)session.getAttribute("cart");
+		for(int i =0 ; i<cart.size() ;i++)
+			if(cart.get(i).getGoodsVO().getNumber() == id)
+				return i;
+		return -1;
+    }
 }

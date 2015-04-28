@@ -34,6 +34,7 @@
 			<li><a href="<%=request.getContextPath()%>/user/userEdit.do">Your Account</a></li>
 			<li><a href="<%=request.getContextPath()%>/user/wishlist.do">Wishlist</a></li>
 			<li><a href="<%=request.getContextPath()%>/user/orders.do">Your Orders</a></li>
+			<li><a href="<%=request.getContextPath()%>/goods/cart.do">Cart</a></li>
 		</c:when>
 		<c:otherwise>
 			<li><a href="<%=request.getContextPath()%>/main/login.do">Sign In</a></li>

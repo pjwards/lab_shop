@@ -12,7 +12,58 @@
 
 <html>
 <head>
+<!-- CSS Files -->
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.min.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap-theme.css">
+<!-- Javascript -->
+<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+<script src="<%=request.getContextPath()%>/resource/js/bootstrap.min.js"></script>
+
     <title>상품 읽기</title>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$("a#addWish").click(function(){
+		var check = prompt("Do you want to add this in wishlist? yes/no").trim().toLowerCase();
+		
+		if(check === ""){
+			alert("Wrong Input");
+			return false;
+		}
+		if(check !== "yes"){
+			return false;
+		}
+		
+		var data = $("a#addWish").attr("vals");
+		var arr = data.split('/');
+		
+		$.ajax({
+			type:"POST",
+			url:"<%=request.getContextPath()%>/user/addWishlist.do",
+			data:{ email : arr[0], check : check, no : arr[1] },
+			success:function(result){
+				if(result === "400"){
+					alert("Already existed");
+				}else if(result === "200"){
+					alert("Added in wishlist");
+				}
+			}
+		});
+	});
+	
+	$("#submit_form").on("submit",function(){
+		var quantity = $("#quantity").val().trim();
+		
+		if(quantity === ""){
+			alert("Check your quantity again");
+			$("#quantity").focus();
+			return false;
+		}
+	
+	});
+});
+</script>
 </head>
 <body>
 <table>
@@ -72,7 +123,21 @@
         </td>
     </tr>
     <tr>
-    <tr>
+        <a href="#" id="addWish" vals="${goodsVO.userEmail }/${goodsVO.number}">WishList</a>
+    
+    	<form action="<%=request.getContextPath()%>/goods/addCart.do" method="get" class="form-inline" id="submit_form" name="submit_form">
+    		<div class="form-group">
+    			<label class="sr-only" for="quantity">Quantity</label>
+    			<div class="input-group">
+      				<div class="input-group-addon">*</div>
+      					<input type="text" class="form-control" id="quantity" name="quantity" placeholder="Quantity" autocomplete="off">
+    			</div>
+  			</div>
+  			<input type="hidden" name="number" value="${goodsVO.number}"/>
+      		<input type="hidden" name="p" value="${param.p}"/>
+  			<button type="submit" class="btn btn-primary">Add to Cart</button>
+    	</form>
+    	
         <td colspan="2">
             <a href="list.do?p=${param.p}">목록보기</a>
             <a href="update.do?p=${param.p}&goodsNumber=${goodsVO.number}">수정하기</a>

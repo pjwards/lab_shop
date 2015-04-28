@@ -14,8 +14,8 @@ import java.util.Date;
  */
 
 public class UserVO implements Serializable{
-	
-	static final long serialVersionUID = 19900317L;
+
+	private static final long serialVersionUID = -1141067737449130083L;
 	
 	private int number;
 	private String firstName;
