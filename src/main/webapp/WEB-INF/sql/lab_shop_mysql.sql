@@ -42,7 +42,7 @@ create table shop_board (
 	group_no int not null,
 	sequence_no char(12) not null,
 	title varchar(100) not null,
-	content text not null,
+	content longtext not null,
 	posting_date datetime not null,
 	read_count int not null,
 	comment_count int not null,
@@ -121,4 +121,14 @@ create table shop_wishlist(
 	index (user_email),
 	foreign key(user_email) references shop_user(email) on delete cascade,
 	foreign key(goods_no) references shop_goods(no)
+);
+
+create table shop_file(
+	no int not null auto_increment,
+	realname varchar(255) not null,
+	name varchar(255) not null,
+	ext varchar(4) not null,
+	uploader varchar(255) not null,
+	boardno int null,
+	primary key (no)
 );

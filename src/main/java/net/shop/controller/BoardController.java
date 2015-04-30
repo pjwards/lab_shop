@@ -9,6 +9,7 @@ import net.shop.vo.PagingVO;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -105,10 +106,11 @@ public class BoardController {
      */
     @RequestMapping(value = "/write.do", method = RequestMethod.POST)
     public String boardWrite(@RequestParam(value = "title", required = true) String title,
-                                   @RequestParam(value = "content", required = true ) String content,
+                                   @RequestParam(value = "daumeditor", required = true ) String daumeditor,
                                    @RequestParam(value = "s", required = true, defaultValue = "default") String separator,
-                                   Authentication auth) throws Exception{
+                                   Authentication auth, HttpServletRequest request, Model model) throws Exception{
 
+    	
         String memberId = util.isMemberId(auth);
 
         int groupId = boardService.generateNextGroupNumber("board");
@@ -119,7 +121,7 @@ public class BoardController {
         DecimalFormat decimalFormat = new DecimalFormat("0000000000");
         boardVO.setSequenceNumber(decimalFormat.format(groupId) + "99");
         boardVO.setTitle(title);
-        boardVO.setContent(content);
+        boardVO.setContent(daumeditor);
         boardVO.setUserNumber(userNumber);
         boardVO.setUserEmail(memberId);
         boardVO.setSeparatorName(separator);

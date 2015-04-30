@@ -91,8 +91,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserVO selectOneVo(String email) throws Exception {
 		// TODO Auto-generated method stub
-		UserVO userVO = userDAO.selectOne(email);
-		return userVO;
+		
+		return userDAO.selectOne(email);
 	}
 	
 	@Override

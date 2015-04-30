@@ -265,4 +265,28 @@ public class Util {
     		 if(is != null){is.close();}
     	 }
     }
+    
+    public static void editorUpload(MultipartFile multipartFile, String path, String fileName) throws IOException {
+        
+		Long size = 0L;
+        File file = new File(path);
+       
+        	//디렉토리 존재하지 않을경우 디렉토리 생성
+        if(!file.exists()) {
+            file.mkdirs();
+        }
+        	//서버에 업로드 할 파일명(한글문제로 인해 원본파일은 올리지 않는것이 좋음)
+        size = multipartFile.getSize();
+        	///////////////// 서버에 파일쓰기 ///////////////// 
+        InputStream is = multipartFile.getInputStream();
+        OutputStream os=new FileOutputStream(path + fileName);
+        int numRead;
+        byte b[] = new byte[(int)multipartFile.getSize()];
+        while((numRead = is.read(b,0,b.length)) != -1){
+            os.write(b,0,numRead);
+        }
+        if(is != null)  is.close();
+        os.flush();
+        os.close();
+    }
 }

@@ -1,14 +1,21 @@
 package net.shop.controller;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.Calendar;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import net.shop.service.CommonService;
 import net.shop.util.ImageUtil;
 import net.shop.util.Util;
+import net.shop.vo.FileVO;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,33 +42,47 @@ public class CommonController {
 	@Resource(name = "imageUtil")
 	private ImageUtil imageUtil;
 	
+	@Resource(name = "commonService")
+	private CommonService commonService;
+	
 	@RequestMapping(value="/upload.do")
 	public String upload() throws Exception{
 		return "/common/upload";
 	}
 
+	//file upload
 	@SuppressWarnings("static-access")
 	@RequestMapping(value="/upload.do",method=RequestMethod.POST)
-	public String upload(@RequestParam(value="file1",required=false) MultipartFile multipartFile, Model model) throws Exception{
+	public String upload(@RequestParam(value="file1",required=false) MultipartFile multipartFile, Model model,
+			Authentication auth) throws Exception{
 		Calendar cal = Calendar.getInstance();
+		UserDetails vo = (UserDetails) auth.getPrincipal();
 		String loadPath = "/home/jisung/git/lab_shop/src/main/webapp/resource/upload/";
+		String uploader = vo.getUsername();
 	    String fileName = multipartFile.getOriginalFilename();
-	    String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
+	    //String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
+		String fileExt = multipartFile.getOriginalFilename().substring( multipartFile.getOriginalFilename().lastIndexOf( ".") + 1, multipartFile.getOriginalFilename().length());
 	    String tempName =  cal.getTimeInMillis() + "";
-	    String replaceName = tempName + fileType;
+	    String replaceName = tempName +"."+ fileExt;
 	    util.fileUpload(multipartFile, loadPath, replaceName);
-	    
+	    FileVO fileVO = new FileVO(fileName, tempName, fileExt, uploader, 0);
+	    commonService.insert(fileVO);
 		return "/common/upload";
 	}
 	
+	//download
 	@RequestMapping(value = "/download.do", method = RequestMethod.GET)
-	public ModelAndView download(HttpServletRequest request){
+	public ModelAndView download(HttpServletRequest request) throws Exception{
 	  File file = new File("/home/jisung/git/lab_shop/src/main/webapp/resource/upload/","images.jpg");
-	  request.setAttribute("fileName", "picture.jpg");   //change a name for image. if this line isn't, use the original name
+	  int boardNumber = 0;
+	  FileVO fileVO = commonService.selectOneVo(boardNumber);
+	  String fileName = fileVO.getName()+"."+fileVO.getExt();
+	  request.setAttribute("fileName", fileName);   //change a name for image. if this line isn't, use the original name
 	  
 	  return new ModelAndView("fileDownloadView","filedown", file);  
 	}
 	
+	//imageupload
 	@SuppressWarnings("static-access")
 	@RequestMapping(value="/imageUpload.do",method=RequestMethod.POST)
 	public String imageUpload(@RequestParam(value="file1",required=false) MultipartFile multipartFile, Model model) throws Exception{
@@ -84,5 +105,43 @@ public class CommonController {
 		
 		model.addAttribute("fileName", multipartFile.getOriginalFilename());		
 		return "/common/upload";
+	}
+	
+	//daumeditor image upload
+	@SuppressWarnings("static-access")
+	@RequestMapping(value="/fileUpload.do",method=RequestMethod.POST)
+	public void fileUpload(@RequestParam(value="image_file",required=false) MultipartFile multipartFile,
+			HttpServletRequest request,HttpServletResponse response) throws Exception{
+	
+		PrintWriter pw = response.getWriter();
+        //String filename = multipartFile.getName().substring(multipartFile.getName().lastIndexOf(".")+1);
+		String fileExt = multipartFile.getOriginalFilename().substring( multipartFile.getOriginalFilename().lastIndexOf( ".") + 1, multipartFile.getOriginalFilename().length());
+		String path = "/home/jisung/git/lab_shop/src/main/webapp/resource/upload/";
+		String realname = UUID.randomUUID().toString() + "." + fileExt;
+		
+		if(!imageUtil.isImageFile(fileExt)){
+			pw.print("400");
+			pw.flush();
+			pw.close();
+			return;
+        }
+
+		if(multipartFile.getSize() > 0) {
+			util.editorUpload(multipartFile, path, realname);
+		}else{
+			pw.print("400");
+			pw.flush();
+			pw.close();
+			return;
+		}
+		
+		response.setContentType("text/plain; charset=UTF-8");
+	    
+	    //json string 값으로 callback
+	    //json 값으로 넘기는 필요 값
+	    //imageurl, filename,filesize,imagealign
+	    pw.print("{\"imageurl\" : \"/lab_shop/resource/upload/"+realname+"\",\"filename\":\""+realname+"\",\"filesize\": 600,\"imagealign\":\"C\"}");
+	    pw.flush();
+	    pw.close();
 	}
 }

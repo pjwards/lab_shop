@@ -31,7 +31,7 @@
     <tr>
         <td>내용</td>
         <td>
-            <pre><c:out value="${boardVO.content}"/></pre>
+            ${boardVO.content}
         </td>
     </tr>
 
