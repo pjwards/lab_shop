@@ -111,6 +111,7 @@ create table shop_orders(
 	user_address varchar(255) not null,
 	user_postcode int not null,
 	goods_no int not null,
+	quantity int not null,
 	primary key (no),
 	foreign key(goods_no) references shop_goods(no)
 );

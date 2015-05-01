@@ -57,12 +57,24 @@ public class OrdersDAOMySql implements OrdersDAO {
 	}
 	
 	@Override
-	public int delete(HashMap<String, Object> paraMap) {
+	public int delete(int number) {
 		// TODO Auto-generated method stub
 		SqlSession sqlSession = sqlSessionFactory.openSession();
 
 		try{
-			return sqlSession.insert("net.OrdersDao.delete", paraMap);
+			return sqlSession.insert("net.OrdersDao.delete", number);
+		}finally{
+			sqlSession.close();
+		}
+	}
+
+	@Override
+	public int insert(OrdersVO ordersVO) {
+		// TODO Auto-generated method stub
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+
+		try{
+			return sqlSession.insert("net.OrdersDao.insert", ordersVO);
 		}finally{
 			sqlSession.close();
 		}

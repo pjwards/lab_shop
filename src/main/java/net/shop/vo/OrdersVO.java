@@ -15,13 +15,44 @@ public class OrdersVO {
 	private String userEmail;
 	private String userName;
 	private int goodsNumber;
+	private int quantity;
 	private String userAddress;
 	private int userPostcode;
 	private String goodsName;
 	private String goodsOptions;
-	private String manufacturer;
 	private int goodsPrice;
+	private String manufacturer;	
 	
+	public OrdersVO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public OrdersVO(String orderNow, String userEmail,
+			String userName, int goodsNumber, int quantity, String userAddress,
+			int userPostcode) {
+		super();
+		this.orderNow = orderNow;
+		this.userEmail = userEmail;
+		this.userName = userName;
+		this.goodsNumber = goodsNumber;
+		this.quantity = quantity;
+		this.userAddress = userAddress;
+		this.userPostcode = userPostcode;
+	}
+
+	
+	public int getGoodsPrice() {
+		return goodsPrice;
+	}
+	public void setGoodsPrice(int goodsPrice) {
+		this.goodsPrice = goodsPrice;
+	}
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 	public int getNumber() {
 		return number;
 	}
@@ -87,12 +118,6 @@ public class OrdersVO {
 	}
 	public void setManufacturer(String manufacturer) {
 		this.manufacturer = manufacturer;
-	}
-	public int getGoodsPrice() {
-		return goodsPrice;
-	}
-	public void setGoodsPrice(int goodsPrice) {
-		this.goodsPrice = goodsPrice;
 	}
 	
 }

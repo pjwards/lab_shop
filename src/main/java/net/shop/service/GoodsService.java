@@ -1,6 +1,7 @@
 package net.shop.service;
 
 import net.shop.vo.GoodsVO;
+import net.shop.vo.OrdersVO;
 
 import java.util.List;
 
@@ -59,4 +60,10 @@ public interface GoodsService {
     게시글에 상품에 대한 개수를 줄인다.
      */
     public void decreaseGoodsCount(int boardNumber) throws Exception;
+    
+    /*
+    Editor : Jisung Jeon
+    Decription : insert data in orderlist
+    */
+	public int addorderlist(OrdersVO ordersVO) throws Exception;
 }

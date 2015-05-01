@@ -145,5 +145,5 @@ public interface UserService {
     Editor : Jisung Jeon
     Decription : delete data in orderlist
     */
-	public int delorderlist(String email, int no) throws Exception;
+	public int delorderlist(int no) throws Exception;
 }

@@ -50,4 +50,16 @@
 		<property name="targetUrlParameter" value="targetUrl" />
   	</bean>
   	
+  	<!-- mail -->
+  	<bean id="mailSender" class ="org.springframework.mail.javamail.JavaMailSenderImpl" >
+   		<property name="host" value="smtp.gmail.com" />
+    	<property name="port" value="587" />
+    	<property name="username" value="userid@gmail.com" />
+    	<property name="password" value="userpassword" />
+    	<property name="javaMailProperties">
+    		<props>
+    	   		<prop key="mail.smtp.starttls.enable">true</prop>
+    		</props>
+   		</property>
+	</bean>
 </beans>

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.shop.service.CommonService;
 import net.shop.util.ImageUtil;
 import net.shop.util.Util;
+import net.shop.vo.EmailVO;
 import net.shop.vo.FileVO;
 
 import org.springframework.security.core.Authentication;
@@ -144,4 +145,23 @@ public class CommonController {
 	    pw.flush();
 	    pw.close();
 	}
+	
+	 @RequestMapping("/send.do")
+	 public String sendEmailAction(Model model, HttpServletRequest request) throws Exception {
+	 
+		 EmailVO emailVO = new EmailVO();
+	         
+	     String reciver = "cbajs20@gmail.com";
+	     String subject = "Hello";
+	     String content = "test email";
+	         
+	     emailVO.setReciver(reciver);
+	     emailVO.setSubject(subject);
+	     emailVO.setContent(content);
+	     util.SendEmail(emailVO);
+	         
+	     model.addAttribute("say", "Send it successfully");
+	     model.addAttribute("url", request.getContextPath()+"/main/main.do");
+		 return "/error/alert";
+	 }
 }

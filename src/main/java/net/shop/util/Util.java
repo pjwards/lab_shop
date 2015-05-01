@@ -1,9 +1,12 @@
 package net.shop.util;
 
 import net.shop.error.*;
+import net.shop.vo.EmailVO;
 import net.shop.vo.PagingVO;
 import net.shop.vo.ReplyVO;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -17,6 +20,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
+
 /**
  * First Editor : Donghyun Seo (egaoneko@naver.com)
  * Last Editor  :
@@ -29,6 +36,8 @@ import java.text.DecimalFormat;
 @Component("util")
 public class Util {
 
+	@Autowired
+    protected JavaMailSender  mailSender;
     /*
     페이징
      */
@@ -271,13 +280,13 @@ public class Util {
 		Long size = 0L;
         File file = new File(path);
        
-        	//디렉토리 존재하지 않을경우 디렉토리 생성
+        //make directory if it isn't
         if(!file.exists()) {
             file.mkdirs();
         }
-        	//서버에 업로드 할 파일명(한글문제로 인해 원본파일은 올리지 않는것이 좋음)
+        //change upload filename
         size = multipartFile.getSize();
-        	///////////////// 서버에 파일쓰기 ///////////////// 
+        //write in server
         InputStream is = multipartFile.getInputStream();
         OutputStream os=new FileOutputStream(path + fileName);
         int numRead;
@@ -288,5 +297,16 @@ public class Util {
         if(is != null)  is.close();
         os.flush();
         os.close();
+    }
+    
+    //send email
+    public void SendEmail(EmailVO emailVO) throws Exception {
+        
+        MimeMessage msg = mailSender.createMimeMessage();
+        msg.setSubject(emailVO.getSubject());
+        msg.setText(emailVO.getContent());
+        msg.setRecipient(RecipientType.TO , new InternetAddress(emailVO.getReciver()));
+         
+        mailSender.send(msg); 
     }
 }

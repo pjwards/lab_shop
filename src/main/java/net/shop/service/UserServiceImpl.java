@@ -195,12 +195,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int delorderlist(String email, int no) throws Exception {
+	public int delorderlist(int no) throws Exception {
 		// TODO Auto-generated method stub
-		HashMap<String, Object> paraMap = new HashMap<String, Object>();
-		paraMap.put("userEmail", email);
-		paraMap.put("goodsNumber",no);
-		return ordersDAO.delete(paraMap);
+		return ordersDAO.delete(no);
 	}
-
+	
 }

@@ -12,16 +12,17 @@
     	<result column="user_name" property="userName"/>
     	<result column="user_address" property="userAddress"/>
     	<result column="user_postcode" property="userPostcode"/>
+    	<result column="quantity" property="quantity"/>
     	<result column="goods_no" property="goodsNumber"/>
     	<result column="name" property="goodsName"/>
+    	<result column="price" property="goodsPrice"/>
     	<result column="options" property="goodsOptions"/>
     	<result column="manufacturer" property="manufacturer"/>
-    	<result column="price" property="goodsPrice"/>
     </resultMap>
 
 	<select id="selectList" parameterType="map" resultMap="ordersResultMap">
       select orders.no, orders.order_date, orders.user_email, orders.user_name, orders.order_now,
-      	orders.goods_no, goods.name, goods.options, goods.manufacturer, goods.price
+      	orders.goods_no, orders.quantity, goods.name, goods.options, goods.manufacturer, goods.price
       from shop_orders as orders inner join shop_goods as goods on orders.goods_no=goods.no
       <if test="keyword != NULL">
       where orders.user_email like #{keyword} or orders.user_name like #{keyword} or orders.no like #{keyword}
@@ -33,8 +34,8 @@
  	  limit #{offset},#{limit} 
     </select>
     
-    <delete id="delete" parameterType="map">
-      delete from shop_orders where user_email=#{userEmail} and goods_no=#{goodsNumber}
+    <delete id="delete" parameterType="int">
+      delete from shop_orders where no=#{number}
     </delete>
     
     <select id="count" resultType="int">
@@ -45,4 +46,9 @@
       select count(*) from shop_orders
       where user_email like #{keyword} or user_name like #{keyword} or no like #{keyword}
     </select>
+    
+    <insert id="insert" parameterType="OrdersVO">
+        INSERT INTO shop_orders (order_date,order_now, user_email, user_name, user_address, user_postcode, quantity, goods_no)
+        VALUE (now(),#{orderNow},#{userEmail},#{userName},#{userAddress},#{userPostcode},#{quantity},#{goodsNumber})
+    </insert>
 </mapper>

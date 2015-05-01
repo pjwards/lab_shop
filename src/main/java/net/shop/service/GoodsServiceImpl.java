@@ -1,10 +1,14 @@
 package net.shop.service;
 
 import net.shop.dao.GoodsDAO;
+import net.shop.dao.OrdersDAO;
 import net.shop.vo.GoodsVO;
+import net.shop.vo.OrdersVO;
+
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+
 import java.util.List;
 
 /**
@@ -21,6 +25,9 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Resource(name = "goodsDAO")
     private GoodsDAO goodsDAO;
+    
+    @Resource(name = "ordersDAO")
+    private OrdersDAO ordersDAO;
 
     @Override
     public int selectCount(String memberId) throws Exception {
@@ -66,4 +73,10 @@ public class GoodsServiceImpl implements GoodsService {
     public void decreaseGoodsCount(int boardNumber) throws Exception {
         goodsDAO.decreaseGoodsCount(boardNumber);
     }
+    
+    @Override
+	public int addorderlist(OrdersVO ordersVO) throws Exception {
+		// TODO Auto-generated method stub
+		return ordersDAO.insert(ordersVO);
+	}
 }

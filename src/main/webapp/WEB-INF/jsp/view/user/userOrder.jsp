@@ -27,9 +27,8 @@ $(document).ready(function(){
 		}
 		
 		var data = $("a#del_order").attr("vals");
-		var arr = data.split('/');
 		
-		var link = 'delOrderlist.do?&email='+arr[0]+'&no='+arr[1]+'&choice='+choice;
+		var link = 'delOrderlist.do?&no='+data+'&choice='+choice;
 		$(location).attr('href', link);
 	});
 });
@@ -63,23 +62,31 @@ $(document).ready(function(){
 				<th scope="col">Order Status</th>
 				<th scope="col">Product</th>
 				<th scope="col">Brand</th>
-				<th scope="col">Price</th>
 				<th scope="col">Options</th>
+				<th scope="col">Quantity</th>
+				<th scope="col">Price</th>
 				<th scope="col">Cancel</th>
 			</tr>
 		</thead>
 		<tbody>
+			<c:set var="s" value="0"></c:set>
 			<c:forEach var="list" items="${lists}">
+				<c:set var="s" value="${s + list.quantity * list.goodsPrice}"></c:set>
 			 <tr>
 				<th scope="row">${list.number }</th>
 				<td>${list.orderNow }</td>
 				<td>${list.goodsName }</td>
 				<td>${list.manufacturer }</td>
-				<td>${list.goodsPrice }</td>
 				<td>${list.goodsOptions }</td>
-				<td><a href="#" id="del_order" vals="${list.userEmail }/${list.number}">Cancel</a></td>
+				<td>${list.quantity }</td>
+				<td>${list.goodsPrice * list.quantity}</td>
+				<td><a href="#" id="del_order" vals="${list.number}">Cancel</a></td>
 			 </tr>
 			</c:forEach>
+			<tr>
+				<td colspan="5" align="right">Total Price</td>
+				<td>${s }</td>
+			</tr>
 		</tbody>
 		<tfoot>
 			<tr>

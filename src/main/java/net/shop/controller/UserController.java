@@ -456,7 +456,7 @@ public class UserController {
 	
 	//orderlist
 	@RequestMapping("/orders.do")
-	public ModelAndView searchUser(@RequestParam(value="p",required=false) String p,
+	public ModelAndView orderList(@RequestParam(value="p",required=false) String p,
 			HttpServletRequest request,HttpServletResponse response, Authentication auth) throws Exception{
 		
 		ModelAndView modelandview = new ModelAndView();
@@ -498,7 +498,7 @@ public class UserController {
 	//delete orderlist
 	@RequestMapping(value="/delOrderlist.do")
 	public String delOrderlist(@RequestParam("choice")String choice,
-			@RequestParam("email")String email,@RequestParam("no")String number,
+			@RequestParam("no")String number,
 			HttpServletRequest request, Model model) throws Exception{
 			
 		if(choice == null || choice.isEmpty()){
@@ -513,7 +513,7 @@ public class UserController {
 			
 		int no = Integer.parseInt(number);
 			
-		if(userService.delorderlist(email,no) == 0){
+		if(userService.delorderlist(no) == 0){
 			model.addAttribute("say", "Wrong already deleted");
 			model.addAttribute("url", request.getContextPath()+"/user/orders.do");
 			return "/error/alert";

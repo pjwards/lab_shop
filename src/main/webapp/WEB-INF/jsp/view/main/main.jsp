@@ -48,6 +48,7 @@
     <li><a href="<%=request.getContextPath()%>/download.do">download</a></li>
     <li><a href="<%=request.getContextPath()%>/goods/list.do">Goods List</a></li>
     <li><a href="<%=request.getContextPath()%>/admin/search.do">Search users</a></li>
+    <li><a href="<%=request.getContextPath()%>/send.do">Send email</a></li>    
 </ul>
 </body>
 

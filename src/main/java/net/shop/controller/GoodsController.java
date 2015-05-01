@@ -6,9 +6,12 @@ import net.shop.service.UserService;
 import net.shop.util.Util;
 import net.shop.vo.CartVO;
 import net.shop.vo.GoodsVO;
+import net.shop.vo.OrdersVO;
 import net.shop.vo.PagingVO;
+import net.shop.vo.UserVO;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -315,6 +318,30 @@ public class GoodsController {
   		return "/goods/cart";	
   	}
   	
+  	//add order
+  	@SuppressWarnings("unchecked")
+	@RequestMapping(value="/addOrders.do")
+  	public String addOrders(HttpServletRequest request, Model model, HttpSession session
+  			,Authentication auth) throws Exception{
+  		
+  		UserDetails vo = (UserDetails) auth.getPrincipal();
+		String email = vo.getUsername();
+		UserVO userVO = userService.selectOneVo(email);
+		List<CartVO> cart = (List<CartVO>)session.getAttribute("cart");
+		
+		for(int i = 0 ; i<cart.size() ;i++){	//run two "for" statement cause they doesn't work together
+  			OrdersVO ordersVO = new OrdersVO("Ready", email, userVO.getLastName(), cart.get(i).getGoodsVO().getNumber(), cart.get(i).getQuantity(), userVO.getAddress(), userVO.getPostcode());
+  			goodsService.addorderlist(ordersVO);
+  			
+		}
+		for(int i = 0 ; i<cart.size() ;i++){
+			cart.remove(i);
+		}
+		
+  		model.addAttribute("say", "Buy it successfully");
+		model.addAttribute("url", request.getContextPath()+"/user/orders.do");
+		return "/error/alert";
+  	}
   	//check if data of id exists
     @SuppressWarnings("unchecked")
 	private int isExsisting(int id, HttpSession session){

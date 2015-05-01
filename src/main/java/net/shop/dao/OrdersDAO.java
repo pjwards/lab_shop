@@ -19,6 +19,8 @@ public interface OrdersDAO {
 	
 	public int count(String keyword) throws Exception;
 
-	public int delete(HashMap<String, Object> paraMap);
+	public int delete(int number);
+	
+	public int insert(OrdersVO ordersVO);
 
 }

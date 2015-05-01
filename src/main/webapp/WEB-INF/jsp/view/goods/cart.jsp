@@ -16,6 +16,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+	
 	$("a#del_cart").click(function(){
 		var choice = prompt("Delete this? yes/no").trim().toLowerCase();
 		
@@ -86,8 +87,9 @@ $(document).ready(function(){
 			 </tr>
 			</c:forEach>
 			<tr>
-				<td colspan="5" align="right">SUM</td>
+				<td colspan="5" align="right">Total Price</td>
 				<td>${s }</td>
+				<td><a href="<%=request.getContextPath()%>/goods/addOrders.do">Buy</a></td>
 			</tr>
 		</tbody>
 	 </table>
