@@ -49,17 +49,25 @@
 		class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
 		<property name="targetUrlParameter" value="targetUrl" />
   	</bean>
-  	
-  	<!-- mail -->
-  	<bean id="mailSender" class ="org.springframework.mail.javamail.JavaMailSenderImpl" >
-   		<property name="host" value="smtp.gmail.com" />
-    	<property name="port" value="587" />
-    	<property name="username" value="userid@gmail.com" />
-    	<property name="password" value="userpassword" />
-    	<property name="javaMailProperties">
-    		<props>
-    	   		<prop key="mail.smtp.starttls.enable">true</prop>
-    		</props>
-   		</property>
-	</bean>
+
+    <!-- Jsonview -->
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+        <property name="contentType" value="application/json;charset=UTF-8"></property>
+    </bean>
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <property name="order" value="1"></property>
+    </bean>
+
+    <!-- mail -->
+    <bean id="mailSender" class ="org.springframework.mail.javamail.JavaMailSenderImpl" >
+        <property name="host" value="smtp.gmail.com" />
+        <property name="port" value="587" />
+        <property name="username" value="userid@gmail.com" />
+        <property name="password" value="userpassword" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
+    </bean>
 </beans>

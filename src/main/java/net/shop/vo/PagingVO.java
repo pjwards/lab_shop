@@ -1,5 +1,9 @@
 package net.shop.vo;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Description
  * Donghyun Seo (egaoneko@naver.com)

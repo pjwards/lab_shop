@@ -43,6 +43,7 @@ public class Util {
      */
     public PagingVO paging(int requestPage, int countPerPage, int totalCount) {
 
+        final int PAGING_PAGE = 10;
         int totalPageCount = 0;
         int firstRow = 0;
         int endRow = 0;
@@ -73,8 +74,8 @@ public class Util {
             페이지의 시작과 끝을 알려주는 부분
              */
             if(totalCount != 0) {
-                beginPage = (requestPage - 1) / countPerPage * countPerPage + 1;
-                endPage = beginPage + countPerPage - 1;
+                beginPage = (requestPage - 1) / PAGING_PAGE * PAGING_PAGE + 1;
+                endPage = beginPage + PAGING_PAGE - 1;
                 if(endPage > totalPageCount){
                     endPage = totalPageCount;
                 }

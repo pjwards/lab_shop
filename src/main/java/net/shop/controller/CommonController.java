@@ -17,6 +17,7 @@ import net.shop.vo.FileVO;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -106,6 +107,22 @@ public class CommonController {
 		
 		model.addAttribute("fileName", multipartFile.getOriginalFilename());		
 		return "/common/upload";
+	}
+
+	/**
+	 * First Editor : Donghyun Seo (egaoneko@naver.com)
+	 * Last Editor  :
+	 * Date         : 2015-05-04
+	 * Description  :
+	 * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
+	 * version      :
+	 */
+	@RequestMapping(value = "/isLogin.do")
+	public String isLogin(Authentication auth) throws Exception {
+
+		util.isMemberId(auth);
+
+		return "common/success";
 	}
 	
 	//daumeditor image upload

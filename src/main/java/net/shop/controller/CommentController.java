@@ -2,6 +2,7 @@ package net.shop.controller;
 
 import net.shop.error.BoardNotFoundException;
 import net.shop.error.CommentNotFoundException;
+import net.shop.error.MemberIdNotFoundException;
 import net.shop.service.CommentService;
 import net.shop.service.UserService;
 import net.shop.util.Util;
@@ -19,7 +20,9 @@ import javax.annotation.Resource;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description
@@ -45,55 +48,44 @@ public class CommentController {
     /*
     댓글 리스트
      */
-    @RequestMapping(value = "/listAll.do")
-    public ModelAndView commentListAll(@RequestParam(value = "boardNumber", required = true) Integer boardNumber)
-            throws Exception {
-
-        ModelAndView modelAndView = new ModelAndView();
-
-        if(boardNumber == null) throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
-        if(boardNumber < 0) throw new IllegalArgumentException("board number < 1 : " + boardNumber);
-
-        int totalCount = commentService.selectCount(boardNumber);
-
-        modelAndView.setViewName("/board/read");
-
-        if(totalCount == 0){
-            modelAndView.addObject("commentVOList", Collections.<CommentVO>emptyList());
-            modelAndView.addObject("hasComment", false);
-            return modelAndView;
-        }
-
-        List<CommentVO> commentVOList = commentService.selectList(boardNumber);
-        modelAndView.addObject("commentVOList", commentVOList);
-        modelAndView.addObject("hasComment", true);
-
-        return modelAndView;
-    }
-
-    /*
-    댓글 리스트
-     */
     @RequestMapping(value = "/list.do")
-    public ModelAndView commentList(@RequestParam(value = "cp", required = true) Integer requestPage,
-                                    @RequestParam(value = "boardNumber", required = true) Integer boardNumber)
-            throws Exception {
+    public ModelAndView commentList(@RequestParam(value = "cp", required = false) Integer requestPage,
+                                    @RequestParam(value = "cs", required = false) String separator,
+                                    @RequestParam(value = "boardNumber", required = true) Integer boardNumber,
+                                    Authentication auth) throws Exception {
 
         ModelAndView modelAndView = new ModelAndView();
 
         if(requestPage == null) requestPage = 1;
         if(requestPage <= 0) throw new IllegalArgumentException("requestPage <= 0 : " + requestPage);
 
-
         if(boardNumber == null) throw new BoardNotFoundException("게시글이 존재하지 않음 : " + boardNumber);
         if(boardNumber < 0) throw new IllegalArgumentException("board number < 1 : " + boardNumber);
 
-        int totalCount = commentService.selectCount(boardNumber);
+        modelAndView.addObject("cs", separator);
+
+        String memberId;
+        try {
+            memberId = util.isMemberId(auth);
+            modelAndView.addObject("isLogin", true);
+            modelAndView.addObject("memberId", memberId);
+        } catch (Exception e) {
+            memberId = null;
+            modelAndView.addObject("isLogin", false);
+        }
+
+        int totalCount;
+
+        if(separator  == null || separator.equals(""))  {
+            totalCount = commentService.selectCount(boardNumber);
+        } else {
+            totalCount = commentService.selectCount(boardNumber, separator);
+        }
 
         /*Paging 메소드의 사용 */
-        PagingVO pagingVO = util.paging(requestPage, 10, totalCount);
+        PagingVO pagingVO = util.paging(requestPage, 3, totalCount);
         modelAndView.addObject("pagingVO", pagingVO);
-        modelAndView.setViewName("/board/read");
+        modelAndView.setViewName("/comment/list");
 
         if(totalCount == 0){
             modelAndView.addObject("commentVOList", Collections.<CommentVO>emptyList());
@@ -101,7 +93,14 @@ public class CommentController {
             return modelAndView;
         }
 
-        List<CommentVO> commentVOList = commentService.selectList(boardNumber, pagingVO.getFirstRow(), pagingVO.getEndRow());
+        List<CommentVO> commentVOList;
+
+        if(separator  == null || separator.equals(""))  {
+            commentVOList = commentService.selectList(boardNumber, pagingVO.getFirstRow(), pagingVO.getEndRow());
+        } else {
+            commentVOList = commentService.selectList(boardNumber, pagingVO.getFirstRow(), pagingVO.getEndRow(), separator);
+        }
+
         modelAndView.addObject("commentVOList", commentVOList);
         modelAndView.addObject("hasComment", true);
 
@@ -114,8 +113,7 @@ public class CommentController {
     @RequestMapping(value = "/write.do", method = RequestMethod.POST)
     public String commentWrite(@RequestParam(value = "content", required = true) String content,
                                @RequestParam(value = "boardNumber", required = true ) Integer boardNumber,
-                               @RequestParam(value = "s", required = true, defaultValue = "default") String separator,
-                               @RequestParam(value = "p", required = false) String page,
+                               @RequestParam(value = "cs", required = true, defaultValue = "default") String separator,
                                Authentication auth) throws Exception{
 
         String memberId = util.isMemberId(auth);
@@ -135,27 +133,16 @@ public class CommentController {
 
         commentService.insert(commentVO);
         commentService.increaseCommentCount(boardNumber);
-
-        return "redirect:/board/read.do?s=" + separator + "&p=" + page +"&boardNumber=" + boardNumber;
-    }
-
-    /*
-    댓글 읽기
-     */
-    public CommentVO commentRead(int commentNumber) throws Exception {
-
-        CommentVO commentVO = commentService.selectOne(commentNumber);
-        if(commentVO == null) throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
-
-        return commentVO;
+        return "/common/success";
     }
 
     /*
     댓글 수정 폼
      */
     @RequestMapping(value = "/update.do")
-    public ModelAndView commentUpdate(@RequestParam(value = "commentNumber", required = true) Integer commentNumber,
-                                      Authentication auth) throws Exception{
+    public ModelAndView commentUpdateForm(@RequestParam(value = "commentNumber", required = true) Integer commentNumber,
+                                          @RequestParam(value = "cs", required = true) String separator,
+                                          Authentication auth) throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
 
@@ -167,6 +154,8 @@ public class CommentController {
         util.isEqualMemberId(commentVO.getUserEmail(), memberId);
 
         modelAndView.addObject("commentVO", commentVO);
+        modelAndView.addObject("cs", separator);
+        modelAndView.addObject("commentNumber", commentNumber);
         modelAndView.setViewName("/comment/updateForm");
         return modelAndView;
     }
@@ -175,12 +164,9 @@ public class CommentController {
     댓글 수정
      */
     @RequestMapping(value = "/update.do", method = RequestMethod.POST)
-    public String commentUpdate(@RequestParam(value = "commentNumber", required = true) Integer commentNumber,
-                                @RequestParam(value = "boardNumber", required = true) String boardNumber,
-                                @RequestParam(value = "content", required = true) String content,
-                                @RequestParam(value = "p", required = false) String page,
-                                @RequestParam(value = "s", required = false) String separator,
-                                Authentication auth) throws Exception {
+    public void commentUpdate(@RequestParam(value = "commentNumber", required = true) Integer commentNumber,
+                              @RequestParam(value = "content", required = true) String content,
+                              Authentication auth) throws Exception {
 
         String memberId = util.isMemberId(auth);
 
@@ -195,18 +181,18 @@ public class CommentController {
 
         int updateCount = commentService.update(commentVO);
         if (updateCount == 0) throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
-
-        commentService.selectOne(commentNumber);
-
-        return "redirect:/board/read.do?s=" + separator + "&p=" + page +"&boardNumber=" + boardNumber;
     }
 
     /*
     댓글 답글 폼
      */
     @RequestMapping(value = "/reply.do")
-    public String commentReply(@RequestParam(value = "parentCommentNumber", required = true) Integer parentCommentNumber)
+    public ModelAndView commentReply(@RequestParam(value = "parentCommentNumber", required = true) Integer parentCommentNumber,
+                               @RequestParam(value = "boardNumber", required = true) Integer boardNumber,
+                               @RequestParam(value = "cs", required = true, defaultValue = "default") String separator)
             throws Exception{
+
+        ModelAndView modelAndView = new ModelAndView();
 
         CommentVO parent = commentService.selectOne(parentCommentNumber);
 
@@ -218,8 +204,12 @@ public class CommentController {
         String lastChildSeq = commentService.selectLastSequenceNumber(searchMaxSeqNum, searchMinSeqNum);
         String sequenceNumber = util.getSequenceNumber(parent, lastChildSeq);
 
-        return "/comment/replyForm";
+        modelAndView.addObject("parentCommentNumber", parentCommentNumber);
+        modelAndView.addObject("boardNumber", boardNumber);
+        modelAndView.addObject("cs", separator);
+        modelAndView.setViewName("/comment/replyForm");
 
+        return modelAndView;
     }
 
     /*
@@ -227,11 +217,10 @@ public class CommentController {
      */
     @RequestMapping(value = "/reply.do", method = RequestMethod.POST)
     public String commentReply(@RequestParam(value = "content", required = true) String content,
-                               @RequestParam(value = "boardNumber", required = true) Integer boardNumber,
-                               @RequestParam(value = "parentCommentNumber", required = true) Integer parentCommentNumber,
-                               @RequestParam(value = "s", required = true, defaultValue = "default") String separator,
-                               @RequestParam(value = "p", required = false) String page,
-                               Authentication auth) throws Exception{
+                             @RequestParam(value = "boardNumber", required = true) Integer boardNumber,
+                             @RequestParam(value = "parentCommentNumber", required = true) Integer parentCommentNumber,
+                             @RequestParam(value = "cs", required = true, defaultValue = "default") String separator,
+                             Authentication auth) throws Exception{
 
         String memberId = util.isMemberId(auth);
 
@@ -260,7 +249,7 @@ public class CommentController {
         if(commentNumber == -1) throw new RuntimeException("DB 삽입 실패 : " + commentNumber);
         commentService.increaseCommentCount(boardNumber);
 
-        return "redirect:/board/read.do?s=" + separator + "&p=" + page + "&boardNumber=" + boardNumber;
+        return "/common/success";
     }
 
     /*
@@ -269,8 +258,6 @@ public class CommentController {
     @RequestMapping(value = "/delete.do", method = RequestMethod.POST)
     public String commentDelete(@RequestParam(value = "boardNumber", required = true) Integer boardNumber,
                                 @RequestParam(value = "commentNumber", required = true) Integer commentNumber,
-                                @RequestParam(value = "p", required = false) String page,
-                                @RequestParam(value = "s", required = false) String separator,
                                 Authentication auth) throws Exception {
 
         String memberId = util.isMemberId(auth);
@@ -281,7 +268,20 @@ public class CommentController {
         commentService.delete(commentNumber);
         commentService.decreaseCommentCount(boardNumber);
 
-        return "redirect:/board/read.do?s=" + separator + "&p=" + page +"&boardNumber=" + boardNumber;
+        return "/common/success";
     }
-   
+
+    @RequestMapping(value = "/isEqualMember.do")
+    public String isEqualMember(@RequestParam(value = "commentNumber", required = true) Integer commentNumber,
+                                Authentication auth) throws Exception {
+
+        String memberId = util.isMemberId(auth);
+
+        CommentVO commentVO = commentService.selectOne(commentNumber);
+        if (commentVO == null) throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
+
+        util.isEqualMemberId(commentVO.getUserEmail(), memberId);
+
+        return "common/success";
+    }
 }

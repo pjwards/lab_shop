@@ -8,22 +8,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
-<head>
-    <title>수정하기</title>
-</head>
-<body>
 
-<form action="<c:url value="update.do" />" method="post">
+<form name="${cs}_${commentNumber}_ajaxform_update" id="${cs}_${commentNumber}_ajaxform_update" action="<c:url value="/comment/update.do" />" method="post">
     <input type="hidden" name="commentNumber" value="${commentVO.number}"/>
-    <input type="hidden" name="boardNumber" value="${param.boardNumber}"/>
-    <input type="hidden" name="s" value="${param.s}"/>
-    <input type="hidden" name="p" value="${param.p}"/>
     내용 : <br/>
-    <textarea name="content" cols="40" rows="5" >${commentVO.content}</textarea>
+    <textarea name="content" id="${cs}_${commentNumber}_content_update" cols="40" rows="5" >${commentVO.content}</textarea>
     <br/>
-    <input type="submit" value="전송"/>
 </form>
 
-</body>
-</html>
+<button id="${cs}_${commentNumber}_ajaxform_cancle_update" onclick="showComment(1, '${cs}')" >취소</button>
+<button id="${cs}_${commentNumber}_ajaxform_submit_update" onclick="ajaxForm_update('${cs}', '${commentNumber}')" >전송</button>
+

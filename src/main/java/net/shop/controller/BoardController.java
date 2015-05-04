@@ -135,10 +135,10 @@ public class BoardController {
     게시판 읽기
      */
     @RequestMapping(value = "/read.do")
-    public String boardRead(@RequestParam(value = "boardNumber", required = true) Integer boardNumber,
-                            @RequestParam(value = "s", required = false) String separator,
-                            @RequestParam(value = "p", required = false) String page,
-                            HttpServletRequest request) throws Exception {
+    public ModelAndView boardRead(@RequestParam(value = "boardNumber", required = true) Integer boardNumber)
+            throws Exception {
+
+        ModelAndView modelAndView = new ModelAndView();
 
         BoardVO boardVO = boardService.selectOne(boardNumber);
 
@@ -147,9 +147,10 @@ public class BoardController {
         boardService.increaseReadCount(boardNumber);
         boardVO.setReadCount(boardVO.getReadCount() + 1);
 
-        request.setAttribute("boardVO", boardVO);
+        modelAndView.addObject("boardVO", boardVO);
+        modelAndView.setViewName("/board/read");
 
-        return "forward:/comment/listAll.do?s=" + separator +"&p=" + page +"&boardNumber=" + boardNumber;
+        return modelAndView;
     }
 
     /*

@@ -11,7 +11,7 @@
         <result column="title" property="title"/>
         <result column="content" property="content"/>
         <result column="posting_date" property="postingDate"/>
-        <result column="comment_count" property="commentCount"/>
+        <result column="read_count" property="readCount"/>
         <result column="comment_count" property="commentCount"/>
         <result column="file_count" property="fileCount"/>
         <result column="goods_count" property="goodsCount"/>

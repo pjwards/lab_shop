@@ -13,6 +13,28 @@
 <html>
 <head>
     <title>글 읽기</title>
+    <script src="${pageContext.request.contextPath}/resource/js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/board/comment.js"></script>
+    <script type="text/javascript">
+        contextPath = "${pageContext.request.contextPath}";
+        boardNumber = "${boardVO.number}";
+
+        var isWriting = false;		// 덧글 쓰기 중일 경우 true
+        var isReplying = false;		// 답글 쓰기 중일 경우 true
+        var isUpdating = false;		// 수정 중일 경우 true
+        var cs1 = 'review'
+        var cs2 = 'qna'
+
+        var loading_comment =
+                function() {
+                    $("#read_comment").html("<table><tr><td><br/><img src='" + contextPath + "/resource/img/board/loader-comm.gif'/><br/><br /></td></tr></table>");
+                };
+
+        $(document).ready(function(){
+            showComment(1, cs1)
+            showComment(1, cs2)
+        });
+    </script>
 </head>
 <body>
 <table>
@@ -48,10 +70,12 @@
             </form>
         </td>
     </tr>
+
 </table>
 
 <!-- 댓글 구현부 -->
-<jsp:include page="/WEB-INF/jsp/view/comment/listAll.jsp"/>
+<div id="review"></div>
+<div id="qna"></div>
 
 </body>
 </html>
