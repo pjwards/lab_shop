@@ -305,8 +305,8 @@ public class GoodsController {
   			return "/error/alert";
   		}
   		
-  		if(choice.compareTo("yes") != 0){
-  			return "redirect:/user/wishlist.do";
+  		if(choice.compareTo("true") != 0){
+  			return "redirect:/goods/cart.do";
   		}
   		
   		int no = Integer.parseInt(number);

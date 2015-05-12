@@ -10,26 +10,51 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.css">
 <script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+<script src="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.js"></script>
 
 <title>Your Orders</title>
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$("a#del_order").click(function(){
-		var choice = prompt("Delete this? yes/no").trim().toLowerCase();
+	function confirmation(question) {
+	    var defer = $.Deferred();
+	    $('<div></div>')
+	        .html(question)
+	        .dialog({
+	            autoOpen: true,
+	            modal: true,
+	            title: 'Confirmation',
+	            buttons: {
+	                "Yes": function () {
+	                    defer.resolve("true");
+	                    $(this).dialog("close");
+	                },
+	                "No": function () {
+	                    defer.resolve("false");
+	                    $(this).dialog("close");
+	                }
+	            },
+	            close: function () {
+	                $(this).remove();
+	            }
+	        });
+	    return defer.promise();
+	}
+	
+	$(".del_order").click(function(){
+		var question = "Do you want to delete it?";
+		var data = $(this).attr("vals");
 		
-		if(choice === ""){
-			return false;
-		}
-		if(choice !== "yes"){
-			return false;
-		}
-		
-		var data = $("a#del_order").attr("vals");
-		
-		var link = 'delOrderlist.do?&no='+data+'&choice='+choice;
-		$(location).attr('href', link);
+		confirmation(question).then(function (answer) {
+		    var ansbool = (String(answer) == "true");
+		    if(ansbool){
+				var arr = data.split('/');
+				var link = 'delOrderlist.do?&no='+data+'&choice='+ansbool;
+				$(location).attr('href', link);
+		    }
+		});	
 	});
 });
 </script>
@@ -75,12 +100,12 @@ $(document).ready(function(){
 			 <tr>
 				<th scope="row">${list.number }</th>
 				<td>${list.orderNow }</td>
-				<td>${list.goodsName }</td>
+				<td><a href="<%=request.getContextPath()%>/goods/read.do?goodsNumber=${list.goodsNumber}">${list.goodsName }</a></td>
 				<td>${list.manufacturer }</td>
 				<td>${list.goodsOptions }</td>
 				<td>${list.quantity }</td>
 				<td>${list.goodsPrice * list.quantity}</td>
-				<td><a href="#" id="del_order" vals="${list.number}">Cancel</a></td>
+				<td><a href="#" class="del_order" vals="${list.number}">Cancel</a></td>
 			 </tr>
 			</c:forEach>
 			<tr>

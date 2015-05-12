@@ -13,8 +13,9 @@
 <html>
 <head>
     <title>글 읽기</title>
-    <script src="${pageContext.request.contextPath}/resource/js/jquery-2.1.3.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/board/comment.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"/>
+    <script src="<%=request.getContextPath()%>/resource/js/board/comment.js"></script>
+   
     <script type="text/javascript">
         contextPath = "${pageContext.request.contextPath}";
         boardNumber = "${boardVO.number}";

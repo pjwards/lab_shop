@@ -27,7 +27,7 @@
     </select>
     
     <select id="selectList" parameterType="map" resultMap="wishlistResultMap">
-      select no, name, manufacturer, price, wish.user_email from shop_wishlist as wish 
+      select goods_no,no, name, manufacturer, price, wish.user_email from shop_wishlist as wish 
       inner join shop_goods as goods on wish.goods_no=goods.no
       <if test="keyword != NULL">
       where name like #{keyword}

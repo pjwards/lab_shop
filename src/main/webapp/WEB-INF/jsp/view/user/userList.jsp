@@ -14,7 +14,9 @@
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <head>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.css">
 <script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+<script src="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -29,14 +31,52 @@ $(document).ready(function(){
 		}
 	});
 	
-	$("a#give_auth").click(function(){
-		var auth = prompt("what authority? user/admin").trim().toLowerCase();
-		if(auth == ""){
-			return false;
-		}
-		var email = $("a#give_auth").attr("vals");
-		var link = 'giveAuth.do?email='+email+'&auth='+auth;
-		$(location).attr('href', link);
+	function confirmation(question) {
+	    var defer = $.Deferred();
+	    $('<div></div>')
+	        .html(question)
+	        .dialog({
+	            autoOpen: true,
+	            modal: true,
+	            title: 'Confirmation',
+	            buttons: {
+	                "User": function () {
+	                    defer.resolve("true");
+	                    $(this).dialog("close");
+	                },
+	                "Admin": function () {
+	                    defer.resolve("false");
+	                    $(this).dialog("close");
+	                },
+	                "Exit": function () {
+	                	 defer.resolve("");
+	                    $(this).dialog("close");
+	                }
+	            },
+	            close: function () {
+	                $(this).remove();
+	            }
+	        });
+	    return defer.promise();
+	}
+	
+	$(".give_auth").click(function(){
+		var question = "Select authority";
+		var email = $(this).attr("vals");
+		confirmation(question).then(function (answer) {
+			if(answer == ""){
+				return false;
+			}
+		    var ansbool = (String(answer) == "true");
+		    if(ansbool){
+				var link = 'giveAuth.do?email='+email+'&auth='+ansbool;//true(user)
+				$(location).attr('href', link);
+		    }else{
+				var link = 'giveAuth.do?email='+email+'&auth='+ansbool;//false(admin)
+				$(location).attr('href', link);
+		    }
+		});	
+		
 	});
 });
 
@@ -122,7 +162,7 @@ function search_enter(form){
 				<td>${list.lastName }</td>
 				<td>${list.email }</td>
 				<td>${list.authority }</td>
-				<td><a href="#" id="give_auth" vals="${list.email }">Img</a></td>
+				<td><a href="#" class="give_auth" vals="${list.email }">Img</a></td>
 			    <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
 			    <td><fmt:formatDate value="${list.lastDate}" pattern="yyyy-MM-dd"/></td>
 			    <td><img alt="" src="<%=request.getContextPath()%>/resource/upload/${list.imagePath}"></td>

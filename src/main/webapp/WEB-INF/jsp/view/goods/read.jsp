@@ -16,40 +16,66 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.min.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap-theme.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.css">
+
 <!-- Javascript -->
 <script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+<script src="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.js"></script>
 <script src="<%=request.getContextPath()%>/resource/js/bootstrap.min.js"></script>
 
     <title>상품 읽기</title>
 
 <script type="text/javascript">
 $(document).ready(function(){
+	function confirmation(question) {
+	    var defer = $.Deferred();
+	    $('<div></div>')
+	        .html(question)
+	        .dialog({
+	            autoOpen: true,
+	            modal: true,
+	            title: 'Confirmation',
+	            buttons: {
+	                "Yes": function () {
+	                    defer.resolve("true");
+	                    $(this).dialog("close");
+	                },
+	                "No": function () {
+	                    defer.resolve("false");
+	                    $(this).dialog("close");
+	                }
+	            },
+	            close: function () {
+	                $(this).remove();
+	            }
+	        });
+	    return defer.promise();
+	}
+	
 	$("a#addWish").click(function(){
-		var check = prompt("Do you want to add this in wishlist? yes/no").trim().toLowerCase();
+		//var check = prompt( yes/no").trim().toLowerCase();
+		var question = "Do you want to add this in wishlist?";
 		
-		if(check === ""){
-			alert("Wrong Input");
-			return false;
-		}
-		if(check !== "yes"){
-			return false;
-		}
-		
-		var data = $("a#addWish").attr("vals");
-		var arr = data.split('/');
-		
-		$.ajax({
-			type:"POST",
-			url:"<%=request.getContextPath()%>/user/addWishlist.do",
-			data:{ email : arr[0], check : check, no : arr[1] },
-			success:function(result){
-				if(result === "400"){
-					alert("Already existed");
-				}else if(result === "200"){
-					alert("Added in wishlist");
-				}
-			}
-		});
+		confirmation(question).then(function (answer) {
+		    var ansbool = (String(answer) == "true");
+		    if(ansbool){
+		    	var data = $("a#addWish").attr("vals");
+				var arr = data.split('/');
+				alert(ansbool);
+				$.ajax({
+					type:"POST",
+					url:"<%=request.getContextPath()%>/user/addWishlist.do",
+					data:{ email : arr[0], check : ansbool, no : arr[1] },
+					success:function(result){
+						if(result === "400"){
+							alert("Already existed");
+						}else if(result === "200"){
+							alert("Added in wishlist");
+						}
+					}
+				});
+		    }
+		});		
 	});
 	
 	$("#submit_form").on("submit",function(){

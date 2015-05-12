@@ -302,17 +302,17 @@ public class UserController {
 	@RequestMapping(value="/giveAuth.do")
 	public String userGiveAuth(@RequestParam("email")String email,
 			@RequestParam("auth")String auth) throws Exception{
-		if(auth == null) auth="user";
 		
+		if(auth == null) auth="true";
 		String trimAuth = auth;
 		String putAuth = null;
 		
-		if(trimAuth.compareTo("admin") == 0){
+		if(trimAuth.compareTo("false") == 0){
 			putAuth = "ROLE_ADMIN";
 		}else{
 			putAuth = "ROLE_USER";
 		}
-
+		
 		userService.updateAuth(email, putAuth);
 		return "redirect:/user/userList.do";
 	}
@@ -325,7 +325,7 @@ public class UserController {
 		
 		if(check == null) check="no";
 		
-		if(check.compareTo("yes") != 0){
+		if(check.compareTo("true") != 0){
 			response.getWriter().print("404");
 			return;
 		}
@@ -402,7 +402,7 @@ public class UserController {
 			return "/error/alert";
 		}
 		
-		if(choice.compareTo("yes") != 0){
+		if(choice.compareTo("true") != 0){
 			return "redirect:/user/wishlist.do";
 		}
 		
@@ -507,7 +507,7 @@ public class UserController {
 			return "/error/alert";
 		}
 			
-		if(choice.compareTo("yes") != 0){
+		if(choice.compareTo("true") != 0){
 			return "redirect:/user/orders.do";
 		}
 			

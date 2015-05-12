@@ -1,3 +1,8 @@
+<%--
+ * First Editor : Jisung Jeon (cbajs20@gmail.com)
+ * Last Editor  :
+ * Last Update  : 2015-05-12
+--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -5,7 +10,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.css">
 <script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+<script src="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.js"></script>
 
 <title>Wishlist</title>
 
@@ -22,21 +29,42 @@ $(document).ready(function(){
 		}
 	});
 	
-	$("a#del_wish").click(function(){
-		var choice = prompt("Delete this? yes/no").trim().toLowerCase();
-		
-		if(choice === ""){
-			return false;
-		}
-		if(choice !== "yes"){
-			return false;
-		}
-		
-		var data = $("a#del_wish").attr("vals");
-		var arr = data.split('/');
-		
-		var link = 'delWishlist.do?&email='+arr[0]+'&no='+arr[1]+'&choice='+choice;
-		$(location).attr('href', link);
+	function confirmation(question) {
+	    var defer = $.Deferred();
+	    $('<div></div>')
+	        .html(question)
+	        .dialog({
+	            autoOpen: true,
+	            modal: true,
+	            title: 'Confirmation',
+	            buttons: {
+	                "Yes": function () {
+	                    defer.resolve("true");
+	                    $(this).dialog("close");
+	                },
+	                "No": function () {
+	                    defer.resolve("false");
+	                    $(this).dialog("close");
+	                }
+	            },
+	            close: function () {
+	                $(this).remove();
+	            }
+	        });
+	    return defer.promise();
+	}
+	
+	$(".del_wish").click(function(){
+		var question = "Do you want to delete it?";
+		var data = $(this).attr("vals");
+		confirmation(question).then(function (answer) {
+		    var ansbool = (String(answer) == "true");
+		    if(ansbool){
+				var arr = data.split('/');
+				var link = 'delWishlist.do?&email='+arr[0]+'&no='+arr[1]+'&choice='+ansbool;
+				$(location).attr('href', link);
+		    }
+		});		
 	});
 });
 
@@ -76,10 +104,10 @@ function search_enter(form){
 		<tbody>
 			<c:forEach var="list" items="${wishlist}">
 			 <tr>
-				<th scope="row">${list.name }</th>
+				<th scope="row"><a href="<%=request.getContextPath()%>/goods/read.do?goodsNumber=${list.goodsNumber}">${list.name }</a></th>
 				<td>${list.manufacturer }</td>
 				<td>${list.price }</td>
-				<td><a href="#" id="del_wish" vals="${list.userEmail }/${list.no}">Delete</a></td>
+				<td><a href="#" class="del_wish" vals="${list.userEmail }/${list.no}">Delete</a></td>
 			 </tr>
 			</c:forEach>
 		</tbody>

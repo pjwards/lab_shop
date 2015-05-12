@@ -17,7 +17,6 @@ import net.shop.vo.FileVO;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -163,22 +162,30 @@ public class CommonController {
 	    pw.close();
 	}
 	
-	 @RequestMapping("/send.do")
-	 public String sendEmailAction(Model model, HttpServletRequest request) throws Exception {
+	@RequestMapping("/email.do")
+	public String email() throws Exception{
+		return "/common/testEmail";
+	}
+	@RequestMapping(value="/email.do",method=RequestMethod.POST)
+	public String email(@RequestParam("reciver")String reciver,
+			@RequestParam("title")String title,
+			@RequestParam("content")String content,
+			Model model, HttpServletRequest request) throws Exception {
 	 
-		 EmailVO emailVO = new EmailVO();
+		EmailVO emailVO = new EmailVO();
+	    
+		if(reciver.isEmpty() || title.isEmpty() || content.isEmpty()){
+			model.addAttribute("say", "Please fill all fields!");
+			model.addAttribute("url", request.getContextPath()+"/email.do");
+		}
 	         
-	     String reciver = "cbajs20@gmail.com";
-	     String subject = "Hello";
-	     String content = "test email";
+		emailVO.setReciver(reciver);
+		emailVO.setSubject(title);
+		emailVO.setContent(content);
+		util.SendEmail(emailVO);
 	         
-	     emailVO.setReciver(reciver);
-	     emailVO.setSubject(subject);
-	     emailVO.setContent(content);
-	     util.SendEmail(emailVO);
-	         
-	     model.addAttribute("say", "Send it successfully");
-	     model.addAttribute("url", request.getContextPath()+"/main/main.do");
-		 return "/error/alert";
-	 }
+		model.addAttribute("say", "Send it successfully");
+		model.addAttribute("url", request.getContextPath()+"/email.do");	
+		return "/error/alert";	
+	}
 }

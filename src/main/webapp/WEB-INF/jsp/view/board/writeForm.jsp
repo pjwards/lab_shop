@@ -106,6 +106,11 @@ function setForm(editor) {
     return true;
 }
 </script>
+<style type="text/css">
+textarea {
+    resize: none;
+}
+</style>
 </head>
 <body>
 

@@ -10,27 +10,49 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.css">
 <script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+<script src="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.js"></script>
 
 <title>Cart</title>
 
 <script type="text/javascript">
 $(document).ready(function(){
+	function confirmation(question) {
+	    var defer = $.Deferred();
+	    $('<div></div>')
+	        .html(question)
+	        .dialog({
+	            autoOpen: true,
+	            modal: true,
+	            title: 'Confirmation',
+	            buttons: {
+	                "Yes": function () {
+	                    defer.resolve("true");
+	                    $(this).dialog("close");
+	                },
+	                "No": function () {
+	                    defer.resolve("false");
+	                    $(this).dialog("close");
+	                }
+	            },
+	            close: function () {
+	                $(this).remove();
+	            }
+	        });
+	    return defer.promise();
+	}
 	
-	$("a#del_cart").click(function(){
-		var choice = prompt("Delete this? yes/no").trim().toLowerCase();
-		
-		if(choice === ""){
-			return false;
-		}
-		if(choice !== "yes"){
-			return false;
-		}
-		
-		var data = $("a#del_cart").attr("vals");
-		
-		var link = 'delCart.do?&no='+data+'&choice='+choice;
-		$(location).attr('href', link);
+	$(".del_cart").click(function(){
+		var question = "Do you want to delete it?";
+		var data = $(this).attr("vals");
+		confirmation(question).then(function (answer) {
+		    var ansbool = (String(answer) == "true");
+		    if(ansbool){
+				var link = 'delCart.do?&no='+data+'&choice='+ansbool;
+				$(location).attr('href', link);
+		    }
+		});		
 	});
 });
 </script>
@@ -76,14 +98,14 @@ $(document).ready(function(){
 				<c:set var="s" value="${s + list.quantity * list.goodsVO.price}"></c:set>
 			 <tr>
 				<th scope="row">${list.goodsVO.number }</th>
-				<td>${list.goodsVO.name}</td>
+				<td><a href="<%=request.getContextPath()%>/goods/read.do?goodsNumber=${list.goodsVO.number}">${list.goodsVO.name}</a></td>
 				<td>${list.goodsVO.manufacturer }</td>
 				<td>${list.goodsVO.size }</td>
 				<td>${list.goodsVO.price }</td>
 				<td>${list.goodsVO.options}</td>
 				<td>${list.quantity }</td>
 				<td>${list.quantity * list.goodsVO.price}</td>
-				<td><a href="#" id="del_cart" vals="${list.goodsVO.number}">Cancel</a></td>
+				<td><a href="#" class="del_cart" vals="${list.goodsVO.number}">Cancel</a></td>
 			 </tr>
 			</c:forEach>
 			<tr>
