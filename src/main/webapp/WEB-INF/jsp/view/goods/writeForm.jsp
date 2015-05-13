@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<form action="<c:url value="write.do" />" method="post">
+<form action="<c:url value="/goods/write.do" />" method="post">
     상품 명 : <input type="text" name="name" size="100"/><br/>
     크기 : <input type="text" name="size" size="20"/><br/>
     소재 : <input type="text" name="material" size="50"/><br/>
@@ -29,6 +29,7 @@
     <textarea name="description" cols="40" rows="5"></textarea>
     <br/>
 
+    <input type="button" onclick="location.href='list.do?s=${param.s}'" value="취소"/>
     <input type="submit" value="전송">
 </form>
 

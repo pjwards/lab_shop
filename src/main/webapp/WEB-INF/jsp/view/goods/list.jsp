@@ -14,12 +14,51 @@
 
     <title>상품 목록</title>
 
+    <script type="text/javascript">
+
+        contextPath = "${pageContext.request.contextPath}";
+
+        $(document).ready(function(){
+            var parentReferrer = parent.document.referrer;
+
+            if(~parentReferrer.indexOf('board')){
+                $(".popup_button").show();
+                $(".popup_button_col").attr("colspan", 14);
+
+                $('.btn_add_goods').bind('click', function(e) {
+                    var trId = '#goods_' + $(this).attr('name');
+                    var addTrId = 'goods_id_' + $(this).attr('name');
+
+                    if ( $("#"+addTrId).length > 0 ) { alert("이미 등록한 상품은 추가로 등록할 수 없습니다."); return; }
+
+                    var trClone = $(trId).clone().html();
+                    //var input = '<input type=\"hidden\" name=\"goods_'+$(this).attr('name')+'\" value=\"'+$(this).attr('name')+'\"/>'
+                    var input = '<input type=\"hidden\" name=\"goods\" value=\"'+$(this).attr('name')+'\"/>'
+
+                    // Prevents the default action to be triggered.
+                    e.preventDefault();
+
+                    var html = String('<tr id=\"'+addTrId+'\">'+trClone+input+'</tr>').replace('class="btn_add_goods"',
+                            'onclick=\"delGoods('+$(this).attr('name')+')\"');
+
+                    $("#empty_goods").hide();
+                    $("#selected_goods  > tbody:last").append(html);
+
+                });
+            }
+        });
+
+        function loadPage(url) {
+            $('#element_to_pop_up .content').load(contextPath + url)
+        };
+
+    </script>
 </head>
 <body>
 <table border="1">
     <c:if test="${pagingVO.totalPageCount > 0}">
         <tr>
-            <td colspan="13">
+            <td class="popup_button_col" colspan="13">
                     ${pagingVO.firstRow}-${pagingVO.endRow}
                 [${pagingVO.requestPage}/${pagingVO.totalPageCount}]
             </td>
@@ -40,12 +79,13 @@
         <td>재고</td>
         <td>등록자</td>
         <td>등록일</td>
+        <td class="popup_button" style="display:none;">추가</td>
     </tr>
 
     <c:choose>
         <c:when test="${hasGoods == false}">
             <tr>
-                <td colspan="13">
+                <td class="popup_button_col" colspan="13">
                     상품이 없습니다.
                 </td>
             </tr>
@@ -53,11 +93,11 @@
 
         <c:otherwise>
             <c:forEach var="list" items="${goodsVOList}">
-                <tr>
+                <tr id="goods_${list.number}">
                     <td>${list.number}</td>
                     <td>
                         <c:set var="query" value="p=${pagingVO.requestPage}&goodsNumber=${list.number}"/>
-                        <a href="<c:url value="read.do?${query}"/> ">
+                        <a target="_blank " href="<c:url value="/goods/read.do?${query}"/> ">
                                 ${list.name}
                         </a>
                     </td>
@@ -72,33 +112,50 @@
                     <td>${list.stock}</td>
                     <td>${list.userEmail}</td>
                     <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
+                    <td class="popup_button" style="display:none;"><button class="btn_add_goods" name="${list.number}">선택</button></td>
             	</tr>
-                
             </c:forEach>
 
             <%-- Paging --%>
-            <tr>
-                <td colspan="13">
-                    <c:if test="${pagingVO.beginPage > 10}">
-                        <a href="<c:url value="list.do?p=${pagingVO.beginPage-1}"/> ">이전</a>
-                    </c:if>
-                    <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
-                        <a href="<c:url value="list.do?p=${pno}"/> ">[${pno}]</a>
-                    </c:forEach>
-                    <c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
-                        <a href="<c:url value="list.do?p=${pagingVO.endPage + 1}"/> ">다음</a>
-                    </c:if>
-                </td>
-            </tr>
+            <c:if test="${header.referer.contains('goods')}">
+                <tr>
+                    <td class="popup_button_col" colspan="13">
+                        <c:if test="${pagingVO.beginPage > 10}">
+                            <a href="<c:url value="/goods/list.do?p=${pagingVO.beginPage-1}"/> ">이전</a>
+                        </c:if>
+                        <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
+                            <a href="<c:url value="/goods/list.do?p=${pno}"/> ">[${pno}]</a>
+                        </c:forEach>
+                        <c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
+                            <a href="<c:url value="/goods/list.do?p=${pagingVO.endPage + 1}"/> ">다음</a>
+                        </c:if>
+                    </td>
+                </tr>
+            </c:if>
+            <c:if test="${header.referer.contains('board')}">
+                <tr>
+                    <td class="popup_button_col" colspan="13">
+                        <c:if test="${pagingVO.beginPage > 10}">
+                            <a href="#" onclick="loadPage('/goods/list.do?p=${pagingVO.beginPage-1}'); return false;">이전</a>
+                        </c:if>
+                        <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
+                            <a href="#" onclick="loadPage('/goods/list.do?p=${pno}'); return false;">[${pno}]</a>
+                        </c:forEach>
+                        <c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
+                            <a href="#" onclick="loadPage('/goods/list.do?p=${pagingVO.endPage + 1}'); return false;">다음</a>
+                        </c:if>
+                    </td>
+                </tr>
+            </c:if>
         </c:otherwise>
     </c:choose>
 
     <tr>
-        <td colspan="13">
-            <a href="write.do">상품 등록</a>
+        <td class="popup_button_col" colspan="13">
+            <a target="_blank " href="<c:url value="/goods/write.do" />">상품 등록</a>
         </td>
     </tr>
-</table>
 
+</table>
 </body>
 </html>

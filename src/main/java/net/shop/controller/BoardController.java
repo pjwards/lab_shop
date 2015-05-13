@@ -2,6 +2,7 @@ package net.shop.controller;
 
 import net.shop.error.BoardNotFoundException;
 import net.shop.service.BoardService;
+import net.shop.service.GoodsService;
 import net.shop.service.UserService;
 import net.shop.util.Util;
 import net.shop.vo.BoardVO;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -40,6 +42,9 @@ public class BoardController {
 
     @Resource(name = "userService")
     private UserService userService;
+
+    @Resource(name = "goodsService")
+    private GoodsService goodsService;
 
     @Resource(name = "util")
     private Util util;
@@ -94,11 +99,15 @@ public class BoardController {
     게시판 글쓰기 폼
      */
     @RequestMapping(value = "/write.do")
-    public String boardWrite(Authentication auth) throws Exception{
+    public ModelAndView boardWrite(Authentication auth) throws Exception{
 
+        ModelAndView modelAndView = new ModelAndView();
         util.isMemberId(auth);
 
-        return "/board/writeForm";
+        modelAndView.addObject("act", "write");
+        modelAndView.setViewName("/board/writeForm");
+
+        return modelAndView;
     }
 
     /*
@@ -106,9 +115,9 @@ public class BoardController {
      */
     @RequestMapping(value = "/write.do", method = RequestMethod.POST)
     public String boardWrite(@RequestParam(value = "title", required = true) String title,
-                                   @RequestParam(value = "daumeditor", required = true ) String daumeditor,
-                                   @RequestParam(value = "s", required = true, defaultValue = "default") String separator,
-                                   Authentication auth, HttpServletRequest request, Model model) throws Exception{
+                             @RequestParam(value = "daumeditor", required = true ) String daumeditor,
+                             @RequestParam(value = "s", required = true, defaultValue = "default") String separator,
+                             Authentication auth, HttpServletRequest request, Model model) throws Exception{
 
     	
         String memberId = util.isMemberId(auth);
@@ -127,6 +136,18 @@ public class BoardController {
         boardVO.setSeparatorName(separator);
 
         boardService.insert(boardVO);
+        int boardNumber = boardService.selectLastBoardNumberByEmail(memberId);
+
+        if(separator.equals("product")){
+            String products[] = request.getParameterValues("goods");
+
+            if(products != null) {
+                for (String product : products) {
+                    goodsService.insert(boardNumber, Integer.parseInt(product));
+                    goodsService.increaseGoodsCount(boardNumber);
+                }
+            }
+        }
 
         return "redirect:/board/list.do?s=" + separator;
     }
@@ -181,7 +202,7 @@ public class BoardController {
     @RequestMapping(value = "/update.do", method = RequestMethod.POST)
     public String boardUpdate(@RequestParam(value = "boardNumber", required = true) Integer boardNumber,
                               @RequestParam(value = "title", required = true) String title,
-                              @RequestParam(value = "content", required = true) String content,
+                              @RequestParam(value = "daumeditor", required = true ) String daumeditor,
                               @RequestParam(value = "s", required = false) String separator,
                               @RequestParam(value = "p", required = false) String page,
                               Authentication auth) throws Exception {
@@ -196,7 +217,7 @@ public class BoardController {
         boardVO = new BoardVO();
         boardVO.setNumber(boardNumber);
         boardVO.setTitle(title);
-        boardVO.setContent(content);
+        boardVO.setContent(daumeditor);
 
         int updateCount = boardService.update(boardVO);
         if (updateCount == 0) {
@@ -225,7 +246,8 @@ public class BoardController {
         String lastChildSeq = boardService.selectLastSequenceNumber(searchMaxSeqNum, searchMinSeqNum);
         String sequenceNumber = util.getSequenceNumber(parent, lastChildSeq);
 
-        modelAndView.setViewName("/board/replyForm");
+        modelAndView.addObject("act", "reply");
+        modelAndView.setViewName("/board/writeForm");
 
         return modelAndView;
 
@@ -237,7 +259,7 @@ public class BoardController {
     @RequestMapping(value = "/reply.do", method = RequestMethod.POST)
     public String boardReply(@RequestParam(value = "parentBoardNumber", required = true) Integer parentBoardNumber,
                              @RequestParam(value = "title", required = true) String title,
-                             @RequestParam(value = "content", required = true) String content,
+                             @RequestParam(value = "daumeditor", required = true ) String daumeditor,
                              @RequestParam(value = "s", required = true, defaultValue = "default") String separator,
                              Authentication auth) throws Exception{
 
@@ -245,7 +267,7 @@ public class BoardController {
 
         BoardVO boardVO = new BoardVO();
         boardVO.setTitle(title);
-        boardVO.setContent(content);
+        boardVO.setContent(daumeditor);
 
         BoardVO parent = boardService.selectOne(parentBoardNumber);
 
@@ -285,6 +307,10 @@ public class BoardController {
 
         BoardVO boardVO = boardService.selectOne(boardNumber);
         util.isEqualMemberId(boardVO.getUserEmail(), memberId);
+
+        if(separator.equals("product")&&boardVO.getGoodsCount()>0){
+            goodsService.deleteBoardGoodsByBoard(boardNumber);
+        }
 
         boardService.delete(boardNumber);
 

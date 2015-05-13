@@ -1,0 +1,36 @@
+#element_to_pop_up {
+    background-color:#fff;
+    border-radius:15px;
+    color:#000;
+    display:none;
+    padding:20px;
+    min-width:400px;
+    min-height: 180px;
+    width:800px;
+}
+
+.b_pop_up {
+    background-color:#fff;
+    border-radius:15px;
+    color:#000;
+    display:none;
+    padding:20px;
+    min-width:400px;
+    min-height: 180px;
+    width:800px;
+}
+
+.b-close{
+    border-radius:7px 7px 7px 7px;
+    box-shadow:none;
+    font:bold 131% sans-serif;
+    padding:0 6px 2px;
+    position:absolute;
+    right:-7px;
+    top:-7px;
+    background-color:#2b91af;
+    color:#fff;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+}

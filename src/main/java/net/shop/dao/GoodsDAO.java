@@ -59,4 +59,24 @@ public interface GoodsDAO {
     게시글에 상품에 대한 개수를 줄인다.
      */
     public void decreaseGoodsCount(int boardNumber) throws Exception;
+
+    /*
+    게시글에 포함된 상품 번호를 구한다.
+     */
+    public List<Integer> selectBoardGoodsByBoard(int boardNumber) throws Exception;
+
+    /*
+    상품이 포함된 게시글 번호를 구한다.
+     */
+    public List<Integer> selectBoardGoodsByGoods(int goodsNumber) throws Exception;
+
+    /*
+    게시글-상품 테이블에서 게시글을 삭제한다.
+     */
+    public int deleteBoardGoodsByBoard(int boardNumber) throws Exception;
+
+    /*
+    게시글-상품 테이블에서 상품을 삭제한다.
+     */
+    public int deleteBoardGoodsByGoods(int goodsNumber) throws Exception;
 }

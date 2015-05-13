@@ -76,7 +76,26 @@ public class GoodsServiceImpl implements GoodsService {
     
     @Override
 	public int addorderlist(OrdersVO ordersVO) throws Exception {
-		// TODO Auto-generated method stub
 		return ordersDAO.insert(ordersVO);
 	}
+
+    @Override
+    public List<Integer> selectBoardGoodsByBoard(int boardNumber) throws Exception {
+        return goodsDAO.selectBoardGoodsByBoard(boardNumber);
+    }
+
+    @Override
+    public List<Integer> selectBoardGoodsByGoods(int goodsNumber) throws Exception {
+        return goodsDAO.selectBoardGoodsByGoods(goodsNumber);
+    }
+
+    @Override
+    public int deleteBoardGoodsByBoard(int boardNumber) throws Exception {
+        return goodsDAO.deleteBoardGoodsByBoard(boardNumber);
+    }
+
+    @Override
+    public int deleteBoardGoodsByGoods(int goodsNumber) throws Exception {
+        return goodsDAO.deleteBoardGoodsByGoods(goodsNumber);
+    }
 }

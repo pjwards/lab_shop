@@ -136,4 +136,48 @@ public class GoodsDAOMySql implements GoodsDAO {
             sqlSession.close();
         }
     }
+
+    @Override
+    public List<Integer> selectBoardGoodsByBoard(int boardNumber) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectList("net.GoodsDao.selectBoardGoodsByBoard", boardNumber);
+        }finally{
+            sqlSession.close();
+        }
+    }
+
+    @Override
+    public List<Integer> selectBoardGoodsByGoods(int goodsNumber) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectList("net.GoodsDao.selectBoardGoodsByGoods", goodsNumber);
+        }finally{
+            sqlSession.close();
+        }
+    }
+
+    @Override
+    public int deleteBoardGoodsByBoard(int boardNumber) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.delete("net.GoodsDao.deleteBoardGoodsByBoard", boardNumber);
+        }finally{
+            sqlSession.close();
+        }
+    }
+
+    @Override
+    public int deleteBoardGoodsByGoods(int goodsNumber) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.delete("net.GoodsDao.deleteBoardGoodsByGoods", goodsNumber);
+        }finally{
+            sqlSession.close();
+        }
+    }
 }

@@ -238,9 +238,49 @@ public class GoodsController {
         if(goodsVO == null) throw new GoodsNotFoundException("상품이 존재하지 않음 : " + goodsNumber);
 
         util.isEqualMemberId(goodsVO.getUserEmail(), memberId);
+
+        List<Integer> boardGoodsList = goodsService.selectBoardGoodsByGoods(goodsNumber);
+
+        if(!boardGoodsList.isEmpty()) {
+            for(int boardNumber: boardGoodsList) {
+                goodsService.decreaseGoodsCount(boardNumber);
+            }
+            goodsService.deleteBoardGoodsByGoods(goodsNumber);
+        }
+
         goodsService.delete(goodsNumber);
 
         return "redirect:/goods/list.do?p=" + page;
+    }
+
+    /*
+    게시글에 대한 상품 리스트
+     */
+    @RequestMapping(value = "/listByBoard.do")
+    public ModelAndView goodsListByBoard(@RequestParam(value = "boardNumber", required = true) Integer boardNumber)
+            throws Exception {
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        List<Integer> boardGoodsList = goodsService.selectBoardGoodsByBoard(boardNumber);
+        List<GoodsVO> goodsVOList = new ArrayList<GoodsVO>();
+
+
+        if(!boardGoodsList.isEmpty()) {
+            for(int goodsNumber: boardGoodsList) {
+                goodsVOList.add(goodsService.selectOne(goodsNumber));
+            }
+
+            modelAndView.addObject("goodsVOList", goodsVOList);
+            modelAndView.addObject("hasGoods", true);
+        } else {
+            modelAndView.addObject("goodsVOList", Collections.<GoodsVO>emptyList());
+            modelAndView.addObject("hasGoods", false);
+        }
+
+        modelAndView.setViewName("/goods/listByBoard");
+
+        return modelAndView;
     }
     
     //cart list

@@ -50,6 +50,9 @@
     <li><a href="<%=request.getContextPath()%>/admin/search.do">Search users</a></li>
     <li><a href="<%=request.getContextPath()%>/email.do">Email</a></li>    
     <!-- <li><a href="test.jsp">Test</a></li>  --> 
+    <li><a href="<%=request.getContextPath()%>/send.do">Send email</a></li>
+	<li><a href="<%=request.getContextPath()%>/goods/listByBoard.do?boardNumber=13">Goods List By Board</a></li>
+	<li><a href="<%=request.getContextPath()%>/board/list.do?s=product">Product Board List</a></li>
 </ul>
 </body>
 

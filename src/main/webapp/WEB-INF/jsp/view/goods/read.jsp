@@ -165,9 +165,9 @@ $(document).ready(function(){
     	</form>
     	
         <td colspan="2">
-            <a href="list.do?p=${param.p}">목록보기</a>
-            <a href="update.do?p=${param.p}&goodsNumber=${goodsVO.number}">수정하기</a>
-            <form action="<c:url value="delete.do" />" method="post">
+            <input type="button" onclick="location.href='list.do?p=${param.p}'" value="목록보기"/>
+            <input type="button" onclick="location.href='update.do?p=${param.p}&goodsNumber=${goodsVO.number}'" value="수정하기"/>
+            <form action="<c:url value="/goods/delete.do" />" method="post" style="display: inline;">
                 <input type="hidden" name="p" value="${param.p}"/>
                 <input type="hidden" name="goodsNumber" value="${goodsVO.number}"/>
                 <input type="submit" value="삭제하기" >
