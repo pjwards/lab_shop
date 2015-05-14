@@ -22,6 +22,12 @@
 
 function delGoods(id) {
     var addTrId = '#goods_id_' + id;
+    var price = parseInt($('#price_' + id).text());
+    var totalPrice = parseInt($('#total_price').attr('value'));
     $(addTrId).remove();
+    $('#total_price').attr('value',totalPrice-price);
 
+    if(parseInt($('#total_price').attr('value'))<0){
+        $('#total_price').attr('value',0);
+    }
 };

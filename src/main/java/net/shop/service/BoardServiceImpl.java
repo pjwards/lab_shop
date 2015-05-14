@@ -82,4 +82,9 @@ public class BoardServiceImpl implements BoardService {
     public int selectLastBoardNumberByEmail(String userEmail) throws Exception {
         return boardDAO.selectLastBoardNumberByEmail(userEmail);
     }
+
+    @Override
+    public int setGoodsCountZero(int boardNumber) throws Exception {
+        return boardDAO.setGoodsCountZero(boardNumber);
+    }
 }

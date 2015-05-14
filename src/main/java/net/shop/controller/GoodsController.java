@@ -202,24 +202,22 @@ public class GoodsController {
 
         util.isEqualMemberId(goodsVO.getUserEmail(), memberId);
 
-        goodsVO = new GoodsVO();
-        goodsVO.setNumber(goodsNumber);
+        GoodsVO newGoodsVO = new GoodsVO();
+        newGoodsVO.setNumber(goodsNumber);
 
-        goodsVO.setName(name);
-        goodsVO.setSize(size);
-        goodsVO.setMaterial(material);
-        goodsVO.setComponent(component);
-        goodsVO.setOptions(options);
-        goodsVO.setManufacturer(manufacturer);
-        goodsVO.setMadein(madein);
-        goodsVO.setDescription(description);
-        goodsVO.setPrice(price);
-        goodsVO.setStock(stock);
+        if(!goodsVO.getName().equals(name)) newGoodsVO.setName(name);
+        if(!goodsVO.getSize().equals(size)) newGoodsVO.setSize(size);
+        if(!goodsVO.getMaterial().equals(material)) newGoodsVO.setMaterial(material);
+        if(!goodsVO.getComponent().equals(component)) newGoodsVO.setComponent(component);
+        if(!goodsVO.getOptions().equals(options)) newGoodsVO.setOptions(options);
+        if(!goodsVO.getManufacturer().equals(manufacturer)) newGoodsVO.setManufacturer(manufacturer);
+        if(!goodsVO.getMadein().equals(madein)) newGoodsVO.setMadein(madein);
+        if(!goodsVO.getDescription().equals(description)) newGoodsVO.setDescription(description);
+        if(goodsVO.getPrice() != price) newGoodsVO.setPrice(price);
+        if(goodsVO.getStock() != stock) newGoodsVO.setStock(stock);
 
-        int updateCount = goodsService.update(goodsVO);
+        int updateCount = goodsService.update(newGoodsVO);
         if (updateCount == 0) throw new GoodsNotFoundException("상품이 존재하지 않음 : " + goodsNumber);
-
-        goodsService.selectOne(goodsNumber);
 
         return "redirect:/goods/read.do?p=" + page + "&goodsNumber=" + goodsNumber;
     }

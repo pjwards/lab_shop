@@ -6,6 +6,7 @@ import net.shop.service.GoodsService;
 import net.shop.service.UserService;
 import net.shop.util.Util;
 import net.shop.vo.BoardVO;
+import net.shop.vo.GoodsVO;
 import net.shop.vo.PagingVO;
 
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -116,8 +118,9 @@ public class BoardController {
     @RequestMapping(value = "/write.do", method = RequestMethod.POST)
     public String boardWrite(@RequestParam(value = "title", required = true) String title,
                              @RequestParam(value = "daumeditor", required = true ) String daumeditor,
+                             @RequestParam(value = "total_price", required = false ) Integer totalPrice,
                              @RequestParam(value = "s", required = true, defaultValue = "default") String separator,
-                             Authentication auth, HttpServletRequest request, Model model) throws Exception{
+                             Authentication auth, HttpServletRequest request) throws Exception{
 
     	
         String memberId = util.isMemberId(auth);
@@ -134,6 +137,12 @@ public class BoardController {
         boardVO.setUserNumber(userNumber);
         boardVO.setUserEmail(memberId);
         boardVO.setSeparatorName(separator);
+
+        if(separator.equals("product")){
+            boardVO.setTotalPrice(totalPrice);
+        } else {
+            boardVO.setTotalPrice(0);
+        }
 
         boardService.insert(boardVO);
         int boardNumber = boardService.selectLastBoardNumberByEmail(memberId);
@@ -191,6 +200,24 @@ public class BoardController {
 
         util.isEqualMemberId(boardVO.getUserEmail(), memberId);
 
+        if(boardVO.getSeparatorName().equals("product")){
+
+            List<Integer> boardGoodsList = goodsService.selectBoardGoodsByBoard(boardNumber);
+            List<GoodsVO> goodsVOList = new ArrayList<GoodsVO>();
+
+            if(!boardGoodsList.isEmpty()) {
+                for(int goodsNumber: boardGoodsList) {
+                    goodsVOList.add(goodsService.selectOne(goodsNumber));
+                }
+
+                modelAndView.addObject("goodsVOList", goodsVOList);
+                modelAndView.addObject("hasGoods", true);
+            } else {
+                modelAndView.addObject("goodsVOList", Collections.<GoodsVO>emptyList());
+                modelAndView.addObject("hasGoods", false);
+            }
+        }
+
         modelAndView.addObject("boardVO", boardVO);
         modelAndView.setViewName("/board/updateForm");
         return modelAndView;
@@ -203,9 +230,10 @@ public class BoardController {
     public String boardUpdate(@RequestParam(value = "boardNumber", required = true) Integer boardNumber,
                               @RequestParam(value = "title", required = true) String title,
                               @RequestParam(value = "daumeditor", required = true ) String daumeditor,
+                              @RequestParam(value = "total_price", required = false ) Integer totalPrice,
                               @RequestParam(value = "s", required = false) String separator,
                               @RequestParam(value = "p", required = false) String page,
-                              Authentication auth) throws Exception {
+                              Authentication auth, HttpServletRequest request) throws Exception {
 
         String memberId = util.isMemberId(auth);
 
@@ -214,14 +242,35 @@ public class BoardController {
 
         util.isEqualMemberId(boardVO.getUserEmail(), memberId);
 
-        boardVO = new BoardVO();
-        boardVO.setNumber(boardNumber);
-        boardVO.setTitle(title);
-        boardVO.setContent(daumeditor);
+        BoardVO updateBoardVO = new BoardVO();
+        updateBoardVO.setNumber(boardNumber);
 
-        int updateCount = boardService.update(boardVO);
+        if(!boardVO.getTitle().equals(title)) updateBoardVO.setTitle(title);
+        if(!boardVO.getContent().equals(daumeditor)) updateBoardVO.setContent(daumeditor);
+
+        if(separator.equals("product")){
+            if(updateBoardVO.getTotalPrice()!=totalPrice) updateBoardVO.setTotalPrice(totalPrice);
+        }
+
+        int updateCount = boardService.update(updateBoardVO);
         if (updateCount == 0) {
             throw new BoardNotFoundException("게시글이 존재하지 않음 : "+ boardNumber);
+        }
+
+        if(separator.equals("product")){
+            String products[] = request.getParameterValues("goods");
+
+            if(boardVO.getGoodsCount()>0){
+                goodsService.deleteBoardGoodsByBoard(boardNumber);
+                boardService.setGoodsCountZero(boardNumber);
+            }
+
+            if(products != null) {
+                for (String product : products) {
+                    goodsService.insert(boardNumber, Integer.parseInt(product));
+                    goodsService.increaseGoodsCount(boardNumber);
+                }
+            }
         }
 
         return "redirect:/board/read.do?s=" + separator + "&p=" + page +"&boardNumber=" + boardNumber;

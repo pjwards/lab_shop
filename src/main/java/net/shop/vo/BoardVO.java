@@ -25,6 +25,8 @@ public class BoardVO extends ReplyVO{
     private int userNumber;
     private String userEmail;
     private String separatorName;
+    private int fileNumber;
+    private int totalPrice;
 
     public int getNumber() {
         return number;
@@ -128,5 +130,21 @@ public class BoardVO extends ReplyVO{
 
     public void setSeparatorName(String separatorName) {
         this.separatorName = separatorName;
+    }
+
+    public int getFileNumber() {
+        return fileNumber;
+    }
+
+    public void setFileNumber(int fileNumber) {
+        this.fileNumber = fileNumber;
+    }
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

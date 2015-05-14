@@ -174,4 +174,15 @@ public class BoardDAOMySql implements BoardDAO {
             sqlSession.close();
         }
     }
+
+    @Override
+    public int setGoodsCountZero(int boardNumber) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.update("net.BoardDao.setGoodsCountZero", boardNumber);
+        } finally{
+            sqlSession.close();
+        }
+    }
 }

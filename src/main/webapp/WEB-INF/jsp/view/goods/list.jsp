@@ -23,11 +23,13 @@
 
             if(~parentReferrer.indexOf('board')){
                 $(".popup_button").show();
-                $(".popup_button_col").attr("colspan", 14);
+                $(".popup_button_col").attr("colspan", 13);
 
                 $('.btn_add_goods').bind('click', function(e) {
                     var trId = '#goods_' + $(this).attr('name');
                     var addTrId = 'goods_id_' + $(this).attr('name');
+                    var price = parseInt($('#price_' + $(this).attr('name')).text());
+                    var totalPrice = parseInt($('#total_price').attr('value'));
 
                     if ( $("#"+addTrId).length > 0 ) { alert("이미 등록한 상품은 추가로 등록할 수 없습니다."); return; }
 
@@ -43,7 +45,7 @@
 
                     $("#empty_goods").hide();
                     $("#selected_goods  > tbody:last").append(html);
-
+                    $('#total_price').attr('value',totalPrice+price);
                 });
             }
         });
@@ -58,7 +60,7 @@
 <table border="1">
     <c:if test="${pagingVO.totalPageCount > 0}">
         <tr>
-            <td class="popup_button_col" colspan="13">
+            <td class="popup_button_col" colspan="12">
                     ${pagingVO.firstRow}-${pagingVO.endRow}
                 [${pagingVO.requestPage}/${pagingVO.totalPageCount}]
             </td>
@@ -74,7 +76,6 @@
         <td>옵션</td>
         <td>제조/수입</td>
         <td>제조국</td>
-        <td>상품 설명</td>
         <td>가격</td>
         <td>재고</td>
         <td>등록자</td>
@@ -85,7 +86,7 @@
     <c:choose>
         <c:when test="${hasGoods == false}">
             <tr>
-                <td class="popup_button_col" colspan="13">
+                <td class="popup_button_col" colspan="12">
                     상품이 없습니다.
                 </td>
             </tr>
@@ -107,8 +108,7 @@
                     <td>${list.options}</td>
                     <td>${list.manufacturer}</td>
                     <td>${list.madein}</td>
-                    <td>${list.description}</td>
-                    <td>${list.price}</td>
+                    <td id="price_${list.number}">${list.price}</td>
                     <td>${list.stock}</td>
                     <td>${list.userEmail}</td>
                     <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
@@ -119,7 +119,7 @@
             <%-- Paging --%>
             <c:if test="${header.referer.contains('goods')}">
                 <tr>
-                    <td class="popup_button_col" colspan="13">
+                    <td class="popup_button_col" colspan="12">
                         <c:if test="${pagingVO.beginPage > 10}">
                             <a href="<c:url value="/goods/list.do?p=${pagingVO.beginPage-1}"/> ">이전</a>
                         </c:if>
@@ -134,7 +134,7 @@
             </c:if>
             <c:if test="${header.referer.contains('board')}">
                 <tr>
-                    <td class="popup_button_col" colspan="13">
+                    <td class="popup_button_col" colspan="12">
                         <c:if test="${pagingVO.beginPage > 10}">
                             <a href="#" onclick="loadPage('/goods/list.do?p=${pagingVO.beginPage-1}'); return false;">이전</a>
                         </c:if>
@@ -151,7 +151,7 @@
     </c:choose>
 
     <tr>
-        <td class="popup_button_col" colspan="13">
+        <td class="popup_button_col" colspan="12">
             <a target="_blank " href="<c:url value="/goods/write.do" />">상품 등록</a>
         </td>
     </tr>

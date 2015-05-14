@@ -51,6 +51,8 @@ create table shop_board (
 	user_no int not null,
 	user_email varchar(50) not null,
 	separator_name varchar(20) not null,
+	file_no int not null,
+	total_price int not null,
 	primary key (no),
 	index (sequence_no),
 	foreign key(user_no) references shop_user(no),
@@ -113,7 +115,7 @@ create table shop_orders(
 	goods_no int not null,
 	quantity int not null,
 	primary key (no),
-	foreign key(goods_no) references shop_goods(no)
+	foreign key(goods_no) references shop_board(no)
 );
 
 create table shop_wishlist(

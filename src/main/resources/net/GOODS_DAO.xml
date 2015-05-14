@@ -43,8 +43,20 @@
     </insert>
 
     <update id="update" parameterType="GoodsVO">
-        UPDATE shop_goods SET name=#{name},size=#{size},material=#{material},component=#{component},options=#{options}
-        ,manufacturer=#{manufacturer},madein=#{madein},description=#{description},price=#{price},stock=#{stock}
+        UPDATE shop_goods
+
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="size != null">size=#{size},</if>
+            <if test="material != null">material=#{material},</if>
+            <if test="component != null">component=#{component},</if>
+            <if test="options != null">options=#{options},</if>
+            <if test="manufacturer != null">manufacturer=#{manufacturer},</if>
+            <if test="madein != null">madein=#{madein},</if>
+            <if test="description != null">description=#{description},</if>
+            <if test="price != null">price=#{price},</if>
+            <if test="stock != null">stock=#{stock}</if>
+        </set>
         WHERE no = #{number}
     </update>
 

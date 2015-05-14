@@ -8,6 +8,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/daumeditor/css/editor.css" type="text/css" charset="utf-8"/>
@@ -18,6 +19,12 @@
     <script src="${pageContext.request.contextPath}/resource/js/board/editor.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/board/popup.js"></script>
     <title>글 수정</title>
+
+    <style type="text/css">
+        textarea {
+            resize: none;
+        }
+    </style>
 
     <script type="text/javascript">
         contextPath = "${pageContext.request.contextPath}";
@@ -47,7 +54,6 @@
                     <td>옵션</td>
                     <td>제조/수입</td>
                     <td>제조국</td>
-                    <td>상품 설명</td>
                     <td>가격</td>
                     <td>재고</td>
                     <td>등록자</td>
@@ -55,15 +61,48 @@
                     <td>삭제</td>
                 </tr>
 
-                <tr>
-                    <td id="empty_goods" colspan="14">
-                        상품이 없습니다.
-                    </td>
-                </tr>
+                <c:choose>
+                    <c:when test="${hasGoods == false}">
+                        <tr>
+                            <td id="empty_goods" colspan="13">
+                                상품이 없습니다.
+                            </td>
+                        </tr>
+                    </c:when>
+
+                    <c:otherwise>
+                        <c:forEach var="list" items="${goodsVOList}">
+                            <tr id="goods_id_${list.number}">
+                                <td>${list.number}</td>
+                                <td>
+                                    <c:set var="query" value="goodsNumber=${list.number}"/>
+                                    <a target="_blank " href="<c:url value="/goods/read.do?${query}"/> ">
+                                            ${list.name}
+                                    </a>
+                                </td>
+                                <td>${list.size}</td>
+                                <td>${list.material}</td>
+                                <td>${list.component}</td>
+                                <td>${list.options}</td>
+                                <td>${list.manufacturer}</td>
+                                <td>${list.madein}</td>
+                                <td id="price_${list.number}">${list.price}</td>
+                                <td>${list.stock}</td>
+                                <td>${list.userEmail}</td>
+                                <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
+                                <td class="popup_button"><button onclick="delGoods(${list.number})" name="${list.number}">선택</button></td>
+                                <input type="hidden" name="goods" value="${list.number}">
+                            </tr>
+                        </c:forEach>
+                    </c:otherwise>
+                </c:choose>
+
                 </tbody>
             </table>
 
-            <button id="popup">상품 추가</button>
+            <button id="popup">상품 추가</button><br/>
+
+            전체 가격 : <input type="text" name="total_price" id="total_price" size="30" value="${boardVO.totalPrice}"/><br/>
 
             <div id='element_to_pop_up' style='display:none;'>
                 <span class='button b-close'><span>X</span></span> <!-- 닫기 버튼 (스타일은 알아서 지정) -->

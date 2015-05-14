@@ -75,6 +75,13 @@
         </td>
     </tr>
 
+    <c:if test="${param.s == 'product'}">
+        <tr>
+            <td>전체 가격</td>
+            <td>${boardVO.totalPrice}</td>
+        </tr>
+    </c:if>
+
     <tr>
         <td colspan="2">
             <input type="button" onclick="location.href='list.do?s=${param.s}&p=${param.p}'" value="목록보기"/>

@@ -18,6 +18,8 @@
         <result column="user_no" property="userNumber"/>
         <result column="user_email" property="userEmail"/>
         <result column="separator_name" property="separatorName"/>
+        <result column="file_no" property="fileNumber"/>
+        <result column="total_price" property="totalPrice"/>
     </resultMap>
 
     <select id="selectCount" resultType="int">
@@ -37,8 +39,8 @@
     </select>
 
     <insert id="insert" parameterType="BoardVO">
-        INSERT INTO shop_board (group_no, sequence_no, title, content, posting_date, read_count, comment_count, file_count, goods_count, user_no, user_email, separator_name)
-        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),0,0,0,0,#{userNumber},#{userEmail},#{separatorName})
+        INSERT INTO shop_board (group_no, sequence_no, title, content, posting_date, read_count, comment_count, file_count, goods_count, user_no, user_email, separator_name, total_price)
+        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),0,0,0,0,#{userNumber},#{userEmail},#{separatorName},#{totalPrice})
     </insert>
 
     <select id="selectOne" parameterType="int" resultMap="boardResultMap">
@@ -54,7 +56,17 @@
     </select>
 
     <update id="update" parameterType="BoardVO">
-        UPDATE shop_board SET title = #{title}, content = #{content} WHERE no = #{number}
+        UPDATE shop_board
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="totalPrice != null">total_price = #{totalPrice}</if>
+        </set>
+        WHERE no = #{number}
+    </update>
+
+    <update id="setGoodsCountZero" parameterType="int">
+        UPDATE shop_board SET goods_count = 0 WHERE no = #{VALUE}
     </update>
 
     <delete id="delete" parameterType="int">

@@ -79,4 +79,9 @@ public interface BoardDAO {
     작성한 글 번호 조회한다.
      */
     public int selectLastBoardNumberByEmail(String userEmail) throws Exception;
+
+    /*
+    상품 개수를 초기화 한다.
+     */
+    public int setGoodsCountZero(int boardNumber) throws Exception;
 }
