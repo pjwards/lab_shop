@@ -51,7 +51,7 @@ create table shop_board (
 	user_no int not null,
 	user_email varchar(50) not null,
 	separator_name varchar(20) not null,
-	file_no int not null,
+	file_no int,
 	total_price int not null,
 	primary key (no),
 	index (sequence_no),
