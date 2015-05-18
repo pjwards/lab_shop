@@ -70,6 +70,7 @@ public class AdminController {
         }
         
 		List<OrdersVO> lists = adminService.selectList(pagingVO.getFirstRow()-1,pagingVO.getEndRow(),keyword);
+		
 		if(lists.isEmpty()){
 			modelandview.addObject("lists", null);
             return modelandview;

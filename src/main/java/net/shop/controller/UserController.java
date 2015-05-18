@@ -1,14 +1,17 @@
 package net.shop.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import net.shop.service.GoodsService;
 import net.shop.service.LoginService;
 import net.shop.service.UserService;
 import net.shop.util.ImageUtil;
 import net.shop.util.Util;
+import net.shop.vo.GoodsVO;
 import net.shop.vo.OrdersVO;
 import net.shop.vo.PagingVO;
 import net.shop.vo.UserVO;
@@ -50,6 +53,9 @@ public class UserController {
 	
 	@Resource(name = "loginService")
 	private LoginService loginService;
+	
+	@Resource(name = "goodsService")
+    private GoodsService goodsService;
 	
 	@Resource(name = "util")
     private Util util;
@@ -320,8 +326,8 @@ public class UserController {
 	//ajax add wishlist
 	@RequestMapping(value="/addWishlist.do", method=RequestMethod.POST)
 	public void addWishlist(@RequestParam("email")String email,
-	@RequestParam("check")String check, @RequestParam("no")String number,
-	HttpServletResponse response) throws Exception{
+	@RequestParam("check")String check, @RequestParam("no")int boardNumber,
+	HttpServletResponse response, Model model) throws Exception{
 		
 		if(check == null) check="no";
 		
@@ -329,14 +335,22 @@ public class UserController {
 			response.getWriter().print("404");
 			return;
 		}
-		int no = Integer.parseInt(number);
 		
-		if(userService.checkWishlist(email,no)){
-			response.getWriter().print("400");
+		List<Integer> boardGoodsList = goodsService.selectBoardGoodsByBoard(boardNumber);
+
+        if(!boardGoodsList.isEmpty()) {
+            for(int goodsNumber: boardGoodsList) {
+            	if(userService.checkWishlist(email,goodsNumber)){
+        			//response.getWriter().print("400");
+        			return;
+        		}
+            	userService.addWishlist(email,goodsNumber);
+        		response.getWriter().print("200");
+            }  
+        }else{
+    		response.getWriter().print("404");
 			return;
-		}
-		userService.addWishlist(email,no);
-		response.getWriter().print("200");
+        }
 	}
 	
 	@RequestMapping(value="/wishlist.do")

@@ -13,14 +13,24 @@
 <html>
 <head>
     <title>글 읽기</title>
-   
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/css/bpopup.css" type="text/css" charset="utf-8"/>
-    <script src="${pageContext.request.contextPath}/resource/js/jquery-2.1.3.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resource/js/board/comment.js"></script>
+  	<!-- CSS Files -->
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.css">
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.min.css">
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap-theme.css">
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bpopup.css" type="text/css" charset="utf-8"/>
+    
+    <!-- Javascript -->
+	<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+	<script src="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.min.js"></script>
+	<script src="<%=request.getContextPath()%>/resource/js/bootstrap.min.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/board/comment.js"></script>
+    
     <script type="text/javascript">
         contextPath = "${pageContext.request.contextPath}";
         boardNumber = "${boardVO.number}";
-
+		
+        var j = jQuery.noConflict(); // Avert conflicts between jquery functions
         var isWriting = false;		// 덧글 쓰기 중일 경우 true
         var isReplying = false;		// 답글 쓰기 중일 경우 true
         var isUpdating = false;		// 수정 중일 경우 true
@@ -29,25 +39,89 @@
 
         var loading_comment =
                 function() {
-                    $("#read_comment").html("<table><tr><td><br/><img src='" + contextPath + "/resource/img/board/loader-comm.gif'/><br/><br /></td></tr></table>");
+                    j("#read_comment").html("<table><tr><td><br/><img src='" + contextPath + "/resource/img/board/loader-comm.gif'/><br/><br /></td></tr></table>");
                 };
 
         // 상품 리스트 로딩.
         function showGoods() {
-            if ( $("#goods_list").length == 0 ) { return; }
+            if ( j("#goods_list").length == 0 ) { return; }
 
-            $("#goods_list").load(
+            j("#goods_list").load(
                     contextPath + "/goods/listByBoard.do",
                     {
                         boardNumber:boardNumber
                     }
             )
         }
-
-        $(document).ready(function(){
+   	      
+        j(document).ready(function(){
+        	showComment(1, cs1);
+            showComment(1, cs2);
+            showGoods();
+            
+        	function confirmation(question) {
+        	    var defer = $.Deferred();
+        	    var div = j('<div></div>')
+        	        div.html(question)
+        	        div.dialog({
+        	        	autoOpen: true,
+        	          	modal: true,
+        	          	title: 'Confirmation',
+        	          	buttons: {
+        	          	       "Yes": function () {
+        	          	           defer.resolve("true");
+        	          	         div.dialog("close");
+        	          	       },
+        	          	       "No": function () {
+        	          	             defer.resolve("false");
+        	          	           div.dialog("close");
+        	          	       	}
+        	          	 	},
+        	          	   	close: function () {
+        	          	   		div.remove();
+        	          	   }
+        	         });
+        	   return defer.promise();
+        	}
+        	
+            j("a#addWish").on("click", function() {
+            	var question = "Do you want to add this in wishlist?";
+        		confirmation(question).then(function (answer) {
+        		    var ansbool = (String(answer) == "true");
+        		    if(ansbool){
+        		    	var data = j("a#addWish").attr("vals");
+        				var arr = data.split('/');
+        				$.ajax({
+        					type:"POST",
+        					url:"<%=request.getContextPath()%>/user/addWishlist.do",
+        					data:{ email : arr[0], check : ansbool, no : arr[1] },
+        					success:function(result){
+        						if(result === "400"){
+        							alert("Already existed");
+        						}else if(result === "200"){
+        							alert("Added in wishlist");
+        						}
+        					}
+        				});
+        		    }
+        		});			
+        	});
+			
             showComment(1, cs1);
             showComment(1, cs2);
             showGoods();
+            
+            j("#submit_form").on("submit",function(){
+        		var quantity = $("#quantity").val().trim();
+        		alert(quantity);
+        		if(quantity === ""){
+        			alert("Check your quantity again");
+        			j("#quantity").focus();
+        			return false;
+        		}
+        	
+        	});
+        	
         });
     </script>
 </head>
@@ -79,9 +153,28 @@
         <tr>
             <td>전체 가격</td>
             <td>${boardVO.totalPrice}</td>
-        </tr>
-    </c:if>
-
+        </tr> 
+	<tr>
+		<td colspan="2">
+		<br>
+        <a href="#" class="btn btn-default" role="button" id="addWish" vals="${boardVO.userEmail }/${boardVO.number}">WishList</a><br><br>
+    	<form action="<%=request.getContextPath()%>/goods/addCart.do" method="get" class="form-inline" id="submit_form" name="submit_form">
+    		<div class="form-group">
+    			<label class="sr-only" for="quantity">Quantity</label>
+    			<div class="input-group">
+      				<div class="input-group-addon">*</div>
+      					<input type="text" class="form-control" id="quantity" name="quantity" placeholder="Quantity" autocomplete="off">
+    			</div>
+  			</div>
+  			<input type="hidden" name="number" value="${boardVO.number}"/>
+      		<input type="hidden" name="p" value="${param.p}"/>
+      		<input type="hidden" name="s" value="${param.s}"/>
+  			<button type="submit" class="btn btn-primary">Add to Cart</button>
+    	</form>
+    	</td>
+	</tr>
+	</c:if>
+    
     <tr>
         <td colspan="2">
             <input type="button" onclick="location.href='list.do?s=${param.s}&p=${param.p}'" value="목록보기"/>
@@ -96,6 +189,7 @@
                 <input type="submit" value="삭제하기" >
             </form>
         </td>
+        
     </tr>
 
 </table>

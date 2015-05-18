@@ -11,10 +11,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/css/bpopup.css" type="text/css" charset="utf-8"/>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bpopup.css" type="text/css" charset="utf-8"/>
 
-    <script src="${pageContext.request.contextPath}/resource/js/jquery-2.1.3.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resource/js/jquery.bpopup.min.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/jquery.bpopup.min.js"></script>
 
     <title>상품 목록</title>
 

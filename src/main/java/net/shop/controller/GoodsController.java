@@ -290,45 +290,71 @@ public class GoodsController {
     //add cart
     @SuppressWarnings("unchecked")
 	@RequestMapping(value="/addCart.do")
-    public String addCart(@RequestParam(value="number") int number,Model model,
+    public String addCart(@RequestParam(value="number") int boardNumber,Model model,
     		@RequestParam(value="quantity") String quantity,HttpSession session,
-    		@RequestParam(value = "p", required = false) String page,HttpServletRequest request)throws Exception{
+    		@RequestParam(value = "p", required = false) String page,
+    		@RequestParam(value = "s", required = false) String seperate,
+    		HttpServletRequest request)throws Exception{
     
-    	GoodsVO goodsVO = goodsService.selectOne(number);
-    	
+    	List<Integer> boardGoodsList = goodsService.selectBoardGoodsByBoard(boardNumber);
+        List<GoodsVO> goodsVOList = new ArrayList<GoodsVO>();
+        
     	if(quantity == null || quantity.isEmpty()){
 			model.addAttribute("say", "Wrong Input");
-			model.addAttribute("url", request.getContextPath()+"/goods/list.do");
+			model.addAttribute("url", request.getContextPath()+"/board/read.do?s="+seperate+"&p=" + page + "&boardNumber=" + boardNumber);
 			return "/error/alert";
 		}
-    	
-    	
+
     	String termQan = quantity.trim().toLowerCase();
     	int quan = 1;
+
     	try{
     		quan = Integer.parseInt(termQan);
     	}catch(Exception e){
     		model.addAttribute("say", "Wrong Input");
-			model.addAttribute("url", request.getContextPath()+"/goods/list.do");
+			model.addAttribute("url", request.getContextPath()+"/board/read.do?s="+seperate+"&p=" + page + "&boardNumber=" + boardNumber);
 			return "/error/alert";
     	}
-    	
-    	if(session.getAttribute("cart") == null){
-    		List<CartVO> cart = new ArrayList<CartVO>();
-    		cart.add(new CartVO(goodsVO, quan));
-    		session.setAttribute("cart", cart);
-    	}else{
-    		List<CartVO> cart = (List<CartVO>)session.getAttribute("cart");
-    		int index = isExsisting(number, session);
-    		if(index == -1){
-    			cart.add(new CartVO(goodsVO, quan));
-    		}
-    		//int amount = cart.get(index).getQuantity() + 1;
-    		//cart.get(index).setQuantity(amount);
-    		session.setAttribute("cart", cart);
-    	}
-    	
-    	return "redirect:/goods/read.do?p=" + page + "&goodsNumber=" + number;
+    	//GoodsVO goodsVO = goodsService.selectOne(number);
+        if(!boardGoodsList.isEmpty()) {
+            
+            model.addAttribute("goodsVOList", goodsVOList);
+            model.addAttribute("hasGoods", true);
+            
+            if(session.getAttribute("cart") == null){
+        		List<CartVO> cart = new ArrayList<CartVO>();
+        		for(int goodsNumber: boardGoodsList) {
+        			cart.add(new CartVO(goodsService.selectOne(goodsNumber), quan));
+                }
+        		session.setAttribute("cart", cart);
+        	}else{
+        		List<CartVO> cart = (List<CartVO>)session.getAttribute("cart");
+        		for(int goodsNumber: boardGoodsList) {
+        			int index = isExsisting(goodsNumber, session);
+            		if(index == -1){
+            			cart.add(new CartVO(goodsService.selectOne(goodsNumber), quan));
+            		}
+                }
+        		//int amount = cart.get(index).getQuantity() + 1;
+        		//cart.get(index).setQuantity(amount);
+        		session.setAttribute("cart", cart);
+        	}
+            
+            for(int goodsNumber: boardGoodsList) {
+                goodsVOList.add(goodsService.selectOne(goodsNumber));
+            }
+
+            model.addAttribute("goodsVOList", goodsVOList);
+            model.addAttribute("hasGoods", true);
+        } else {
+        	model.addAttribute("goodsVOList", Collections.<GoodsVO>emptyList());
+        	model.addAttribute("hasGoods", false);
+        }
+        
+        model.addAttribute("say", "Add it");
+		model.addAttribute("url", request.getContextPath()+"/board/read.do?s="+seperate+"&p=" + page + "&boardNumber=" + boardNumber);
+    	return "/error/alert";
+    			
     }
     
     //delete cart

@@ -1,5 +1,6 @@
 package net.shop.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,10 +12,16 @@ import java.util.Date;
  * version      :
  */
 
-public class GoodsVO {
-    private int number;
-    private String name;
-    private String size;
+public class GoodsVO implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 905987690676181623L;
+	
+	private int number;
+	private String name;
+	private String size;
     private String material;
     private String component;
     private String options;

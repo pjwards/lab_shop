@@ -21,19 +21,24 @@ $(document).ready(function() {
 		});
 	});
 	
-	// Validating Form Fields.....
+	// Validating Form Fields
 	$("#submit").click(function(e) {
 		var reciver = $("#reciver").val();
-		alert(reciver);
 		var title = $("#title").val();
 		var content = $("#content").val();
 		var emailReg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		
 		if (reciver === "" || title === "" || content === "") {
 			alert("Please fill all fields!");
+			$("#reciver").val('');
+			$("#title").val('');
+			$("#content").val('');
 			e.preventDefault();
 		} else if (!(reciver).match(emailReg)) {
 			alert("Invalid Email!");
+			$("#reciver").val('');
+			$("#title").val('');
+			$("#content").val('');
 			e.preventDefault();
 		} else {
 			alert("Send it Successfully");

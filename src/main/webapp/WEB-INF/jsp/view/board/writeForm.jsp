@@ -10,13 +10,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/daumeditor/css/editor.css" type="text/css" charset="utf-8"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/css/bpopup.css" type="text/css" charset="utf-8"/>
-    <script src="${pageContext.request.contextPath}/resource/daumeditor/js/editor_loader.js" type="text/javascript" charset="utf-8"></script>
-    <script src="${pageContext.request.contextPath}/resource/js/jquery-2.1.3.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resource/js/jquery.bpopup.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resource/js/board/editor.js"></script>
-    <script src="${pageContext.request.contextPath}/resource/js/board/popup.js"></script>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/resource/daumeditor/css/editor.css" type="text/css" charset="utf-8"/>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bpopup.css" type="text/css" charset="utf-8"/>
+    <script src="<%=request.getContextPath()%>/resource/daumeditor/js/editor_loader.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/jquery.bpopup.min.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/board/editor.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/board/popup.js"></script>
     <title>글쓰기</title>
     
     <style type="text/css">
