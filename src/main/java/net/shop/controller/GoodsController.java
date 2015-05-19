@@ -385,16 +385,36 @@ public class GoodsController {
   	//add order
   	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/addOrders.do")
-  	public String addOrders(HttpServletRequest request, Model model, HttpSession session
+  	public String addOrders(@RequestParam("price")int price,@RequestParam("quantity")int quantity,
+  			@RequestParam("address")String address,@RequestParam("postcode")String postcode,@RequestParam("boardNumber")int boardNumber,
+  			@RequestParam("receiver")String receiver,HttpServletRequest request, Model model, HttpSession session
   			,Authentication auth) throws Exception{
+  		
+  		if(address == null || address.isEmpty() || postcode == null || address.isEmpty() || receiver == null || receiver.isEmpty()){
+  			model.addAttribute("say", "Wrong Input");
+  			model.addAttribute("url", request.getContextPath()+"/user/wishlist.do");
+  			return "/error/alert";
+  		}
+  		
+  		String code = postcode.trim().toLowerCase();
+    	int quan = 1;
+
+    	try{
+    		quan = Integer.parseInt(code);
+    	}catch(Exception e){
+    		model.addAttribute("say", "Wrong Input");
+			model.addAttribute("url", request.getContextPath()+"/user/wishlist.do");
+			return "/error/alert";
+    	}
   		
   		UserDetails vo = (UserDetails) auth.getPrincipal();
 		String email = vo.getUsername();
 		UserVO userVO = userService.selectOneVo(email);
-		List<CartVO> cart = (List<CartVO>)session.getAttribute("cart");
+		
+		List<CartVO> cart = (List<CartVO>)session.getAttribute("cart");//change cart db
 		
 		for(int i = 0 ; i<cart.size() ;i++){	//run two "for" statement cause they doesn't work together
-  			OrdersVO ordersVO = new OrdersVO("Ready", email, userVO.getLastName(), cart.get(i).getGoodsVO().getNumber(), cart.get(i).getQuantity(), userVO.getAddress(), userVO.getPostcode());
+  			OrdersVO ordersVO = new OrdersVO("Ready", email, userVO.getLastName(), boardNumber, quantity, address, quan,price,receiver);
   			goodsService.addorderlist(ordersVO);
   			
 		}

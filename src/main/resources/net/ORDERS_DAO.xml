@@ -10,27 +10,19 @@
     	<result column="order_now" property="orderNow"/>
     	<result column="user_email" property="userEmail"/>
     	<result column="user_name" property="userName"/>
-    	<result column="user_address" property="userAddress"/>
-    	<result column="user_postcode" property="userPostcode"/>
+    	<result column="address" property="address"/>
+    	<result column="postcode" property="postcode"/>
     	<result column="quantity" property="quantity"/>
-    	<result column="goods_no" property="goodsNumber"/>
-    	<result column="name" property="goodsName"/>
-    	<result column="price" property="goodsPrice"/>
-    	<result column="options" property="goodsOptions"/>
-    	<result column="manufacturer" property="manufacturer"/>
+    	<result column="total_price" property="totalPrice"/>
+    	<result column="receiver" property="receiver"/>
+    	<result column="board_no" property="boardNumber"/>
+    	
     </resultMap>
 
 	<select id="selectList" parameterType="map" resultMap="ordersResultMap">
-      select orders.no, orders.order_date, orders.user_email, orders.user_name, orders.order_now,
-      	orders.goods_no, orders.quantity, goods.name, goods.options, goods.manufacturer, goods.price
-      from shop_orders as orders inner join shop_goods as goods on orders.goods_no=goods.no
-      <if test="keyword != NULL">
-      where orders.user_email like #{keyword} or orders.user_name like #{keyword} or orders.no like #{keyword}
-      </if>
-      <if test="userEmail != NULL">
-      where orders.user_email like #{userEmail}
-      </if>
-      order by orders.no desc
+     select * from shop_orders
+      where user_email like #{userEmail}
+      order by no desc
  	  limit #{offset},#{limit} 
     </select>
     
@@ -48,7 +40,7 @@
     </select>
     
     <insert id="insert" parameterType="OrdersVO">
-        INSERT INTO shop_orders (order_date,order_now, user_email, user_name, user_address, user_postcode, quantity, goods_no)
-        VALUE (now(),#{orderNow},#{userEmail},#{userName},#{userAddress},#{userPostcode},#{quantity},#{goodsNumber})
+        INSERT INTO shop_orders (order_date,order_now, user_email, user_name, address, postcode, quantity,total_price,receiver,board_no)
+        VALUE (now(),#{orderNow},#{userEmail},#{userName},#{address},#{postcode},#{quantity},#{totalPrice},#{receiver},#{goodsNumber})
     </insert>
 </mapper>

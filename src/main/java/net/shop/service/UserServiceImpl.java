@@ -141,12 +141,13 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public List<WishlistVO> wishList(int start, int end, String keyword) throws Exception{
+	public List<WishlistVO> wishList(int start, int end, String keyword, String email) throws Exception{
 		// TODO Auto-generated method stub
 		HashMap<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("offset", start);
 		paraMap.put("limit", end);
 		paraMap.put("keyword", keyword);
+		paraMap.put("userEmail", email);
 		return wishlistDAO.selectListMap(paraMap);
 	}
 

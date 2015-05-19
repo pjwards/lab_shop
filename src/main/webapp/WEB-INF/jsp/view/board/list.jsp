@@ -12,6 +12,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
+	
     <title>게시글 목록</title>
 </head>
 <body>
@@ -84,6 +85,6 @@
         </td>
     </tr>
 </table>
-
+<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </body>
 </html>

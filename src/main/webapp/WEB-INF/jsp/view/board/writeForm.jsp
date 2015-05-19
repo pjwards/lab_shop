@@ -84,11 +84,10 @@
 
     <!-- call editor frame -->
     <div id="editor_frame"></div>
-    <textarea name="daumeditor" id="daumeditor" rows="10" cols="100" style="width:766px; height:412px;display: none;"></textarea>
-    <input type="button" onclick="location.href='list.do?s=${param.s}'" value="취소"/>
+    <textarea name="daumeditor" id="daumeditor" rows="10" cols="100" style="width:766px; height:412px;display: none;"></textarea>
+    <input type="button" onclick="location.href='list.do?s=${param.s}'" value="취소"/>
     <input type="button" id="save_button" value="전송"/>
 </form>
 </div>
 <!-- end editor -->
 </body>
-</html>

@@ -32,6 +32,7 @@
       <if test="keyword != NULL">
       where name like #{keyword}
       </if>
+      where wish.user_email like #{userEmail}
       order by no desc
  	  limit #{offset},#{limit} 
     </select>

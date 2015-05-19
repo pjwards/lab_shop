@@ -10,9 +10,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.css">
-<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
-<script src="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.js"></script>
+<%@ include file="/WEB-INF/jsp/includes/src.jsp"%>
 
 <title>Wishlist</title>
 

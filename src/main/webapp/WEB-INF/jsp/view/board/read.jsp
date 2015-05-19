@@ -24,7 +24,7 @@
 	<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
 	<script src="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.min.js"></script>
 	<script src="<%=request.getContextPath()%>/resource/js/bootstrap.min.js"></script>
-    <script src="<%=request.getContextPath()%>/resource/js/board/comment.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/board/boardComment.js"></script>
     
     <script type="text/javascript">
         contextPath = "${pageContext.request.contextPath}";
@@ -55,9 +55,6 @@
         }
    	      
         j(document).ready(function(){
-        	showComment(1, cs1);
-            showComment(1, cs2);
-            showGoods();
             
         	function confirmation(question) {
         	    var defer = $.Deferred();
@@ -113,7 +110,6 @@
             
             j("#submit_form").on("submit",function(){
         		var quantity = $("#quantity").val().trim();
-        		alert(quantity);
         		if(quantity === ""){
         			alert("Check your quantity again");
         			j("#quantity").focus();
@@ -197,6 +193,6 @@
 <!-- 댓글 구현부 -->
 <div id="review"></div>
 <div id="qna"></div>
-
+<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </body>
 </html>

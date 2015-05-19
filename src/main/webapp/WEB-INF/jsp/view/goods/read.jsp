@@ -96,6 +96,6 @@
         </td>
     </tr>
 </table>
-
+<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </body>
 </html>

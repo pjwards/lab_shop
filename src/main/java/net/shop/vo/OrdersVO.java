@@ -14,38 +14,44 @@ public class OrdersVO {
 	private String orderNow;
 	private String userEmail;
 	private String userName;
-	private int goodsNumber;
+	private String receiver;
 	private int quantity;
-	private String userAddress;
-	private int userPostcode;
-	private String goodsName;
-	private String goodsOptions;
-	private int goodsPrice;
-	private String manufacturer;	
+	private String address;
+	private int postcode;
+	private int totalPrice;
+	private int boardNumber;	
 	
 	public OrdersVO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public OrdersVO(String orderNow, String userEmail,
-			String userName, int goodsNumber, int quantity, String userAddress,
-			int userPostcode) {
+			String userName, int boardNumber, int quantity, String address,
+			int postcode, int totalPrice, String receiver) {
 		super();
 		this.orderNow = orderNow;
 		this.userEmail = userEmail;
 		this.userName = userName;
-		this.goodsNumber = goodsNumber;
+		this.boardNumber = boardNumber;
 		this.quantity = quantity;
-		this.userAddress = userAddress;
-		this.userPostcode = userPostcode;
+		this.address = address;
+		this.postcode = postcode;
+		this.totalPrice = totalPrice;
+		this.receiver = receiver;
 	}
 
 	
-	public int getGoodsPrice() {
-		return goodsPrice;
+	public String getReceiver() {
+		return receiver;
 	}
-	public void setGoodsPrice(int goodsPrice) {
-		this.goodsPrice = goodsPrice;
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
+	}
+	public int getTotalPrice() {
+		return totalPrice;
+	}
+	public void setTotalPrice(int totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 	public int getQuantity() {
 		return quantity;
@@ -83,41 +89,23 @@ public class OrdersVO {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public int getGoodsNumber() {
-		return goodsNumber;
+	public int getBoardNumber() {
+		return boardNumber;
 	}
-	public void setGoodsNumber(int goodsNumber) {
-		this.goodsNumber = goodsNumber;
+	public void setBoardNumber(int boardNumber) {
+		this.boardNumber = boardNumber;
 	}
-	public String getUserAddress() {
-		return userAddress;
+	public String getAddress() {
+		return address;
 	}
-	public void setUserAddress(String userAddress) {
-		this.userAddress = userAddress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
-	public int getUserPostcode() {
-		return userPostcode;
+	public int getPostcode() {
+		return postcode;
 	}
-	public void setUserPostcode(int userPostcode) {
-		this.userPostcode = userPostcode;
-	}
-	public String getGoodsName() {
-		return goodsName;
-	}
-	public void setGoodsName(String goodsName) {
-		this.goodsName = goodsName;
-	}
-	public String getGoodsOptions() {
-		return goodsOptions;
-	}
-	public void setGoodsOptions(String goodsOptions) {
-		this.goodsOptions = goodsOptions;
-	}
-	public String getManufacturer() {
-		return manufacturer;
-	}
-	public void setManufacturer(String manufacturer) {
-		this.manufacturer = manufacturer;
+	public void setPostcode(int postcode) {
+		this.postcode = postcode;
 	}
 	
 }

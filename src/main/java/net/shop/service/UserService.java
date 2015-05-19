@@ -109,7 +109,7 @@ public interface UserService {
     Editor : Jisung Jeon
     Decription : list of wishlist
     */
-	public List<WishlistVO> wishList(int start, int end, String keyword) throws Exception;
+	public List<WishlistVO> wishList(int start, int end, String keyword, String email) throws Exception;
 	
 	/*
     Editor : Jisung Jeon

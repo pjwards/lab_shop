@@ -356,10 +356,13 @@ public class UserController {
 	@RequestMapping(value="/wishlist.do")
 	public ModelAndView WishlistDAO(@RequestParam(value="p",required=false) String p,
 			@RequestParam(value="q",required=false) String q,
-			HttpServletRequest request,HttpServletResponse response) throws Exception {
+			HttpServletRequest request,HttpServletResponse response, Authentication auth) throws Exception {
+		
 		ModelAndView modelandview = new ModelAndView();
 		String requestPageString = p;		//paging
 		String keyword = q;					//searching
+		UserDetails vo = (UserDetails) auth.getPrincipal();
+		String email = vo.getUsername();
 		
 		if(requestPageString == null || requestPageString.equals("")) {
             requestPageString = "1";
@@ -392,7 +395,7 @@ public class UserController {
             return modelandview;
         }
         
-        List<WishlistVO> lists = userService.wishList(pagingVO.getFirstRow()-1,pagingVO.getEndRow(),keyword);
+        List<WishlistVO> lists = userService.wishList(pagingVO.getFirstRow()-1,pagingVO.getEndRow(),keyword,email);
         if(lists.isEmpty()){
 			request.setAttribute("hasUser", false);
             return modelandview;
