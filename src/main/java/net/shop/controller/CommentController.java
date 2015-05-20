@@ -164,7 +164,7 @@ public class CommentController {
     댓글 수정
      */
     @RequestMapping(value = "/update.do", method = RequestMethod.POST)
-    public void commentUpdate(@RequestParam(value = "commentNumber", required = true) Integer commentNumber,
+    public String commentUpdate(@RequestParam(value = "commentNumber", required = true) Integer commentNumber,
                               @RequestParam(value = "content", required = true) String content,
                               Authentication auth) throws Exception {
 
@@ -181,6 +181,8 @@ public class CommentController {
 
         int updateCount = commentService.update(commentVO);
         if (updateCount == 0) throw new CommentNotFoundException("댓글이 존재하지 않음 : " + commentNumber);
+
+        return "/common/success";
     }
 
     /*

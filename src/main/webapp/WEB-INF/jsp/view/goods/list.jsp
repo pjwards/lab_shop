@@ -29,7 +29,7 @@
                     var trId = '#goods_' + $(this).attr('name');
                     var addTrId = 'goods_id_' + $(this).attr('name');
                     var price = parseInt($('#price_' + $(this).attr('name')).text());
-                    var totalPrice = parseInt($('#total_price').attr('value'));
+                    var totalPrice = parseInt($('#total_price').prop('value'));
 
                     if ( $("#"+addTrId).length > 0 ) { alert("이미 등록한 상품은 추가로 등록할 수 없습니다."); return; }
 
@@ -45,7 +45,7 @@
 
                     $("#empty_goods").hide();
                     $("#selected_goods  > tbody:last").append(html);
-                    $('#total_price').attr('value',totalPrice+price);
+                    $('#total_price').prop('value',totalPrice+price);
                 });
             }
         });

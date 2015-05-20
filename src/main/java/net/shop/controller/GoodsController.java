@@ -283,7 +283,7 @@ public class GoodsController {
     
     //cart list
     @RequestMapping("/cart.do")
-	public String userDelete() throws Exception{
+	public String cartList() throws Exception{
 		return "/goods/cart";
 	}
   

@@ -63,7 +63,7 @@ function isEqualMember(number) {
 
 function toggleWrite(separator) {
 
-    if(isLogin()==false){
+    if(!isLogin()){
         return;
     }
 
@@ -73,7 +73,7 @@ function toggleWrite(separator) {
 
 function toggleReply(separator, number, boardNumber) {
 
-    if(isLogin()==false){
+    if(!isLogin()){
         return;
     }
 
@@ -85,8 +85,7 @@ function toggleReply(separator, number, boardNumber) {
 
 function updateComment(separator, number) {
 
-    var loginStatus = isLogin();
-    if((loginStatus == true && isEqualMember(number)) || loginStatus == false){
+    if(!isLogin() || !isEqualMember(number)){
         return;
     }
 
@@ -97,8 +96,7 @@ function updateComment(separator, number) {
 
 function deleteComment(separator, number, boardNumber) {
 
-    var loginStatus = isLogin();
-    if((loginStatus == true && isEqualMember(number)) || loginStatus == false){
+    if(!isLogin() || !isEqualMember(number)){
         return;
     }
 
@@ -124,7 +122,7 @@ function deleteComment(separator, number, boardNumber) {
 
 function ajaxForm(separator) {
 
-    if(isLogin() == false){
+    if(!isLogin()){
         // 덧글 페이지 처음으로 리로딩
         showComment(1, separator);
 
@@ -185,7 +183,7 @@ function ajaxForm(separator) {
 
 function ajaxForm_reply(separator, number) {
 
-    if(isLogin()==false){
+    if(!isLogin()){
         // 덧글 페이지 처음으로 리로딩
         showComment(1, separator);
 
@@ -246,8 +244,7 @@ function ajaxForm_reply(separator, number) {
 
 function ajaxForm_update(separator, number) {
 
-    var loginStatus = isLogin();
-    if((loginStatus == true && isEqualMember(number)) || loginStatus == false){
+    if(!isLogin() || !isEqualMember(number)){
         // 덧글 페이지 처음으로 리로딩
         showComment(1, separator);
 

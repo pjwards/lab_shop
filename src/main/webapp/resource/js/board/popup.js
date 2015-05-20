@@ -23,11 +23,11 @@
 function delGoods(id) {
     var addTrId = '#goods_id_' + id;
     var price = parseInt($('#price_' + id).text());
-    var totalPrice = parseInt($('#total_price').attr('value'));
+    var totalPrice = parseInt($('#total_price').prop('value'));
     $(addTrId).remove();
-    $('#total_price').attr('value',totalPrice-price);
+    $('#total_price').prop('value',totalPrice-price);
 
-    if(parseInt($('#total_price').attr('value'))<0){
-        $('#total_price').attr('value',0);
+    if(parseInt($('#total_price').prop('value'))<0){
+        $('#total_price').prop('value',0);
     }
 };
