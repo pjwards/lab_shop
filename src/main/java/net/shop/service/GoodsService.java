@@ -1,5 +1,6 @@
 package net.shop.service;
 
+import net.shop.vo.CartVO;
 import net.shop.vo.GoodsVO;
 import net.shop.vo.OrdersVO;
 
@@ -66,6 +67,12 @@ public interface GoodsService {
     Decription : insert data in orderlist
     */
 	public int addorderlist(OrdersVO ordersVO) throws Exception;
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : insert data in cart
+    */
+	public int addcartlist(CartVO cartVO) throws Exception;
 
     /*
     게시글에 포함된 상품 번호를 구한다.
@@ -86,4 +93,14 @@ public interface GoodsService {
     게시글-상품 테이블에서 상품을 삭제한다.
      */
     public int deleteBoardGoodsByGoods(int goodsNumber) throws Exception;
+    
+    /*
+  		Delete cart of the number
+     */
+	public int cartDelete(int number);
+	
+	/*
+		Find cart of the number
+	 */
+	public CartVO cartOne(int boardNumber, String email);
 }

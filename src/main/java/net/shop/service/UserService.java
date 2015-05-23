@@ -2,6 +2,7 @@ package net.shop.service;
 
 import java.util.List;
 
+import net.shop.vo.CartVO;
 import net.shop.vo.OrdersVO;
 import net.shop.vo.UserVO;
 import net.shop.vo.WishlistVO;
@@ -146,4 +147,11 @@ public interface UserService {
     Decription : delete data in orderlist
     */
 	public int delorderlist(int no) throws Exception;
+	
+	/*
+    Editor : Jisung Jeon
+    Decription : call list of cart
+    */
+	public List<CartVO> cartList(String email);
+	
 }

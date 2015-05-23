@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="net.CartDao">
+    <resultMap type="CartVO" id="cartResultMap">
+    	<result column="board_no" property="boardNumber"/>
+    	<result column="user_email" property="userEmail"/>
+    	<result column="no" property="number"/>
+    	<result column="quantity" property="quantity"/>
+    	<result column="total_price" property="price"/>
+    	<result column="image_path" property="imagePath"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="CartVO">
+        INSERT INTO shop_cart (board_no, user_email, quantity)
+        VALUE (#{boardNumber},#{userEmail},#{quantity})
+    </insert>
+    
+    <select id="selectList" parameterType="String" resultMap="cartResultMap">
+      select cart.board_no, cart.no, total_price, title, cart.user_email from shop_cart as cart 
+      inner join shop_board as board on cart.board_no=board.no
+      where cart.user_email like #{userEmail}
+      order by cart.no desc
+    </select>
+    
+    <delete id="delete" parameterType="int">
+      delete from shop_cart where no=#{number}
+    </delete>
+    
+    <select id="selectOne" parameterType="map" resultMap="cartResultMap">
+      select cart.board_no, cart.no, cart.user_email, total_price, cart.quantity from shop_cart as cart 
+      inner join shop_board as board on cart.board_no=board.no
+      where cart.user_email=#{userEmail} and cart.board_no=#{boardNumber}
+    </select>
+</mapper>

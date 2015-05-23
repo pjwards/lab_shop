@@ -1,7 +1,6 @@
 package net.shop.controller;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +10,6 @@ import net.shop.service.LoginService;
 import net.shop.service.UserService;
 import net.shop.util.ImageUtil;
 import net.shop.util.Util;
-import net.shop.vo.GoodsVO;
 import net.shop.vo.OrdersVO;
 import net.shop.vo.PagingVO;
 import net.shop.vo.UserVO;
@@ -327,7 +325,7 @@ public class UserController {
 	@RequestMapping(value="/addWishlist.do", method=RequestMethod.POST)
 	public void addWishlist(@RequestParam("email")String email,
 	@RequestParam("check")String check, @RequestParam("no")int boardNumber,
-	HttpServletResponse response, Model model) throws Exception{
+	HttpServletResponse response) throws Exception{
 		
 		if(check == null) check="no";
 		
@@ -336,27 +334,20 @@ public class UserController {
 			return;
 		}
 		
-		List<Integer> boardGoodsList = goodsService.selectBoardGoodsByBoard(boardNumber);
-
-        if(!boardGoodsList.isEmpty()) {
-            for(int goodsNumber: boardGoodsList) {
-            	if(userService.checkWishlist(email,goodsNumber)){
-        			//response.getWriter().print("400");
-        			return;
-        		}
-            	userService.addWishlist(email,goodsNumber);
-        		response.getWriter().print("200");
-            }  
-        }else{
-    		response.getWriter().print("404");
+		if(userService.checkWishlist(email, boardNumber)){
+			response.getWriter().print("400");
 			return;
-        }
+		}else{
+			userService.addWishlist(email, boardNumber);
+			response.getWriter().print("200");
+			return;
+		}
 	}
 	
 	@RequestMapping(value="/wishlist.do")
-	public ModelAndView WishlistDAO(@RequestParam(value="p",required=false) String p,
+	public ModelAndView wishList(@RequestParam(value="p",required=false) String p,
 			@RequestParam(value="q",required=false) String q,
-			HttpServletRequest request,HttpServletResponse response, Authentication auth) throws Exception {
+			HttpServletRequest request, Authentication auth) throws Exception {
 		
 		ModelAndView modelandview = new ModelAndView();
 		String requestPageString = p;		//paging
@@ -410,7 +401,7 @@ public class UserController {
 	//delete wishlist
 	@RequestMapping(value="/delWishlist.do")
 	public String delWishlist(@RequestParam("choice")String choice,
-			@RequestParam("email")String email,@RequestParam("no")String number,
+			@RequestParam("email")String email,@RequestParam("no")int boardNumber,
 			HttpServletRequest request, Model model) throws Exception{
 		
 		if(choice == null || choice.isEmpty()){
@@ -423,9 +414,7 @@ public class UserController {
 			return "redirect:/user/wishlist.do";
 		}
 		
-		int no = Integer.parseInt(number);
-		
-		if(userService.delWishlist(email,no) == 0){
+		if(userService.delWishlist(email,boardNumber) == 0){
 			model.addAttribute("say", "Wrong already deleted");
 			model.addAttribute("url", request.getContextPath()+"/user/wishlist.do");
 			return "/error/alert";
@@ -451,7 +440,7 @@ public class UserController {
 		userService.updatePassword(email, encode);
 		response.getWriter().print("Successfully Changed");
 	}
-	
+
 	//ajax check Email
 	@RequestMapping(value="/checkEmail.do", method=RequestMethod.POST)
 	public void checkEmail(@RequestParam("email") String email,
@@ -474,7 +463,7 @@ public class UserController {
 	//orderlist
 	@RequestMapping("/orders.do")
 	public ModelAndView orderList(@RequestParam(value="p",required=false) String p,
-			HttpServletRequest request,HttpServletResponse response, Authentication auth) throws Exception{
+			HttpServletRequest request, Authentication auth) throws Exception{
 		
 		ModelAndView modelandview = new ModelAndView();
 		String requestPageString = p;		//paging
@@ -515,7 +504,7 @@ public class UserController {
 	//delete orderlist
 	@RequestMapping(value="/delOrderlist.do")
 	public String delOrderlist(@RequestParam("choice")String choice,
-			@RequestParam("no")String number,
+			@RequestParam("no")int number,
 			HttpServletRequest request, Model model) throws Exception{
 			
 		if(choice == null || choice.isEmpty()){
@@ -528,9 +517,7 @@ public class UserController {
 			return "redirect:/user/orders.do";
 		}
 			
-		int no = Integer.parseInt(number);
-			
-		if(userService.delorderlist(no) == 0){
+		if(userService.delorderlist(number) == 0){
 			model.addAttribute("say", "Wrong already deleted");
 			model.addAttribute("url", request.getContextPath()+"/user/orders.do");
 			return "/error/alert";

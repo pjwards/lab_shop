@@ -6,30 +6,59 @@ public class CartVO implements Serializable{
 
 	private static final long serialVersionUID = 7189614286736101498L;
 	
-	private GoodsVO goodsVO= new GoodsVO();
+	private int number;
 	private int quantity;
+	private int boardNumber;
+	private String userEmail;
+	private String imagePath;
+	private int price;
 	
 	public CartVO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public CartVO(GoodsVO goodsVO, int quantity) {
+	public CartVO(int quantity, int boardNumber,String userEmail) {
 		super();
-		this.goodsVO = goodsVO;
 		this.quantity = quantity;
+		this.boardNumber = boardNumber;
+		this.userEmail = userEmail;
 	}
 	
-	public GoodsVO getGoodsVO() {
-		return goodsVO;
+	public int getNumber() {
+		return number;
 	}
-	public void setGoodsVO(GoodsVO goodsVO) {
-		this.goodsVO = goodsVO;
+	public void setNumber(int number) {
+		this.number = number;
+	}
+	public int getBoardNumber() {
+		return boardNumber;
+	}
+	public void setBoardNumber(int boardNumber) {
+		this.boardNumber = boardNumber;
+	}
+	public String getUserEmail() {
+		return userEmail;
+	}
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 	public int getQuantity() {
 		return quantity;
 	}
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	public String getImagePath() {
+		return imagePath;
+	}
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
 	}
 	
 }

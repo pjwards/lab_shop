@@ -5,12 +5,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import net.shop.dao.CartDAO;
 import net.shop.dao.OrdersDAO;
 import net.shop.dao.UserDAO;
 import net.shop.dao.WishlistDAO;
 
 import org.springframework.stereotype.Service;
 
+import net.shop.vo.CartVO;
 import net.shop.vo.OrdersVO;
 import net.shop.vo.UserVO;
 import net.shop.vo.WishlistVO;
@@ -35,6 +37,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Resource(name="ordersDAO")
 	private OrdersDAO ordersDAO;
+	
+	@Resource(name="cartDAO")
+	private CartDAO cartDAO;
 	
 	@Override
 	public boolean selectOne(String email) throws Exception {
@@ -124,7 +129,7 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("userEmail", email);
-		paraMap.put("goodsNumber",number);
+		paraMap.put("boardNumber",number);
 		return wishlistDAO.insert(paraMap);
 	}
 
@@ -156,7 +161,7 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("userEmail", email);
-		paraMap.put("goodsNumber",number);
+		paraMap.put("boardNumber",number);
 		return wishlistDAO.delete(paraMap);
 	}
 
@@ -165,7 +170,7 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("userEmail", email);
-		paraMap.put("goodsNumber",number);
+		paraMap.put("boardNumber",number);
 		WishlistVO wishlistVO = wishlistDAO.selectOne(paraMap);
 		if(wishlistVO != null){
 			return true;
@@ -199,6 +204,12 @@ public class UserServiceImpl implements UserService {
 	public int delorderlist(int no) throws Exception {
 		// TODO Auto-generated method stub
 		return ordersDAO.delete(no);
+	}
+
+	@Override
+	public List<CartVO> cartList(String email) {
+		// TODO Auto-generated method stub
+		return cartDAO.selectList(email);
 	}
 	
 }

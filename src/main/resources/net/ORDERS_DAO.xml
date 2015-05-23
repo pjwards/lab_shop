@@ -41,6 +41,6 @@
     
     <insert id="insert" parameterType="OrdersVO">
         INSERT INTO shop_orders (order_date,order_now, user_email, user_name, address, postcode, quantity,total_price,receiver,board_no)
-        VALUE (now(),#{orderNow},#{userEmail},#{userName},#{address},#{postcode},#{quantity},#{totalPrice},#{receiver},#{goodsNumber})
+        VALUE (now(),#{orderNow},#{userEmail},#{userName},#{address},#{postcode},#{quantity},#{totalPrice},#{receiver},#{boardNumber})
     </insert>
 </mapper>

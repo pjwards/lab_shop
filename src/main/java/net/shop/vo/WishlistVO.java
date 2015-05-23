@@ -7,31 +7,33 @@ Date         : 2015-04-21
 */
 
 public class WishlistVO {
-
-	private int goodsNumber;
+	private int number;
 	private String userEmail;
-	private int no;
-	private String name;
-	private String manufacturer;
+	private int boardNumber;
 	private int price;
+	private String imagePath;
+	private String title;
 	
-	public int getNo() {
-		return no;
+	public WishlistVO(){
+		super();
 	}
-	public void setNo(int no) {
-		this.no = no;
+	public WishlistVO(String userEmail, int boardNumber) {
+		super();
+		this.userEmail = userEmail;
+		this.boardNumber = boardNumber;
 	}
-	public String getName() {
-		return name;
+	
+	public int getNumber() {
+		return number;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setNumber(int number) {
+		this.number = number;
 	}
-	public String getManufacturer() {
-		return manufacturer;
+	public int getBoardNumber() {
+		return boardNumber;
 	}
-	public void setManufacturer(String manufacturer) {
-		this.manufacturer = manufacturer;
+	public void setBoardNumber(int boardNumber) {
+		this.boardNumber = boardNumber;
 	}
 	public int getPrice() {
 		return price;
@@ -39,17 +41,23 @@ public class WishlistVO {
 	public void setPrice(int price) {
 		this.price = price;
 	}
-	public int getGoodsNumber() {
-		return goodsNumber;
-	}
-	public void setGoodsNumber(int goodsNumber) {
-		this.goodsNumber = goodsNumber;
-	}
 	public String getUserEmail() {
 		return userEmail;
 	}
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
+	}
+	public String getImagePath() {
+		return imagePath;
+	}
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 }

@@ -127,7 +127,7 @@ function ajaxForm(separator) {
         showComment(1, separator);
 
         // 덧글 내용 초기화
-        j("#" + separator + "_content").val("");
+        $("#" + separator + "_content").val("");
         return;
     }
 
@@ -135,7 +135,7 @@ function ajaxForm(separator) {
         if (isWriting == false) {
             isWriting = true;
 
-            if (j("#" + separator + "_content").val() == "") {
+            if ($("#" + separator + "_content").val() == "") {
                 alert("덧글 내용을 작성하시기 바랍니다.");
                 isWriting = false;
                 e.preventDefault(); //STOP default action
@@ -196,7 +196,7 @@ function ajaxForm_reply(separator, number) {
         if (isReplying == false) {
             isReplying = true;
 
-            if (j("#" + separator + "_" + number + "_content_reply").val() == "") {
+            if ($("#" + separator + "_" + number + "_content_reply").val() == "") {
                 alert("답글 내용을 작성하시기 바랍니다.");
                 isReplying = false;
                 e.preventDefault(); //STOP default action
@@ -217,7 +217,7 @@ function ajaxForm_reply(separator, number) {
                     showComment(1, separator);
 
                     // 덧글 내용 초기화
-                    $("#" + separator + "_" + number + "_content_reply").val("");
+                    j("#" + separator + "_" + number + "_content_reply").val("");
 
                     // 초기화
                     isReplying = false;
@@ -257,7 +257,7 @@ function ajaxForm_update(separator, number) {
         if (isUpdating == false) {
             isUpdating = true;
 
-            if (j("#" + separator + "_" + number + "_content_update").val() == "") {
+            if ($("#" + separator + "_" + number + "_content_update").val() == "") {
                 alert("수정 내용을 작성하시기 바랍니다.");
                 isUpdating = false;
                 e.preventDefault(); //STOP default action

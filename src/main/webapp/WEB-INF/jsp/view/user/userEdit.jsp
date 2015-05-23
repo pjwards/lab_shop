@@ -29,7 +29,7 @@ $(function(){
 		var pass1 = $("#password").val();
 		var pass2 = $("#password_chk").val();
 		
-		if(pass1 == "" || pass2 == ""){
+		if(pass1 === "" || pass2 === ""){
 			$("#password").focus();
 			alert("Input password");
 			return false;

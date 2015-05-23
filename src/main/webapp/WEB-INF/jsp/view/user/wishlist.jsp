@@ -64,6 +64,34 @@ $(document).ready(function(){
 		    }
 		});		
 	});
+	
+	$(".cart").click(function(){
+		var question = "Do you want to do it?";
+		var data = $(this).attr("vals");
+		confirmation(question).then(function (answer) {
+		    var ansbool = (String(answer) == "true");
+		    if(ansbool){
+				var arr = data.split('/');
+				alert(arr[0]);
+				$.ajax({
+					type:"POST",
+					url:"<%=request.getContextPath()%>/goods/addCart.do",
+					data:{ choice : arr[0], no : arr[1] },
+					success:function(result){
+						if(result === "400"){
+							alert("Error");
+						}else if(result === "200"){
+							alert("Copied in Cart");
+						}else if(result === "202"){
+							alert("Moved in Cart");
+						}else{
+							alert("Already listed");
+						}
+					}
+				});
+		    }
+		});		
+	});
 });
 
 function search_enter(form){
@@ -94,18 +122,21 @@ function search_enter(form){
 	<table id="box-table-a" class="table table-hover">
 		<thead>
 			<tr>
-				<th scope="col">Name</th>
-				<th scope="col">Brand</th>
+				<th scope="col">Product</th>
 				<th scope="col">Price</th>
+				<th scope="col">Go to Cart</th>
+				<th scope="col">Copy to Cart</th>
+				<th scope="col">Delete</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach var="list" items="${wishlist}">
 			 <tr>
-				<th scope="row"><a href="<%=request.getContextPath()%>/goods/read.do?goodsNumber=${list.goodsNumber}">${list.name }</a></th>
-				<td>${list.manufacturer }</td>
+				<th scope="row"><a href="<%=request.getContextPath()%>/board/read.do?boardNumber=${list.boardNumber}">${list.title }</a></th>
 				<td>${list.price }</td>
-				<td><a href="#" class="del_wish" vals="${list.userEmail }/${list.no}">Delete</a></td>
+				<td><a href="#" class="cart" vals="go/${list.boardNumber}">Go</a></td>
+				<td><a href="#" class="cart" vals="copy/${list.boardNumber}">Copy</a></td>			
+				<td><a href="#" class="del_wish" vals="${list.userEmail }/${list.boardNumber}">Delete</a></td>
 			 </tr>
 			</c:forEach>
 		</tbody>

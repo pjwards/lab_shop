@@ -116,16 +116,26 @@ create table shop_orders(
 	board_no int not null,
 	total_price int not null,
 	quantity int not null,
-	primary key (no),
-	foreign key(goods_no) references shop_board(no)
+	primary key (no)
 );
 
 create table shop_wishlist(
-	goods_no int not null,
+	no int not null auto_increment,
+	board_no int not null,
 	user_email varchar(255) not null,
-	index (user_email),
+	primary key (no),
 	foreign key(user_email) references shop_user(email) on delete cascade,
-	foreign key(goods_no) references shop_goods(no)
+	foreign key(board_no) references shop_board(no)
+);
+
+create table shop_cart(
+	no int not null auto_increment,
+	board_no int not null,
+	user_email varchar(255) not null,
+	quantity int not null,
+	primary key (no),
+	foreign key(user_email) references shop_user(email) on delete cascade,
+	foreign key(board_no) references shop_board(no)
 );
 
 create table shop_file(

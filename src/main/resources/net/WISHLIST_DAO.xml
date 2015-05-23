@@ -5,17 +5,17 @@
         
 <mapper namespace="net.WishlistDao">
     <resultMap type="WishlistVO" id="wishlistResultMap">
-    	<result column="goods_no" property="goodsNumber"/>
+    	<result column="board_no" property="boardNumber"/>
     	<result column="user_email" property="userEmail"/>
-    	<result column="no" property="no"/>
-    	<result column="name" property="name"/>
-    	<result column="manufacturer" property="manufacturer"/>
-    	<result column="price" property="price"/>
+    	<result column="no" property="number"/>
+    	<result column="total_price" property="price"/>
+    	<result column="title" property="title"/>
+    	<result column="image_path" property="imagePath"/>
     </resultMap>
     
     <insert id="insert" parameterType="map">
-      insert into shop_wishlist (goods_no, user_email)
-      values(#{goodsNumber},#{userEmail})
+      insert into shop_wishlist (board_no, user_email)
+      values(#{boardNumber},#{userEmail})
     </insert>
     
     <select id="count" resultType="int">
@@ -27,21 +27,21 @@
     </select>
     
     <select id="selectList" parameterType="map" resultMap="wishlistResultMap">
-      select goods_no,no, name, manufacturer, price, wish.user_email from shop_wishlist as wish 
-      inner join shop_goods as goods on wish.goods_no=goods.no
+      select wish.board_no, wish.no, total_price, title, wish.user_email from shop_wishlist as wish 
+      inner join shop_board as board on wish.board_no=board.no
       <if test="keyword != NULL">
-      where name like #{keyword}
+      where title like #{keyword}
       </if>
       where wish.user_email like #{userEmail}
-      order by no desc
- 	  limit #{offset},#{limit} 
+      order by wish.no desc
+ 	  limit #{offset},#{limit}
     </select>
     
     <delete id="delete" parameterType="map">
-      delete from shop_wishlist where user_email=#{userEmail} and goods_no=#{goodsNumber}
+      delete from shop_wishlist where user_email=#{userEmail} and board_no=#{boardNumber}
     </delete>
     
     <select id="selectOne" parameterType="map" resultMap="wishlistResultMap">
-      select * from shop_wishlist where user_email=#{userEmail} and goods_no=#{goodsNumber}
+      select * from shop_wishlist where user_email=#{userEmail} and board_no=#{boardNumber}
     </select>
 </mapper>

@@ -1,7 +1,9 @@
 package net.shop.service;
 
+import net.shop.dao.CartDAO;
 import net.shop.dao.GoodsDAO;
 import net.shop.dao.OrdersDAO;
+import net.shop.vo.CartVO;
 import net.shop.vo.GoodsVO;
 import net.shop.vo.OrdersVO;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,6 +31,9 @@ public class GoodsServiceImpl implements GoodsService {
     
     @Resource(name = "ordersDAO")
     private OrdersDAO ordersDAO;
+    
+    @Resource(name = "cartDAO")
+    private CartDAO cartDAO;
 
     @Override
     public int selectCount(String memberId) throws Exception {
@@ -98,4 +104,25 @@ public class GoodsServiceImpl implements GoodsService {
     public int deleteBoardGoodsByGoods(int goodsNumber) throws Exception {
         return goodsDAO.deleteBoardGoodsByGoods(goodsNumber);
     }
+
+	@Override
+	public int addcartlist(CartVO cartVO) throws Exception {
+		// TODO Auto-generated method stub
+		return cartDAO.insert(cartVO);
+	}
+
+	@Override
+	public int cartDelete(int number) {
+		// TODO Auto-generated method stub
+		return cartDAO.delete(number);
+	}
+
+	@Override
+	public CartVO cartOne(int boardNumber, String email) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("boardNumber", boardNumber);
+		paraMap.put("userEmail", email);
+		return cartDAO.selectOne(paraMap);
+	}
 }
