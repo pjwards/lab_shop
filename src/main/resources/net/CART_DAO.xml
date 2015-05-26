@@ -11,6 +11,7 @@
     	<result column="quantity" property="quantity"/>
     	<result column="total_price" property="price"/>
     	<result column="image_path" property="imagePath"/>
+    	<result column="title" property="title"/>
     </resultMap>
     
     <insert id="insert" parameterType="CartVO">
@@ -19,7 +20,7 @@
     </insert>
     
     <select id="selectList" parameterType="String" resultMap="cartResultMap">
-      select cart.board_no, cart.no, total_price, title, cart.user_email from shop_cart as cart 
+      select cart.board_no, cart.no, total_price, title, cart.user_email, cart.quantity from shop_cart as cart 
       inner join shop_board as board on cart.board_no=board.no
       where cart.user_email like #{userEmail}
       order by cart.no desc
@@ -27,6 +28,10 @@
     
     <delete id="delete" parameterType="int">
       delete from shop_cart where no=#{number}
+    </delete>
+    
+    <delete id="deleteMap" parameterType="map">
+      delete from shop_cart where user_email=#{userEmail} and board_no=#{boardNumber}
     </delete>
     
     <select id="selectOne" parameterType="map" resultMap="cartResultMap">

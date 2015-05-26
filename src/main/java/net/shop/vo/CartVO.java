@@ -12,6 +12,7 @@ public class CartVO implements Serializable{
 	private String userEmail;
 	private String imagePath;
 	private int price;
+	private String title;
 	
 	public CartVO() {
 		super();
@@ -24,6 +25,13 @@ public class CartVO implements Serializable{
 		this.userEmail = userEmail;
 	}
 	
+	
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 	public int getNumber() {
 		return number;
 	}

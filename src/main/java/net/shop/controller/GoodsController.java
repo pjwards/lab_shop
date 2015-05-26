@@ -10,7 +10,6 @@ import net.shop.vo.GoodsVO;
 import net.shop.vo.OrdersVO;
 import net.shop.vo.PagingVO;
 import net.shop.vo.UserVO;
-import net.shop.vo.WishlistVO;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -301,6 +299,7 @@ public class GoodsController {
         	return modelandview;
         }
         UserVO userVO = userService.selectOneVo(email);
+        modelandview.setViewName("/goods/cart");
         modelandview.addObject("cartlist", lists);
         modelandview.addObject("user", userVO);
     	request.setAttribute("hasUser", true);
@@ -309,8 +308,8 @@ public class GoodsController {
 	}
     
     //ajax add cart
-    @RequestMapping(value="/addCart.do")
-    public void addCart(@RequestParam(value="number") int boardNumber,
+    @RequestMapping(value="/addCartAjax.do", method=RequestMethod.POST)
+    public void addCartAjax(@RequestParam(value="number") int boardNumber,
     		@RequestParam(value = "choice") String choice,
     		HttpServletResponse response, Authentication auth)throws Exception{
     	
@@ -318,12 +317,12 @@ public class GoodsController {
     		response.getWriter().print("400");
 			return;
 		}
-	
+    	//int requestPage = Integer.parseInt(boardNumber);
     	UserDetails vo = (UserDetails) auth.getPrincipal();
     	String email = vo.getUsername();
     	
-    	if(goodsService.cartOne(boardNumber,email) == null){
-			response.getWriter().print("404");
+    	if(goodsService.cartOne(boardNumber,email) != null){
+    		response.getWriter().print("404");
 			return;
     	}
     	
@@ -331,16 +330,17 @@ public class GoodsController {
 		
     	if(choice.compareTo("go") != 0){
     		goodsService.addcartlist(cartVO);
-    		userService.delWishlist(email, boardNumber);
-    		response.getWriter().print("202");
+			response.getWriter().print("200");
 			return;
 		}else{
-    		goodsService.addcartlist(cartVO);
-			response.getWriter().print("200");
+			goodsService.addcartlist(cartVO);
+    		userService.delWishlist(email, boardNumber);
+    		response.getWriter().print("202");
 			return;
 		}
     	
     }
+    
     //add cart
 	@RequestMapping(value="/addCart.do")
     public String addCart(@RequestParam(value="number") int boardNumber,Model model,
@@ -370,7 +370,7 @@ public class GoodsController {
     	UserDetails vo = (UserDetails) auth.getPrincipal();
 		String email = vo.getUsername();
 		
-    	if(goodsService.cartOne(boardNumber, email) == null){
+    	if(goodsService.cartOne(boardNumber, email) != null){
     		model.addAttribute("say", "Already listed");
 			model.addAttribute("url", request.getContextPath()+"/board/read.do?s="+seperate+"&p=" + page + "&boardNumber=" + boardNumber);
 			return "/error/alert";
@@ -405,14 +405,14 @@ public class GoodsController {
 			model.addAttribute("url", request.getContextPath()+"/goods/cart.do");
 			return "/error/alert";
 		}
-  		return "/goods/cart";	
+  		return "redirect:/goods/cart.do";	
   	}
   	
   	//add order
 	@RequestMapping(value="/addOrders.do")
-  	public String addOrders(@RequestParam("addr")String address,
+  	public String addOrders(@RequestParam("no")int[] boardNumbers,
+  			@RequestParam("addr")String address,
   			@RequestParam("post")int postcode,
-  			@RequestParam("boardNumber")int[] boardNumbers,
   			@RequestParam("name")String receiver,
   			HttpServletRequest request, Model model
   			,Authentication auth) throws Exception{
@@ -436,6 +436,8 @@ public class GoodsController {
          	
           		OrdersVO ordersVO = new OrdersVO("Ok", email, sender, boardNumber, quantity, address, postcode, price, receiver);
           		goodsService.addorderlist(ordersVO);
+          		goodsService.cartDelete(boardNumber, email);
+          		
             }
         }else{
         	model.addAttribute("say", "Wrong Input");
@@ -443,6 +445,7 @@ public class GoodsController {
   			return "/error/alert";
         }
 	
+		
   		model.addAttribute("say", "Buy it successfully");
 		model.addAttribute("url", request.getContextPath()+"/user/orders.do");
 		return "/error/alert";

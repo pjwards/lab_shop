@@ -29,10 +29,14 @@
     <select id="selectList" parameterType="map" resultMap="wishlistResultMap">
       select wish.board_no, wish.no, total_price, title, wish.user_email from shop_wishlist as wish 
       inner join shop_board as board on wish.board_no=board.no
-      <if test="keyword != NULL">
-      where title like #{keyword}
-      </if>
-      where wish.user_email like #{userEmail}
+      <choose>
+      	<when test="keyword != NULL">
+      	where title like #{keyword} and wish.user_email like #{userEmail}
+      	</when>
+      	<otherwise>
+      	where wish.user_email like #{userEmail}
+      	</otherwise>
+      </choose>
       order by wish.no desc
  	  limit #{offset},#{limit}
     </select>

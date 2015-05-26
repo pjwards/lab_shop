@@ -20,6 +20,7 @@ public class OrdersVO {
 	private int postcode;
 	private int totalPrice;
 	private int boardNumber;	
+	private String title;
 	
 	public OrdersVO() {
 		super();
@@ -41,6 +42,12 @@ public class OrdersVO {
 	}
 
 	
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 	public String getReceiver() {
 		return receiver;
 	}

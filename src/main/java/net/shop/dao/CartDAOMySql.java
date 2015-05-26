@@ -49,7 +49,7 @@ public class CartDAOMySql implements CartDAO {
 		SqlSession sqlSession = sqlSessionFactory.openSession();
 
         try{
-            return sqlSession.insert("net.CartDao.delete", number);
+            return sqlSession.delete("net.CartDao.delete", number);
         }finally{
             sqlSession.close();
         }
@@ -62,6 +62,18 @@ public class CartDAOMySql implements CartDAO {
 
         try{
             return sqlSession.selectOne("net.CartDao.selectOne",paraMap);
+        }finally{
+            sqlSession.close();
+        }
+	}
+
+	@Override
+	public int deleteMap(HashMap<String, Object> paraMap) {
+		// TODO Auto-generated method stub
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.delete("net.CartDao.deleteMap",paraMap);
         }finally{
             sqlSession.close();
         }

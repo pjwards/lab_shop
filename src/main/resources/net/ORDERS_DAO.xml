@@ -16,14 +16,16 @@
     	<result column="total_price" property="totalPrice"/>
     	<result column="receiver" property="receiver"/>
     	<result column="board_no" property="boardNumber"/>
-    	
+    	<result column="title" property="title"/>
     </resultMap>
 
 	<select id="selectList" parameterType="map" resultMap="ordersResultMap">
-     select * from shop_orders
-      where user_email like #{userEmail}
-      order by no desc
- 	  limit #{offset},#{limit} 
+     select orders.no, orders.order_date, orders.order_now, orders.user_email, orders.user_name,
+     orders.quantity, orders.total_price, orders.receiver, orders.board_no, board.title from shop_orders as orders
+     inner join shop_board as board on orders.board_no=board.no
+     where orders.user_email like #{userEmail}
+     order by orders.no desc
+ 	 limit #{offset},#{limit} 
     </select>
     
     <delete id="delete" parameterType="int">

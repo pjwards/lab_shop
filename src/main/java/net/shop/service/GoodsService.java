@@ -100,6 +100,11 @@ public interface GoodsService {
 	public int cartDelete(int number);
 	
 	/*
+		Delete cart of selected email, boardBumber
+	*/
+	public int cartDelete(int boardNumber,String email);
+	
+	/*
 		Find cart of the number
 	 */
 	public CartVO cartOne(int boardNumber, String email);

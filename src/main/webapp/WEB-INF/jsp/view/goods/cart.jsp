@@ -56,43 +56,37 @@ $(document).ready(function(){
 	$(".order").click(function(){
 		var question = "Do you want to order it?";
 		var data = [];
-		var addr = $("#address").val();
-		var post = $("#postcode").val();
-		var name = $("#receiver").val();
+		var addr = $("#addr").text();
+		alert(addr);
+		var post = 123456;//$("#postcode").val();
+		var name = "hi";//$("#receiver").val();
 		
 		data.push($(this).attr("vals"));
 		confirmation(question).then(function (answer) {
 		    var ansbool = (String(answer) == "true");
 		    if(ansbool){
-				var link = '<%=request.getContextPath()%>/goods/addOrders.do?&no='+data+'&addr='+addr+'&post'+post+'&name='+name;
+				var link = '<%=request.getContextPath()%>/goods/addOrders.do?&no='+data+'&addr='+addr+'&post='+post+'&name='+name;
 				$(location).attr('href', link);
 		    }
 		});		
 	});
 	
-	var data = [];
-	
-	$('#box-table-a').find('tr').each(function(){
-		var tot = 0;
-		var row = $(this);
-		
-		if(row.find('input[type="checkbox"]').is(':checked')){
-			data.push(row.find('input[type="checkbox"]').is(':checked').value());
-			tot += $("sub_tot").val();
-		}
-		$("#total").text(tot);
-	});
-	
 	$("#total_order").click(function(){
 		var question = "Do you want to order it?";
-		var addr = $("#address").val();
-		var post = $("#postcode").val();
-		var name = $("#receiver").val();
+		var data = [];
+		var addr = 'seoul';//$("#addr").text();
+		//alert(addr);
+		var post = 123456;//$("#postcode").val();
+		var name = "hi";//$("#receiver").val();
 		
+		$('.order').each(function(){
+			data.push($(this).attr("vals"));
+		});
+		//alert(data);
 		confirmation(question).then(function (answer) {
 		    var ansbool = (String(answer) == "true");
 		    if(ansbool){
-				var link = '<%=request.getContextPath()%>/goods/addOrders.do?&no='+data+'&addr='+addr+'&post'+post+'&name='+name;
+				var link = '<%=request.getContextPath()%>/goods/addOrders.do?&no='+data+'&addr='+addr+'&post='+post+'&name='+name;
 				$(location).attr('href', link);
 		    }
 		});		
@@ -159,7 +153,7 @@ $(document).ready(function(){
 				<th scope="col">Price</th>
 				<th scope="col">Quantity</th>
 				<th scope="col">Sub Total</th>
-				<th scope="col">Order Now</th>
+				<th scope="col">Buy</th>
 				<th scope="col">Cancel</th>
 			</tr>
 		</thead>
@@ -168,36 +162,38 @@ $(document).ready(function(){
 			<c:forEach var="list" items="${cartlist}">
 				<c:set var="s" value="${s + list.quantity * list.price}"></c:set>
 			 <tr>
-			 	<td><input type="checkbox" class="check" value="${list.boardNumber}"></td>
 				<td><a href="<%=request.getContextPath()%>/goods/read.do?goodsNumber=${list.number}">${list.title}</a></td>
 				<td>${list.price }</td>
 				<td>${list.quantity }</td>
-				<td id="sub_tot">${list.quantity * list.goodsVO.price}</td>
-				<td><a href="#" class="order" vals="${list.boardNumber}">Buy</a></td>
+				<td id="sub_tot">${list.quantity * list.price}</td>
+				<td><a href="#" class="order" id="order" vals="${list.boardNumber}">Buy</a></td>
 				<td><a href="#" class="del_cart" vals="${list.number}">Cancel</a></td>
 			 </tr>
 			</c:forEach>
 		</tbody>
 		<tr>
-			<td colspan="5" align="right">Total Price</td>
-			<td id="total"></td>
-			<td><a href="#" id="total_order" vals="${list.boardNumber}">Buy</a></td>
+			<td colspan="3" align="right">Total Price : </td>
+			<td id="total">${s }</td>
+			<td><a href="#" id="total_order" vals="${list.boardNumber}">Buy All</a></td>
 		</tr>
 	 </table>
 	 <tr>
-	 	<td colspan="5" align="right">Your Address</td>
-	 	<td id="addr">${user.address }</td>
-	 	<td>Your Postcode</td>
-	 	<td id="post">${user.postcode }</td>
-	 	<td>Receiver</td>
-	 	<td id="name">${user.lastName }</td>
+	 	<td colspan="5" align="right">Your Address</td><br>
+	 	<td id="addr" vals = "${user.address }">${user.address }</td><br>
+	 	<td>Your Postcode</td><br>
+	 	<td id="post" vals = "${user.postcode }">${user.postcode }</td><br>
+	 	<td>Receiver</td><br>
+	 	<td id="name" vals ="${user.lastName }">${user.lastName }</td><br>
 	 	<button type="button" class="btn btn-primary btn-xs" id="change" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Change Info</button>
 		<div class="collapse" id="collapseExample">
   			<div class="well">
     				<fieldset>
     					<legend>Chage Info</legend>
+    						<p>Address</p>
     						<input type="text" class="form-control" id="address" name="address" maxlength="250" required="required" autocomplete="off" >
+    						<p>PostCode</p>
     						<input type="text" class="form-control" id="number" name="postcode" maxlength="6" required="required" autocomplete="off" >&nbsp;<span id="errmsg"></span>
+    						<p>Receiver</p>
     						<input type="text" class="form-control" id="receiver" name="receiver" maxlength="50" required="required" autocomplete="off"><br>
     						<input type="button" class="btn btn-primary btn-sm" id="change_info" name="change_info" value="Submit" >
     				</fieldset>
@@ -206,6 +202,7 @@ $(document).ready(function(){
 	 </tr>
    	</c:otherwise>
 </c:choose>
+<br>
 <a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </body>
 </html>

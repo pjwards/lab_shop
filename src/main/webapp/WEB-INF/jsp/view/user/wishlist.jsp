@@ -72,11 +72,10 @@ $(document).ready(function(){
 		    var ansbool = (String(answer) == "true");
 		    if(ansbool){
 				var arr = data.split('/');
-				alert(arr[0]);
 				$.ajax({
 					type:"POST",
-					url:"<%=request.getContextPath()%>/goods/addCart.do",
-					data:{ choice : arr[0], no : arr[1] },
+					url:"<%=request.getContextPath()%>/goods/addCartAjax.do",
+					data:{ number : arr[1], choice : arr[0] },
 					success:function(result){
 						if(result === "400"){
 							alert("Error");

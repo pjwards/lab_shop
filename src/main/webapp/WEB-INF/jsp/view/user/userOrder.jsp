@@ -100,7 +100,7 @@ $(document).ready(function(){
 			 <tr>
 				<th scope="row">${list.number }</th>
 				<td><fmt:formatDate value="${list.orderDate}" pattern="yyyy-MM-dd"/></td>
-				<td><a href="<%=request.getContextPath()%>/goods/read.do?goodsNumber=${list.goodsNumber}">${list.goodsName }</a></td>
+				<td><a href="<%=request.getContextPath()%>/goods/read.do?goodsNumber=${list.boardNumber}">${list.title }</a></td>
 				<td>${list.totalPrice }</td>
 				<td>${list.quantity }</td>
 				<td>${list.orderNow }</td>
@@ -114,6 +114,7 @@ $(document).ready(function(){
 				<td>${s }</td>
 			</tr>
 		</tbody>
+		
 		<tfoot>
 			<tr>
 				<td colspan="16" align="center">
