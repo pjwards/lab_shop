@@ -15,8 +15,8 @@
     </resultMap>
     
     <insert id="insert" parameterType="CartVO">
-        INSERT INTO shop_cart (board_no, user_email, quantity, address, receiver, postcode)
-        VALUE (#{boardNumber},#{userEmail},#{quantity}, #{address}, #{receiver},#{postcode})
+        INSERT INTO shop_cart (board_no, user_email, quantity)
+        VALUE (#{boardNumber},#{userEmail},#{quantity}, #{address})
     </insert>
     
     <select id="selectList" parameterType="String" resultMap="cartResultMap">
