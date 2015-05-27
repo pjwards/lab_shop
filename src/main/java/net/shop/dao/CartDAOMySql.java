@@ -79,4 +79,16 @@ public class CartDAOMySql implements CartDAO {
         }
 	}
 
+	@Override
+	public int changeMap(HashMap<String, Object> paraMap) {
+		// TODO Auto-generated method stub
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.delete("net.CartDao.changeMap",paraMap);
+        }finally{
+            sqlSession.close();
+        }
+	}
+
 }

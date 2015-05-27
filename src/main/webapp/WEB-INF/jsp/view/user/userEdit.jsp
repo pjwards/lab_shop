@@ -24,8 +24,10 @@
 <title>Edit</title>
 
 <script type="text/javascript">
+
 $(function(){
-	$("#input_pwd").on("click",function(){
+	$("#input_pwd").on("click",function(){		
+		
 		var pass1 = $("#password").val();
 		var pass2 = $("#password_chk").val();
 		
@@ -57,6 +59,9 @@ $(function(){
 					$("#password_chk").val('');
 				}else{
 					$("#txt").text(result);
+					$("#password").val('');
+					$("#password_chk").val('');
+					$('.collapse').collapse('hide'); 
 				}
 			}
 		});
@@ -74,6 +79,19 @@ $(function(){
 		}
 		
 	});
+	
+	$("#postcode").keypress(function (e) {
+	     //if the letter is not digit then display error and don't type anything
+	     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+	        //display error message
+	        $("#errmsg,#errmsg2").html("Digits Only").show().fadeOut("slow");
+	               return false;
+	    }
+	});
+	
+	$("#password_btn").on("click",function(){
+		$("#txt").text("");
+	});
 });
 </script>
 </head>
@@ -84,7 +102,7 @@ $(function(){
 		<br><br>
 		<input type="text" name="lastName" maxlength="50" required="required"  autocomplete="off" value="${uservo.lastName}">	
 		<br><br>
-		<button type="button" class="btn btn-primary btn-xs" id="password_btn" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Change Password</button><br>
+		<button type="button" class="btn btn-primary btn-xs" id="password_btn" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Change Password</button><p id="txt"></p>
 		<div class="collapse" id="collapseExample">
   			<div class="well">
     				<fieldset>
@@ -92,13 +110,12 @@ $(function(){
     						<input type="password" class="form-control" id="password" name="password" maxlength="20" required="required" placeholder="Password" autocomplete="off" >
     						<input type="password" class="form-control" id="password_chk" name="password2" maxlength="20" required="required" placeholder="Password again" autocomplete="off" >
     						<input type="button" class="btn btn-primary btn-sm" id="input_pwd" name="input_pwd" value="Submit" >
-    						<p id="txt"></p>
     				</fieldset>
   			</div>
 		</div>
 		<br>
 		<input type="text" class="form-control" name="address" maxlength="250" required="required" autocomplete="off" value="${uservo.address}"><br>
-		<input type="text" class="form-control" id="postcode" name="postcode" maxlength="6" required="required" autocomplete="off" value="${uservo.postcode}"><br>
+		<input type="text" class="form-control" id="postcode" name="postcode" maxlength="6" required="required" autocomplete="off" value="${uservo.postcode}">&nbsp;<span id="errmsg"></span><br>
 		<input type="file" name="thumnail"/>
 		<br>
 		<button type="submit" class="btn btn-primary" value="submit">Submit</button>	 

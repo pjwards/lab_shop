@@ -172,7 +172,7 @@ function search_enter(form){
 		<tfoot>
 			<tr>
 				<td colspan="16" align="center">
-  				 <c:if test="${pagingVO.beginPage > 5}">
+  				 <c:if test="${pagingVO.beginPage > 10}">
                     	 <a href="<c:url value="userList.do?q=${keyword }&order=${order}&p=${pagingVO.beginPage-1}"/> ">이전</a>
                  </c:if>
                  <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">

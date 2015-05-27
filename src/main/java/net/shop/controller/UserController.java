@@ -97,7 +97,7 @@ public class UserController {
         }
 
         /*Paging 메소드의 사용 */
-        PagingVO pagingVO = util.paging(requestPage, 5, totalCount);
+        PagingVO pagingVO = util.paging(requestPage, 10, totalCount);
         modelandview.addObject("pagingVO", pagingVO);
         modelandview.setViewName("/user/userList");
         
@@ -376,7 +376,7 @@ public class UserController {
         }
         
         /*Paging 메소드의 사용 */
-        PagingVO pagingVO = util.paging(requestPage, 5, totalCount);
+        PagingVO pagingVO = util.paging(requestPage, 10, totalCount);
         modelandview.addObject("pagingVO", pagingVO);
         modelandview.setViewName("/user/wishlist");
         
@@ -483,7 +483,7 @@ public class UserController {
 		int totalCount = userService.orderCount();
 		
 		/*Paging 메소드의 사용 */
-        PagingVO pagingVO = util.paging(requestPage, 5, totalCount);
+        PagingVO pagingVO = util.paging(requestPage, 10, totalCount);
         modelandview.addObject("pagingVO", pagingVO);
         modelandview.setViewName("/user/userOrder");
         if(totalCount == 0){

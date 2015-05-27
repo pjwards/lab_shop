@@ -88,6 +88,15 @@ $(function(){
 			return false;
 		}
 	});
+	
+	$("#postcode").keypress(function (e) {
+	     //if the letter is not digit then display error and don't type anything
+	     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+	        //display error message
+	        $("#errmsg,#errmsg2").html("Digits Only").show().fadeOut("slow");
+	               return false;
+	    }
+	});
 });
 </script>
 </head>
@@ -99,7 +108,7 @@ $(function(){
 		<input type="button" class="btn btn-primary btn-sm" id="check_email" name="check_email" value="Check" ><p id="txt"></p><br>
 		<input type="password" class="form-control" name="password" maxlength="20" required="required" placeholder="Password" autocomplete="off"><br>
 		<input type="text" class="form-control" name="address" maxlength="250" required="required" placeholder="Address" autocomplete="off"><br>
-		<input type="text" class="form-control" id="postcode" name="postcode" maxlength="6" required="required" placeholder="Postcode" autocomplete="off"><br>
+		<input type="text" class="form-control" id="postcode" name="postcode" maxlength="6" required="required" placeholder="Postcode" autocomplete="off">&nbsp;<span id="errmsg"></span><br><br>
 		<input type="file" name="thumnail"/><br>
 		<button type="submit" class="btn btn-primary" value="submit">Submit</button>
 	</form>

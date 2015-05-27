@@ -15,8 +15,8 @@
     </resultMap>
     
     <insert id="insert" parameterType="CartVO">
-        INSERT INTO shop_cart (board_no, user_email, quantity)
-        VALUE (#{boardNumber},#{userEmail},#{quantity})
+        INSERT INTO shop_cart (board_no, user_email, quantity, address, receiver, postcode)
+        VALUE (#{boardNumber},#{userEmail},#{quantity}, #{address}, #{receiver},#{postcode})
     </insert>
     
     <select id="selectList" parameterType="String" resultMap="cartResultMap">
@@ -39,4 +39,8 @@
       inner join shop_board as board on cart.board_no=board.no
       where cart.user_email=#{userEmail} and cart.board_no=#{boardNumber}
     </select>
+    
+    <update id="changeMap" parameterType="map">
+   		update shop_cart set quantity=#{quantity} where no=#{number}
+    </update>
 </mapper>

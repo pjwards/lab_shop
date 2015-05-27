@@ -45,7 +45,7 @@ $(document).ready(function(){
 		var question = "Do you want to delete it?";
 		var data = $(this).attr("vals");
 		confirmation(question).then(function (answer) {
-		    var ansbool = (String(answer) == "true");
+		    var ansbool = (String(answer) === "true");
 		    if(ansbool){
 				var link = 'delCart.do?&no='+data+'&choice='+ansbool;
 				$(location).attr('href', link);
@@ -56,17 +56,51 @@ $(document).ready(function(){
 	$(".order").click(function(){
 		var question = "Do you want to order it?";
 		var data = [];
-		var addr = $("#addr").text();
-		alert(addr);
-		var post = 123456;//$("#postcode").val();
-		var name = "hi";//$("#receiver").val();
+		var addr = "${user.lastName }";
+		var post = "${user.address }";
+		var name = "${user.postcode }";
 		
 		data.push($(this).attr("vals"));
 		confirmation(question).then(function (answer) {
-		    var ansbool = (String(answer) == "true");
+		    var ansbool = (String(answer) === "true");
 		    if(ansbool){
 				var link = '<%=request.getContextPath()%>/goods/addOrders.do?&no='+data+'&addr='+addr+'&post='+post+'&name='+name;
 				$(location).attr('href', link);
+		    }
+		});		
+	});
+	
+	$(".change_quan").click(function(){
+		var question = "Do you want to change it?";
+		var number = $(this).attr("vals");
+		var quantity = $("#qty_"+number).val();
+		var price = $("#price_"+number).attr("vals");
+		if(quantity === 0){
+			alert("No zero quantity");
+			return;
+		}
+		confirmation(question).then(function (answer) {
+		    var ansbool = (String(answer) === "true");
+		    if(ansbool){
+		    	$.ajax({
+					type:"POST",
+					url:"<%=request.getContextPath()%>/goods/changeQuan.do",
+					data:{quantity:quantity, number:number},
+					success:function(result){
+						if(result === "400"){
+							alert("Error");
+						}else{
+							var total = 0;
+							$("#qty_"+number).val(result);
+							$("#sub_tot_"+number).text(price*result);
+							$("table tbody").find("td.sub_tot").each(function(){
+								var sub = $(this).text();
+								total = total + parseInt(sub);
+							});
+							$("#total").text(total);
+						}
+					}
+				});
 		    }
 		});		
 	});
@@ -74,17 +108,16 @@ $(document).ready(function(){
 	$("#total_order").click(function(){
 		var question = "Do you want to order it?";
 		var data = [];
-		var addr = 'seoul';//$("#addr").text();
-		//alert(addr);
-		var post = 123456;//$("#postcode").val();
-		var name = "hi";//$("#receiver").val();
+		var addr = "${user.lastName }";
+		var post = "${user.address }";
+		var name = "${user.postcode }";
 		
 		$('.order').each(function(){
 			data.push($(this).attr("vals"));
 		});
 		//alert(data);
 		confirmation(question).then(function (answer) {
-		    var ansbool = (String(answer) == "true");
+		    var ansbool = (String(answer) === "true");
 		    if(ansbool){
 				var link = '<%=request.getContextPath()%>/goods/addOrders.do?&no='+data+'&addr='+addr+'&post='+post+'&name='+name;
 				$(location).attr('href', link);
@@ -92,44 +125,41 @@ $(document).ready(function(){
 		});		
 	});
 	
-	$("#change_info").on("click",function(){
+	/* $("#change_info").on("click",function(){
 		var addr = $("#address").val();
 		var post = $("#postcode").val();
 		var name = $("#receiver").val();
 		
 		if(addr === "" || post === "" || name === "" ){
 			$("#address").focus();
-			alert("Input it");
+			alert("Fill out all");
 			return false;
 		}
 		
-		var trimcode = post.trim();
-		if(trimcode.length !== 6){
-			alert("Check your postcode again");
-			$("#postcode").focus();
-			return false;
-		}
+		var trimAddr = addr.trim();
+		var trimName = name.trim();
 		
-		var intcode = parseInt(trimcode);
-		if (intcode>999999 || intcode<100000) {
-			alert("Check your postcode again");
-			$("#postcode").focus();
-			return false;
-		}
+		$("#addr").text(trimAddr);
+		$("#post").text(post);
+		$("#name").text(trimName);
 		
-		$("#addr").text(addr);
-		$("#post").text(intcode);
-		$("#name").text(name);
-	});
+		$("#address").val('');
+		$("#postcode").val('');
+		$("#receiver").val('');
+		$('.collapse').collapse('hide');
+	}); */
 	
-	$("#number").keypress(function (e) {
+	$(".number").keypress(function (e) {
 	     //if the letter is not digit then display error and don't type anything
+	     var number = $(this).attr("vals");
+	     
 	     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
 	        //display error message
-	        $("#errmsg").html("Digits Only").show().fadeOut("slow");
+	        $("#errmsg"+number).html("Digits Only").show().fadeOut("slow");
 	               return false;
 	    }
 	});
+
 });
 </script>
 </head>
@@ -146,7 +176,7 @@ $(document).ready(function(){
             </tr>
     </c:when>
    	<c:otherwise>
-   		<table id="box-table-a" class="table table-hover">
+   		<table id="box-table-a" class="table table-hover" id="table">
 		<thead>
 			<tr>
 				<th scope="col">Product</th>
@@ -163,9 +193,10 @@ $(document).ready(function(){
 				<c:set var="s" value="${s + list.quantity * list.price}"></c:set>
 			 <tr>
 				<td><a href="<%=request.getContextPath()%>/goods/read.do?goodsNumber=${list.number}">${list.title}</a></td>
-				<td>${list.price }</td>
-				<td>${list.quantity }</td>
-				<td id="sub_tot">${list.quantity * list.price}</td>
+				<td id="price_${list.number}" class="prc" vals="${list.price }">${list.price }</td>
+				<td><input type="text" value="${list.quantity }" id="qty_${list.number}" class="number" vals="${list.number}"/>
+					<input type="button" class="change_quan" vals="${list.number}" value="Change" >&nbsp;<span id="errmsg${list.number}" class="error"></span></td>
+				<td id="sub_tot_${list.number}" class="sub_tot">${list.quantity * list.price}</td>
 				<td><a href="#" class="order" id="order" vals="${list.boardNumber}">Buy</a></td>
 				<td><a href="#" class="del_cart" vals="${list.number}">Cancel</a></td>
 			 </tr>
@@ -177,29 +208,6 @@ $(document).ready(function(){
 			<td><a href="#" id="total_order" vals="${list.boardNumber}">Buy All</a></td>
 		</tr>
 	 </table>
-	 <tr>
-	 	<td colspan="5" align="right">Your Address</td><br>
-	 	<td id="addr" vals = "${user.address }">${user.address }</td><br>
-	 	<td>Your Postcode</td><br>
-	 	<td id="post" vals = "${user.postcode }">${user.postcode }</td><br>
-	 	<td>Receiver</td><br>
-	 	<td id="name" vals ="${user.lastName }">${user.lastName }</td><br>
-	 	<button type="button" class="btn btn-primary btn-xs" id="change" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Change Info</button>
-		<div class="collapse" id="collapseExample">
-  			<div class="well">
-    				<fieldset>
-    					<legend>Chage Info</legend>
-    						<p>Address</p>
-    						<input type="text" class="form-control" id="address" name="address" maxlength="250" required="required" autocomplete="off" >
-    						<p>PostCode</p>
-    						<input type="text" class="form-control" id="number" name="postcode" maxlength="6" required="required" autocomplete="off" >&nbsp;<span id="errmsg"></span>
-    						<p>Receiver</p>
-    						<input type="text" class="form-control" id="receiver" name="receiver" maxlength="50" required="required" autocomplete="off"><br>
-    						<input type="button" class="btn btn-primary btn-sm" id="change_info" name="change_info" value="Submit" >
-    				</fieldset>
-  			</div>
-		</div>
-	 </tr>
    	</c:otherwise>
 </c:choose>
 <br>

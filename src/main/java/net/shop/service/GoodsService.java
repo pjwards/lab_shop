@@ -108,4 +108,9 @@ public interface GoodsService {
 		Find cart of the number
 	 */
 	public CartVO cartOne(int boardNumber, String email);
+
+	/*
+	 	Cange quantity of specific cart data
+	 */
+	public int cartChange(int quantity, int cartNumber);
 }

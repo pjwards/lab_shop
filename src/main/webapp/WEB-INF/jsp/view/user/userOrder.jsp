@@ -90,7 +90,7 @@ $(document).ready(function(){
 				<th scope="col">State of Order</th>
 				<th scope="col">Orderer</th>
 				<th scope="col">Receiver</th>
-				<th scope="col">Cancel</th>
+				<th scope="col">Delete it on List</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -106,26 +106,22 @@ $(document).ready(function(){
 				<td>${list.orderNow }</td>
 				<td>${list.userName}</td>
 				<td>${list.receiver}</td>
-				<td><a href="#" class="del_order" vals="${list.number}">Cancel</a></td>
+				<td><a href="#" class="del_order" vals="${list.number}">Delete</a></td>
 			 </tr>
 			</c:forEach>
-			<tr>
-				<td colspan="5" align="right">Total Price</td>
-				<td>${s }</td>
-			</tr>
 		</tbody>
 		
 		<tfoot>
 			<tr>
 				<td colspan="16" align="center">
-  					<c:if test="${pagingVO.beginPage > 5}">
-                       	<a href="<c:url value="search.do?q=${keyword }&p=${pagingVO.beginPage-1}"/> ">이전</a>
+  					<c:if test="${pagingVO.beginPage > 10}">
+                       	<a href="<c:url value="orders.do?p=${pagingVO.beginPage-1}"/> ">이전</a>
                    	</c:if>
                  	<c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
-                       	<a href="<c:url value="search.do?q=${keyword }&p=${pno}"/> ">[${pno}]</a>
+                       	<a href="<c:url value="orders.do?p=${pno}"/> ">[${pno}]</a>
              		</c:forEach>
                		<c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
-                  		<a href="<c:url value="search.do?q=${keyword }&p=${pagingVO.endPage + 1}"/> ">다음</a>
+                  		<a href="<c:url value="orders.do?p=${pagingVO.endPage + 1}"/> ">다음</a>
                   	</c:if>
  				 </td>
 			</tr>

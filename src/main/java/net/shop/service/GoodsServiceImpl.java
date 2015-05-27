@@ -134,4 +134,13 @@ public class GoodsServiceImpl implements GoodsService {
 		paraMap.put("userEmail", email);
 		return cartDAO.deleteMap(paraMap);
 	}
+
+	@Override
+	public int cartChange(int quantity, int cartNumber) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> paraMap = new HashMap<String, Object>();
+		paraMap.put("number", cartNumber);
+		paraMap.put("quantity", quantity);
+		return cartDAO.changeMap(paraMap);
+	}
 }

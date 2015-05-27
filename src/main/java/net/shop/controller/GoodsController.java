@@ -341,6 +341,24 @@ public class GoodsController {
     	
     }
     
+    //ajax change Quantity of specific data
+    @RequestMapping(value="/changeQuan.do", method=RequestMethod.POST)
+    public void changeQuan(@RequestParam(value="quantity") int quantity,
+    		@RequestParam(value = "number") int cartNumber,
+    		HttpServletResponse response, Authentication auth)throws Exception{
+    	
+    	if(quantity == 0){
+    		response.getWriter().print("400");
+			return;
+    	}
+    	
+    	if(goodsService.cartChange(quantity,cartNumber) == 0){
+    		response.getWriter().print("400");
+			return;
+		}
+    	
+    	response.getWriter().print(quantity);
+    }
     //add cart
 	@RequestMapping(value="/addCart.do")
     public String addCart(@RequestParam(value="number") int boardNumber,Model model,

@@ -16,6 +16,8 @@ public interface CartDAO {
 	public CartVO selectOne(HashMap<String, Object> paraMap);
 
 	public int deleteMap(HashMap<String, Object> paraMap);
+
+	public int changeMap(HashMap<String, Object> paraMap);
 	
 
 }
