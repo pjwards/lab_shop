@@ -4,15 +4,17 @@
 			
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<script type="text/javascript">
-
-</script>	                        	
+<%@ include file="/WEB-INF/jsp/includes/src.jsp"%>
+<%@ include file="/WEB-INF/jsp/includes/header.jsp"%>
+                        	
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Sign In</title>
 </head>
 
 <body>
+<%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
+<div class="main">
 <form action="<c:url value='/j_spring_security_check' />" id="signin" method="post">
     Email:<br>
  	<input type="text" name="email" id="email" required="required" placeholder="email" autocomplete="off"><br>    
@@ -30,5 +32,6 @@
     <button type="submit" class="btn btn-primary btn-lg active">Sign In</button><br>
 </form>
 <a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
+</div>
 </body>
 </html>

@@ -6,18 +6,23 @@
  * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
  * version      : 
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.min.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap-theme.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/daumeditor/css/editor.css" type="text/css" charset="utf-8"/>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bpopup.css" type="text/css" charset="utf-8"/>
+<script src="<%=request.getContextPath()%>/resource/daumeditor/js/editor_loader.js" type="text/javascript" charset="utf-8"></script>
+<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+<script src="<%=request.getContextPath()%>/resource/js/jquery.bpopup.min.js"></script>
+<script src="<%=request.getContextPath()%>/resource/js/board/editor.js"></script>
+<script src="<%=request.getContextPath()%>/resource/js/board/popup.js"></script>
+<%@ include file="/WEB-INF/jsp/includes/header.jsp"%>
 <head>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/resource/daumeditor/css/editor.css" type="text/css" charset="utf-8"/>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bpopup.css" type="text/css" charset="utf-8"/>
-    <script src="<%=request.getContextPath()%>/resource/daumeditor/js/editor_loader.js" type="text/javascript" charset="utf-8"></script>
-    <script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
-    <script src="<%=request.getContextPath()%>/resource/js/jquery.bpopup.min.js"></script>
-    <script src="<%=request.getContextPath()%>/resource/js/board/editor.js"></script>
-    <script src="<%=request.getContextPath()%>/resource/js/board/popup.js"></script>
+
     <title>글 수정</title>
 
     <style type="text/css">
@@ -31,7 +36,8 @@
     </script>
 </head>
 <body>
-
+<%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
+<div class="main">
 <!-- start editor -->
 <div>
     <form id="frm" name="frm" action="<c:url value="/board/update.do" />" method="post" accept-charset="utf-8">
@@ -123,5 +129,6 @@
     "content":$tx('daumeditor')
     });
 </script>
+</div>
 </body>
 </html>

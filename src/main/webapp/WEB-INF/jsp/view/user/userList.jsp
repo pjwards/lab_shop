@@ -7,17 +7,16 @@
  * version      :
 --%>
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<%@ include file="/WEB-INF/jsp/includes/src.jsp"%>
+<%@ include file="/WEB-INF/jsp/includes/header.jsp"%>
 <head>
-<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.css">
-<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
-<script src="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.js"></script>
-
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#search_btn").click(function(){
@@ -89,6 +88,8 @@ function search_enter(form){
 <title>UserList</title>
 </head>
 <body>
+<%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
+<div class="main">
 	<c:if test="${pagingVO.totalPageCount > 0}">
         <tr>
             <td colspan="5">
@@ -194,5 +195,6 @@ function search_enter(form){
 	</form>
 	
 	<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
+</div>
 </body>
 </html>

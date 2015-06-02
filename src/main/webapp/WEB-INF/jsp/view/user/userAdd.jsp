@@ -11,15 +11,10 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<%@ include file="/WEB-INF/jsp/includes/src.jsp"%>
+<%@ include file="/WEB-INF/jsp/includes/header.jsp"%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<!-- CSS Files -->
-<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.min.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap-theme.css">
-<!-- Javascript -->
-<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
-<script src="<%=request.getContextPath()%>/resource/js/bootstrap.min.js"></script>
 
 <title>add</title>
 
@@ -101,6 +96,8 @@ $(function(){
 </script>
 </head>
 <body>
+<%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
+<div class="main">
 	<form action="" method="post" enctype="multipart/form-data" id="submit_form" name="submit_form">
 		<input type="text" class="form-control" name="firstName" maxlength="50" required="required" placeholder="First name" autocomplete="off"><br>
 		<input type="text" class="form-control" name="lastName" maxlength="50" required="required" placeholder="Last name" autocomplete="off"><br>
@@ -113,5 +110,6 @@ $(function(){
 		<button type="submit" class="btn btn-primary" value="submit">Submit</button>
 	</form>
 	<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
+</div>
 </body>
 </html>

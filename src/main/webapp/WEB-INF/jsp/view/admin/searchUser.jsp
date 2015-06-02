@@ -12,6 +12,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%@ include file="/WEB-INF/jsp/includes/src.jsp"%>
+<%@ include file="/WEB-INF/jsp/includes/header.jsp"%>
 
 <title>Search USER</title>
 
@@ -37,7 +38,8 @@ function search_enter(form){
 </script>
 </head>
 <body>
-
+<%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
+<div class="main">
 <h1>Search</h1>
 <form id="search" method="post">
 		<input type="text" name="search_word" id="q" onkeypress="search_enter(document.q);" autocomplete="off"/>
@@ -107,5 +109,6 @@ function search_enter(form){
    	</c:otherwise>
 </c:choose>
 <a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
+</div>
 </body>
 </html>

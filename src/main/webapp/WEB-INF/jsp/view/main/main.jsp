@@ -6,25 +6,22 @@
   Time: 오후 2:29
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 
-<!-- CSS Files -->
-<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.min.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap-theme.css">
-<!-- Javascript -->
-<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
-<script src="<%=request.getContextPath()%>/resource/js/bootstrap.min.js"></script>
-
+<%@ include file="/WEB-INF/jsp/includes/src.jsp"%>
+<%@ include file="/WEB-INF/jsp/includes/header.jsp"%>
 <head>
-    <title>Main</title>
+    <title>Shop</title>
 </head>
 
 <body>
-<h1>Main page</h1> 
+<%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
+<div class="main">
 
+<h1>Main page</h1> 
 <ul>
 	<li><a href="<%=request.getContextPath()%>/user/userAdd.do">Sign Up</a></li>
 	<c:choose>
@@ -41,18 +38,22 @@
 		</c:otherwise>
 	</c:choose>
 	<li><a href="<%=request.getContextPath()%>/user/userList.do">User List</a></li>
+	<li><a href="<%=request.getContextPath()%>/goods/list.do">Goods List</a></li>
+    <li><a href="<%=request.getContextPath()%>/admin/search.do">Search users</a></li>
+    
 	<li><a href="<%=request.getContextPath()%>/board/list.do?s=default">Board List</a></li>
     <li><a href="<%=request.getContextPath()%>/board/list.do?s=notice">Notice Board List</a></li>
     <li><a href="<%=request.getContextPath()%>/board/list.do?s=qna">QnA Board List</a></li>
+    
     <li><a href="<%=request.getContextPath()%>/upload.do">upload</a></li>
     <li><a href="<%=request.getContextPath()%>/download.do">download</a></li>
-    <li><a href="<%=request.getContextPath()%>/goods/list.do">Goods List</a></li>
-    <li><a href="<%=request.getContextPath()%>/admin/search.do">Search users</a></li>
-    <li><a href="<%=request.getContextPath()%>/email.do">Email</a></li>    
+    <li><a href="<%=request.getContextPath()%>/email.do">Email</a></li>   
+     
     <!-- <li><a href="test.jsp">Test</a></li>  --> 
 	<li><a href="<%=request.getContextPath()%>/goods/listByBoard.do?boardNumber=13">Goods List By Board</a></li>
 	<li><a href="<%=request.getContextPath()%>/board/list.do?s=product">Product Board List</a></li>
 </ul>
+</div>
 </body>
 
 </html>

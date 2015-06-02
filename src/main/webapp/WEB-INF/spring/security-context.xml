@@ -11,12 +11,15 @@
    		<intercept-url pattern="/main/login.do" access="isAnonymous()" />
    		<intercept-url pattern="/user/userAdd.do" access="isAnonymous()" />
 		<intercept-url pattern="/user/userList.do" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/user/userEdit.do" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/user/userDelete.do" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/user/userEdit.do" access="isAuthenticated()" />
+		<intercept-url pattern="/user/userDelete.do" access="isAuthenticated()" />
 		<intercept-url pattern="/user/giveAuth.do" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/admin/search.do" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/user/wishlist.do" access="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
-		<intercept-url pattern="/user/orders.do" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/user/wishlist.do" access="isAuthenticated()" />
+		<intercept-url pattern="/user/orders.do" access="isAuthenticated()" />
+		<intercept-url pattern="/goods/cart.do" access="isAuthenticated()" />
+		<intercept-url pattern="/email.do" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/goods/list.do" access="hasRole('ROLE_ADMIN')" />
 		
 		<form-login 
 		    login-page="/main/login.do" 

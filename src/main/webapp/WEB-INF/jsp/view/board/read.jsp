@@ -6,25 +6,29 @@
  * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
  * version      :
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+  	
+<!-- CSS Files -->
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.min.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap-theme.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bpopup.css" type="text/css" charset="utf-8"/>
+    
+<!-- Javascript -->
+<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+<script src="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.min.js"></script>
+<script src="<%=request.getContextPath()%>/resource/js/bootstrap.min.js"></script>
+<script src="<%=request.getContextPath()%>/resource/js/board/boardComment.js"></script>
 
+<%@ include file="/WEB-INF/jsp/includes/header.jsp"%>
 <html>
 <head>
     <title>글 읽기</title>
-  	<!-- CSS Files -->
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.css">
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap.min.css">
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bootstrap-theme.css">
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/resource/css/bpopup.css" type="text/css" charset="utf-8"/>
-    
-    <!-- Javascript -->
-	<script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
-	<script src="<%=request.getContextPath()%>/resource/jqueryui/jquery-ui.min.js"></script>
-	<script src="<%=request.getContextPath()%>/resource/js/bootstrap.min.js"></script>
-    <script src="<%=request.getContextPath()%>/resource/js/board/boardComment.js"></script>
+
     
     <script type="text/javascript">
         contextPath = "${pageContext.request.contextPath}";
@@ -122,6 +126,8 @@
     </script>
 </head>
 <body>
+<%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
+<div class="main">
 <table>
     <tr>
         <td>제목</td>
@@ -194,5 +200,6 @@
 <div id="review"></div>
 <div id="qna"></div>
 <a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
+</div>
 </body>
 </html>
