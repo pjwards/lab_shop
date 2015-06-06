@@ -20,6 +20,7 @@
         <result column="separator_name" property="separatorName"/>
         <result column="file_no" property="fileNumber"/>
         <result column="total_price" property="totalPrice"/>
+        <result column="image_path" property="imagePath"/>
     </resultMap>
 
     <select id="selectCount" resultType="int">
@@ -39,8 +40,8 @@
     </select>
 
     <insert id="insert" parameterType="BoardVO">
-        INSERT INTO shop_board (group_no, sequence_no, title, content, posting_date, read_count, comment_count, file_count, goods_count, user_no, user_email, separator_name, total_price)
-        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),0,0,0,0,#{userNumber},#{userEmail},#{separatorName},#{totalPrice})
+        INSERT INTO shop_board (group_no, sequence_no, title, content, posting_date, read_count, comment_count, file_count, goods_count, user_no, user_email, separator_name, total_price, image_path)
+        VALUE (#{groupNumber},#{sequenceNumber},#{title},#{content},now(),0,0,0,0,#{userNumber},#{userEmail},#{separatorName},#{totalPrice},#{imagePath})
     </insert>
 
     <select id="selectOne" parameterType="int" resultMap="boardResultMap">

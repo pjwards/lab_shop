@@ -27,6 +27,7 @@ public class BoardVO extends ReplyVO{
     private String separatorName;
     private int fileNumber;
     private int totalPrice;
+    private String imagePath;
 
     public int getNumber() {
         return number;
@@ -146,5 +147,13 @@ public class BoardVO extends ReplyVO{
 
     public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

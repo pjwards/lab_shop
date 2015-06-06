@@ -53,6 +53,7 @@ create table shop_board (
 	separator_name varchar(20) not null,
 	file_no int,
 	total_price int not null,
+	image_path varchar(50),
 	primary key (no),
 	index (sequence_no),
 	foreign key(user_no) references shop_user(no),
