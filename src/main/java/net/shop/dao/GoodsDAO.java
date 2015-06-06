@@ -2,6 +2,7 @@ package net.shop.dao;
 
 import net.shop.vo.GoodsVO;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -21,6 +22,11 @@ public interface GoodsDAO {
     public int selectCount(String memberId) throws Exception;
 
     /*
+    HashMap 을 사용하여 유저에 대한 상품 전체 개수를 구한다.
+     */
+    public int selectCount(HashMap<String,Object> map) throws Exception;
+
+    /*
     특정한 ID 값을 사용해 해당 상품을 조회한다.
      */
     public GoodsVO selectOne(int goodsNumber) throws Exception;
@@ -29,6 +35,11 @@ public interface GoodsDAO {
     전체 상품 리스트를 읽어온다.
      */
     public List<GoodsVO> selectList(String memberId, int firstRow, int endRow) throws Exception;
+
+    /*
+    HashMap 을 사용하여 전체 상품 리스트를 읽어온다.
+     */
+    public List<GoodsVO> selectList(HashMap<String,Object> map) throws Exception;
 
     /*
     상품을 등록한다.

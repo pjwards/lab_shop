@@ -40,6 +40,17 @@ public class GoodsDAOMySql implements GoodsDAO {
     }
 
     @Override
+    public int selectCount(HashMap<String, Object> map) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectOne("net.GoodsDao.selectCountByKeyword", map);
+        }finally{
+            sqlSession.close();
+        }
+    }
+
+    @Override
     public GoodsVO selectOne(int goodsNumber) throws Exception {
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
@@ -62,6 +73,17 @@ public class GoodsDAOMySql implements GoodsDAO {
 
         try{
             return sqlSession.selectList("net.GoodsDao.selectList", map);
+        }finally{
+            sqlSession.close();
+        }
+    }
+
+    @Override
+    public List<GoodsVO> selectList(HashMap<String, Object> map) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectList("net.GoodsDao.selectListByKeyword", map);
         }finally{
             sqlSession.close();
         }

@@ -56,19 +56,31 @@ public class BoardController {
      */
     @RequestMapping(value = "/list.do")
     public ModelAndView boardList(@RequestParam(value = "p", required = false) Integer requestPage,
-                                  @RequestParam(value = "s", required = false) String separator) throws Exception{
+                                  @RequestParam(value = "s", required = false) String separator,
+                                  @RequestParam(value="q",required=false) String keyword) throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
 
         if(requestPage == null) requestPage = 1;
         if(requestPage <= 0) return (ModelAndView)new ModelAndView("redirect:/board/list.do?s=" + separator);
 
-        int totalCount;
-        if(separator  == null || separator.equals(""))  {
-            totalCount = boardService.selectCount();
-        } else {
-            totalCount = boardService.selectCount(separator);
+        if(separator == null || separator.equals("")) {
+            separator = null;
         }
+
+        if(keyword == null || keyword.equals("")) {
+            keyword = null;
+        }
+
+        int totalCount;
+
+//        if(separator  == null || separator.equals(""))  {
+//            totalCount = boardService.selectCount();
+//        } else {
+//            totalCount = boardService.selectCount(separator);
+//        }
+
+        totalCount = boardService.selectCount(separator, keyword);
 
         /*Paging 메소드의 사용 */
         PagingVO pagingVO = util.paging(requestPage, 10, totalCount);
@@ -85,11 +97,14 @@ public class BoardController {
         }
 
         List<BoardVO> boardVOList;
-        if(separator  == null || separator.equals(""))  {
-            boardVOList = boardService.selectList(pagingVO.getFirstRow(), pagingVO.getEndRow());
-        } else {
-            boardVOList = boardService.selectList(pagingVO.getFirstRow(), pagingVO.getEndRow(), separator);
-        }
+//        if(separator  == null || separator.equals(""))  {
+//            boardVOList = boardService.selectList(pagingVO.getFirstRow(), pagingVO.getEndRow());
+//        } else {
+//            boardVOList = boardService.selectList(pagingVO.getFirstRow(), pagingVO.getEndRow(), separator);
+//        }
+
+        boardVOList = boardService.selectList(pagingVO.getFirstRow(), pagingVO.getEndRow(), separator, keyword);
+
 
         modelAndView.addObject("boardVOList", boardVOList);
         modelAndView.addObject("hasBoard", true);

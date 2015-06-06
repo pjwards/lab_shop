@@ -7,6 +7,7 @@ import net.shop.vo.CartVO;
 import net.shop.vo.GoodsVO;
 import net.shop.vo.OrdersVO;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,6 +42,16 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public int selectCount(String memberId, String keyword) throws Exception {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+
+        map.put("memberId", memberId);
+        map.put("keyword", keyword);
+
+        return goodsDAO.selectCount(map);
+    }
+
+    @Override
     public GoodsVO selectOne(int goodsNumber) throws Exception {
         return goodsDAO.selectOne(goodsNumber);
     }
@@ -48,6 +59,19 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<GoodsVO> selectList(String memberId, int firstRow, int endRow) throws Exception {
         return goodsDAO.selectList(memberId, firstRow, endRow);
+    }
+
+    @Override
+    public List<GoodsVO> selectList(String memberId, int firstRow, int endRow, String keyword) throws Exception {
+
+        RowBounds rowBounds = new RowBounds(firstRow - 1, endRow - firstRow + 1);
+
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("memberId", memberId);
+        map.put("rowBounds", rowBounds);
+        map.put("keyword", keyword);
+        return goodsDAO.selectList(map);
     }
 
     @Override

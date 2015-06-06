@@ -18,6 +18,28 @@
 <head>
 	
     <title>게시글 목록</title>
+
+    <script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#search_btn").click(function(){
+                if($("#q").val() == ''){
+                    alert("Enter Keyword");
+                    $("#q").focus();
+                    return false;
+                }else{
+                    var act = 'list.do?s=${param.s}&q='+$("#q").val();
+                    $("#search").attr('action',act).submit();
+                }
+            });
+        });
+
+        function search_enter(form){
+            var keycode = window.event.keyCode;
+            if(keycode == 13) $("#search_btn").click();
+        }
+    </script>
 </head>
 <body>
 <%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
@@ -90,8 +112,17 @@
             <a href="write.do?s=${param.s}">글쓰기</a>
         </td>
     </tr>
+
 </table>
+
+    <div id="search_div">
+        <form id="search" method="post">
+            <input type="text" name="search_word" id="q" onkeypress="search_enter(document.q);" autocomplete="off"/>
+            <input type="button" value="search" id="search_btn"/>
+        </form>
+    </div>
 <a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </div>
+
 </body>
 </html>

@@ -31,12 +31,55 @@
         SELECT COUNT(*) FROM shop_board WHERE separator_name = #{separatorName}
     </select>
 
+    <select id="selectCountByHashMap" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) FROM shop_board
+
+        <if test="separatorName != NULL or keyword != NULL">
+            WHERE
+
+            <if test="separatorName != NULL">
+                separator_name = #{separatorName}
+            </if>
+
+            <if test="separatorName != NULL and keyword != NULL">
+                AND
+            </if>
+
+            <if test="keyword != NULL">
+                title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%') OR user_email LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </if>
+
+    </select>
+
     <select id="selectList" resultMap="boardResultMap">
         SELECT * FROM shop_board ORDER BY sequence_no DESC LIMIT #{offset},#{limit}
     </select>
 
     <select id="selectListBySeparator" parameterType="hashmap" resultMap="boardResultMap">
         SELECT * FROM shop_board WHERE separator_name = #{separatorName} ORDER BY sequence_no DESC LIMIT #{rowBounds.offset},#{rowBounds.limit}
+    </select>
+
+    <select id="selectListByHashMap" parameterType="hashmap" resultMap="boardResultMap">
+        SELECT * FROM shop_board
+
+        <if test="separatorName != NULL or keyword != NULL">
+            WHERE
+
+            <if test="separatorName != NULL">
+                separator_name = #{separatorName}
+            </if>
+
+            <if test="separatorName != NULL and keyword != NULL">
+                AND
+            </if>
+
+            <if test="keyword != NULL">
+                title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%') OR user_email LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </if>
+
+        ORDER BY sequence_no DESC LIMIT #{rowBounds.offset},#{rowBounds.limit}
     </select>
 
     <insert id="insert" parameterType="BoardVO">

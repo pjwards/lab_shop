@@ -6,13 +6,21 @@
  * Copyright ⓒ 2013-2015 Donghyun Seo All rights reserved.
  * version      : 
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
+
+<c:if test="${!header.referer.contains('board')}">
+    <%@ include file="/WEB-INF/jsp/includes/src.jsp"%>
+    <%@ include file="/WEB-INF/jsp/includes/header.jsp"%>
+</c:if>
+
 <head>
 
     <title>상품 목록</title>
+
+    <script src="<%=request.getContextPath()%>/resource/js/jquery-2.1.3.min.js"></script>
 
     <script type="text/javascript">
 
@@ -48,115 +56,171 @@
                     $('#total_price').prop('value',totalPrice+price);
                 });
             }
+
+            $("#search_btn").click(function(){
+                if($("#q").val() == ''){
+                    alert("Enter Keyword");
+                    $("#q").focus();
+                    return false;
+                }else{
+                    var act = 'list.do?s=${param.s}&q='+$("#q").val();
+                    $("#search").attr('action',act).submit();
+                }
+            });
         });
 
         function loadPage(url) {
             $('#element_to_pop_up .content').load(contextPath + url)
         };
 
+        function search_enter(form){
+            var keycode = window.event.keyCode;
+            if(keycode == 13) $("#search_btn").click();
+        }
+
     </script>
 </head>
 <body>
-<table border="1">
-    <c:if test="${pagingVO.totalPageCount > 0}">
-        <tr>
-            <td class="popup_button_col" colspan="12">
-                    ${pagingVO.firstRow}-${pagingVO.endRow}
-                [${pagingVO.requestPage}/${pagingVO.totalPageCount}]
-            </td>
-        </tr>
-    </c:if>
 
-    <tr>
-        <td>상품 번호</td>
-        <td>상품 명</td>
-        <td>크기</td>
-        <td>소재</td>
-        <td>구성</td>
-        <td>옵션</td>
-        <td>제조/수입</td>
-        <td>제조국</td>
-        <td>가격</td>
-        <td>재고</td>
-        <td>등록자</td>
-        <td>등록일</td>
-        <td class="popup_button" style="display:none;">추가</td>
-    </tr>
+<c:if test="${!header.referer.contains('board')}">
+<%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
+<div class="main">
+</c:if>
 
-    <c:choose>
-        <c:when test="${hasGoods == false}">
+    <table border="1">
+        <c:if test="${pagingVO.totalPageCount > 0}">
             <tr>
                 <td class="popup_button_col" colspan="12">
-                    상품이 없습니다.
+                        ${pagingVO.firstRow}-${pagingVO.endRow}
+                    [${pagingVO.requestPage}/${pagingVO.totalPageCount}]
                 </td>
             </tr>
-        </c:when>
+        </c:if>
 
-        <c:otherwise>
-            <c:forEach var="list" items="${goodsVOList}">
-                <tr id="goods_${list.number}">
-                    <td>${list.number}</td>
-                    <td>
-                        <c:set var="query" value="p=${pagingVO.requestPage}&goodsNumber=${list.number}"/>
-                        <a target="_blank " href="<c:url value="/goods/read.do?${query}"/> ">
-                                ${list.name}
-                        </a>
-                    </td>
-                    <td>${list.size}</td>
-                    <td>${list.material}</td>
-                    <td>${list.component}</td>
-                    <td>${list.options}</td>
-                    <td>${list.manufacturer}</td>
-                    <td>${list.madein}</td>
-                    <td id="price_${list.number}">${list.price}</td>
-                    <td>${list.stock}</td>
-                    <td>${list.userEmail}</td>
-                    <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
-                    <td class="popup_button" style="display:none;"><button class="btn_add_goods" name="${list.number}">선택</button></td>
-            	</tr>
-            </c:forEach>
+        <tr>
+            <td>상품 번호</td>
+            <td>상품 명</td>
+            <td>크기</td>
+            <td>소재</td>
+            <td>구성</td>
+            <td>옵션</td>
+            <td>제조/수입</td>
+            <td>제조국</td>
+            <td>가격</td>
+            <td>재고</td>
+            <td>등록자</td>
+            <td>등록일</td>
+            <td class="popup_button" style="display:none;">추가</td>
+        </tr>
 
-            <%-- Paging --%>
-            <c:if test="${header.referer.contains('goods')}">
+        <c:choose>
+            <c:when test="${hasGoods == false}">
                 <tr>
                     <td class="popup_button_col" colspan="12">
-                        <c:if test="${pagingVO.beginPage > 10}">
-                            <a href="<c:url value="/goods/list.do?p=${pagingVO.beginPage-1}"/> ">이전</a>
-                        </c:if>
-                        <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
-                            <a href="<c:url value="/goods/list.do?p=${pno}"/> ">[${pno}]</a>
-                        </c:forEach>
-                        <c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
-                            <a href="<c:url value="/goods/list.do?p=${pagingVO.endPage + 1}"/> ">다음</a>
-                        </c:if>
+                        상품이 없습니다.
                     </td>
                 </tr>
-            </c:if>
-            <c:if test="${header.referer.contains('board')}">
-                <tr>
-                    <td class="popup_button_col" colspan="12">
-                        <c:if test="${pagingVO.beginPage > 10}">
-                            <a href="#" onclick="loadPage('/goods/list.do?p=${pagingVO.beginPage-1}'); return false;">이전</a>
-                        </c:if>
-                        <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
-                            <a href="#" onclick="loadPage('/goods/list.do?p=${pno}'); return false;">[${pno}]</a>
-                        </c:forEach>
-                        <c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
-                            <a href="#" onclick="loadPage('/goods/list.do?p=${pagingVO.endPage + 1}'); return false;">다음</a>
-                        </c:if>
-                    </td>
-                </tr>
-            </c:if>
-        </c:otherwise>
-    </c:choose>
+            </c:when>
 
-    <tr>
-        <td class="popup_button_col" colspan="12">
-            <a target="_blank " href="<c:url value="/goods/write.do" />">상품 등록</a>
-        </td>
-    </tr>
+            <c:otherwise>
+                <c:forEach var="list" items="${goodsVOList}">
+                    <tr id="goods_${list.number}">
+                        <td>${list.number}</td>
+                        <td>
 
-</table>
-<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
+                            <c:if test="${!header.referer.contains('board')}">
+                                <c:set var="query" value="p=${pagingVO.requestPage}&goodsNumber=${list.number}"/>
+                                <a href="<c:url value="/goods/read.do?${query}"/> ">
+                                        ${list.name}
+                                </a>
+                            </c:if>
+
+                            <c:if test="${header.referer.contains('board')}">
+                                <c:set var="query" value="p=${pagingVO.requestPage}&goodsNumber=${list.number}"/>
+                                <a target="_blank " href="<c:url value="/goods/read.do?${query}"/> ">
+                                        ${list.name}
+                                </a>
+                            </c:if>
+                        </td>
+                        <td>${list.size}</td>
+                        <td>${list.material}</td>
+                        <td>${list.component}</td>
+                        <td>${list.options}</td>
+                        <td>${list.manufacturer}</td>
+                        <td>${list.madein}</td>
+                        <td id="price_${list.number}">${list.price}</td>
+                        <td>${list.stock}</td>
+                        <td>${list.userEmail}</td>
+                        <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
+                        <td class="popup_button" style="display:none;"><button class="btn_add_goods" name="${list.number}">선택</button></td>
+                    </tr>
+                </c:forEach>
+
+                <%-- Paging --%>
+                <c:if test="${!header.referer.contains('board')}">
+                    <tr>
+                        <td class="popup_button_col" colspan="12">
+                            <c:if test="${pagingVO.beginPage > 10}">
+                                <a href="<c:url value="/goods/list.do?p=${pagingVO.beginPage-1}"/> ">이전</a>
+                            </c:if>
+                            <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
+                                <a href="<c:url value="/goods/list.do?p=${pno}"/> ">[${pno}]</a>
+                            </c:forEach>
+                            <c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
+                                <a href="<c:url value="/goods/list.do?p=${pagingVO.endPage + 1}"/> ">다음</a>
+                            </c:if>
+                        </td>
+                    </tr>
+                </c:if>
+                <c:if test="${header.referer.contains('board')}">
+                    <tr>
+                        <td class="popup_button_col" colspan="12">
+                            <c:if test="${pagingVO.beginPage > 10}">
+                                <a href="#" onclick="loadPage('/goods/list.do?p=${pagingVO.beginPage-1}'); return false;">이전</a>
+                            </c:if>
+                            <c:forEach var="pno" begin="${pagingVO.beginPage}" end="${pagingVO.endPage}">
+                                <a href="#" onclick="loadPage('/goods/list.do?p=${pno}'); return false;">[${pno}]</a>
+                            </c:forEach>
+                            <c:if test="${pagingVO.endPage < pagingVO.totalPageCount}">
+                                <a href="#" onclick="loadPage('/goods/list.do?p=${pagingVO.endPage + 1}'); return false;">다음</a>
+                            </c:if>
+                        </td>
+                    </tr>
+                </c:if>
+            </c:otherwise>
+        </c:choose>
+
+
+        <c:if test="${!header.referer.contains('board')}">
+            <tr>
+                <td class="popup_button_col" colspan="12">
+                    <a href="<c:url value="/goods/write.do" />">상품 등록</a>
+                </td>
+            </tr>
+        </c:if>
+
+        <c:if test="${header.referer.contains('board')}">
+            <tr>
+                <td class="popup_button_col" colspan="12">
+                    <a target="_blank " href="<c:url value="/goods/write.do" />">상품 등록</a>
+                </td>
+            </tr>
+        </c:if>
+
+    </table>
+
+    <div id="search_div">
+        <form id="search" method="post">
+            <input type="text" name="search_word" id="q" onkeypress="search_enter(document.q);" autocomplete="off"/>
+            <input type="button" value="search" id="search_btn"/>
+        </form>
+    </div>
+
+    <a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
+
+<c:if test="${!header.referer.contains('board')}">
+</div>
+</c:if>
+
 </body>
 </html>

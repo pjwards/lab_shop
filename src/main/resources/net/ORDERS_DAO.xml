@@ -38,7 +38,7 @@
     
     <select id="countByKeyword" parameterType="String" resultType="int">
       select count(*) from shop_orders
-      where user_email like #{keyword} or user_name like #{keyword} or no like #{keyword}
+      where user_email like CONCAT('%', #{keyword}, '%') or user_name like CONCAT('%', #{keyword}, '%') or no like CONCAT('%', #{keyword}, '%')
     </select>
     
     <insert id="insert" parameterType="OrdersVO">

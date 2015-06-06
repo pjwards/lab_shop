@@ -23,6 +23,11 @@ public interface GoodsService {
     public int selectCount(String memberId) throws Exception;
 
     /*
+    HashMap 을 사용하여 유저에 대한 상품 전체 개수를 구한다.
+     */
+    public int selectCount(String memberId, String keyword) throws Exception;
+
+    /*
     특정한 ID 값을 사용해 해당 상품을 조회한다.
      */
     public GoodsVO selectOne(int goodsNumber) throws Exception;
@@ -31,6 +36,11 @@ public interface GoodsService {
     전체 상품 리스트를 읽어온다.
      */
     public List<GoodsVO> selectList(String memberId, int firstRow, int endRow) throws Exception;
+
+    /*
+    HashMap을 사용하여 전체 상품 리스트를 읽어온다.
+     */
+    public List<GoodsVO> selectList(String memberId, int firstRow, int endRow, String keyword) throws Exception;
 
     /*
     상품을 등록한다.

@@ -23,7 +23,7 @@
     </select>
     
     <select id="countByKeyword" parameterType="String" resultType="int">
-      select count(*) from shop_wishlist where name like #{keyword}
+      select count(*) from shop_wishlist where name like CONCAT('%', #{keyword}, '%')
     </select>
     
     <select id="selectList" parameterType="map" resultMap="wishlistResultMap">
@@ -31,7 +31,7 @@
       inner join shop_board as board on wish.board_no=board.no
       <choose>
       	<when test="keyword != NULL">
-      	where title like #{keyword} and wish.user_email like #{userEmail}
+      	where title like CONCAT('%', #{keyword}, '%') and wish.user_email like CONCAT('%', #{keyword}, '%')
       	</when>
       	<otherwise>
       	where wish.user_email like #{userEmail}

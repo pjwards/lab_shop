@@ -26,6 +26,11 @@ public interface BoardService {
     public int selectCount(String separatorName) throws Exception;
 
     /*
+    HashMap 을 사용하여 게시글 전체 개수를 구한다.
+     */
+    public int selectCount(String separatorName, String keyword) throws Exception;
+
+    /*
     전체 게시글 중에서 시작 행(firstRow)과 끝 행(endRow)에 속하는 게시글을 읽어온다.
      */
     public List<BoardVO> selectList(int firstRow, int endRow) throws Exception;
@@ -34,6 +39,11 @@ public interface BoardService {
     특정 카테고리의 전체 게시글 중에서 시작 행(firstRow)과 끝 행(endRow)에 속하는 게시글을 읽어온다.
      */
     public List<BoardVO> selectList(int firstRow, int endRow, String separatorName) throws Exception;
+
+    /*
+    HashMap 을 사용하여 게시글을 읽어온다.
+     */
+    public List<BoardVO> selectList(int firstRow, int endRow, String separatorName, String keyword) throws Exception;
 
     /*
     게시글을 작성한다.

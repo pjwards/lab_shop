@@ -22,7 +22,15 @@
     </resultMap>
 
     <select id="selectCount" parameterType="String" resultType="int">
-        SELECT COUNT(*) FROM shop_goods
+        SELECT COUNT(*) FROM shop_goods WHERE user_email = #{memberId}
+    </select>
+
+    <select id="selectCountByKeyword" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) FROM shop_goods WHERE user_email = #{memberId}
+
+        <if test="keyword != NULL">
+            AND name LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%') OR manufacturer LIKE CONCAT('%', #{keyword}, '%')
+        </if>
     </select>
 
     <select id="selectOne" parameterType="int" resultMap="goodsResultMap">
@@ -31,6 +39,16 @@
 
     <select id="selectList" parameterType="hashmap" resultMap="goodsResultMap">
         SELECT * FROM shop_goods WHERE user_email = #{memberId} ORDER BY no DESC LIMIT #{rowBounds.offset},#{rowBounds.limit}
+    </select>
+
+    <select id="selectListByKeyword" parameterType="hashmap" resultMap="goodsResultMap">
+        SELECT * FROM shop_goods WHERE user_email = #{memberId}
+
+        <if test="keyword != NULL">
+            AND name LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%') OR manufacturer LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+
+        ORDER BY no DESC LIMIT #{rowBounds.offset},#{rowBounds.limit}
     </select>
 
     <insert id="insert" parameterType="GoodsVO">

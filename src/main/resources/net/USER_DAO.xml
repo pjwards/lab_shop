@@ -26,7 +26,7 @@
     <select id="selectList" parameterType="map" resultMap="userResultMap">
       select * from shop_user 
       <if test="keyword != NULL">
-      where last_name like #{keyword} or email like #{keyword} or authority like #{keyword}
+      where last_name like CONCAT('%', #{keyword}, '%') or email like CONCAT('%', #{keyword}, '%') or authority like CONCAT('%', #{keyword}, '%')
       </if>
       order by 
       <choose>
@@ -45,7 +45,7 @@
     </select>
 
 	<select id="countByKeyword" parameterType="String" resultType="int">
-      select count(*) from shop_user where last_name like #{keyword} or email like #{keyword} or authority like #{keyword}
+      select count(*) from shop_user where last_name like CONCAT('%', #{keyword}, '%') or email like CONCAT('%', #{keyword}, '%') or authority like CONCAT('%', #{keyword}, '%')
     </select>
     
     <insert id="insert" parameterType="UserVO">

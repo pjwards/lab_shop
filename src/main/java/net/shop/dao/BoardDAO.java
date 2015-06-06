@@ -3,6 +3,7 @@ package net.shop.dao;
 import net.shop.vo.BoardVO;
 import net.shop.vo.BoardVO;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -26,6 +27,11 @@ public interface BoardDAO {
     public int selectCount(String separatorName) throws Exception;
 
     /*
+    HashMap 을 사용하여 게시글 전체 개수를 구한다.
+     */
+    public int selectCount(HashMap<String,Object> map);
+
+    /*
     전체 게시글 중에서 시작 행(firstRow)과 끝 행(endRow)에 속하는 게시글을 읽어온다.
      */
     public List<BoardVO> selectList(int firstRow, int endRow) throws Exception;
@@ -34,6 +40,11 @@ public interface BoardDAO {
     특정 카테고리의 전체 게시글 중에서 시작 행(firstRow)과 끝 행(endRow)에 속하는 게시글을 읽어온다.
      */
     public List<BoardVO> selectList(int firstRow, int endRow, String separatorName) throws Exception;
+
+    /*
+    HashMap 을 사용하여 게시글을 읽어온다.
+     */
+    public List<BoardVO> selectList(HashMap<String,Object> map) throws Exception;
 
     /*
     게시글을 작성한다.

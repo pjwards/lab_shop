@@ -49,6 +49,17 @@ public class BoardDAOMySql implements BoardDAO {
         }
     }
 
+    @Override
+    public int selectCount(HashMap<String, Object> map) {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectOne("net.BoardDao.selectCountByHashMap", map);
+        }finally{
+            sqlSession.close();
+        }
+    }
+
     public List<BoardVO> selectList(int firstRow, int endRow) throws Exception{
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
@@ -73,6 +84,17 @@ public class BoardDAOMySql implements BoardDAO {
 
         try{
             return sqlSession.selectList("net.BoardDao.selectListBySeparator", map);
+        }finally{
+            sqlSession.close();
+        }
+    }
+
+    @Override
+    public List<BoardVO> selectList(HashMap<String, Object> map) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectList("net.BoardDao.selectListByHashMap", map);
         }finally{
             sqlSession.close();
         }

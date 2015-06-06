@@ -2,9 +2,11 @@ package net.shop.service;
 
 import net.shop.dao.BoardDAO;
 import net.shop.vo.BoardVO;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -33,6 +35,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public int selectCount(String separatorName, String keyword) throws Exception {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+
+        map.put("separatorName", separatorName);
+        map.put("keyword", keyword);
+
+        return boardDAO.selectCount(map);
+    }
+
+    @Override
     public List<BoardVO> selectList(int firstRow, int endRow) throws Exception {
         return boardDAO.selectList(firstRow, endRow);
     }
@@ -40,6 +52,19 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<BoardVO> selectList(int firstRow, int endRow, String separatorName) throws Exception {
         return boardDAO.selectList(firstRow, endRow, separatorName);
+    }
+
+    @Override
+    public List<BoardVO> selectList(int firstRow, int endRow, String separatorName, String keyword) throws Exception {
+
+        RowBounds rowBounds = new RowBounds(firstRow - 1, endRow - firstRow + 1);
+
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("separatorName", separatorName);
+        map.put("rowBounds", rowBounds);
+        map.put("keyword", keyword);
+        return boardDAO.selectList(map);
     }
 
     @Override

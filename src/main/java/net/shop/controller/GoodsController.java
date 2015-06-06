@@ -57,6 +57,7 @@ public class GoodsController {
      */
     @RequestMapping(value = "/list.do")
     public ModelAndView goodsList(@RequestParam(value = "p", required = false) String requestPageString,
+                                  @RequestParam(value="q",required=false) String keyword,
                                   Authentication auth) throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
@@ -67,7 +68,11 @@ public class GoodsController {
         int requestPage = Integer.parseInt(requestPageString);
         if(requestPage <= 0) return (ModelAndView)new ModelAndView("redirect:/goods/list.do");
 
-        int totalCount = goodsService.selectCount(memberId);
+        if(keyword == null || keyword.equals("")) {
+            keyword = null;
+        }
+
+        int totalCount = goodsService.selectCount(memberId, keyword);
 
 
         /*Paging 메소드의 사용 */
@@ -84,7 +89,7 @@ public class GoodsController {
             return modelAndView;
         }
 
-        List<GoodsVO> goodsVOList = goodsService.selectList(memberId, pagingVO.getFirstRow(), pagingVO.getEndRow());
+        List<GoodsVO> goodsVOList = goodsService.selectList(memberId, pagingVO.getFirstRow(), pagingVO.getEndRow(), keyword);
 
         modelAndView.addObject("goodsVOList", goodsVOList);
         modelAndView.addObject("hasGoods", true);
