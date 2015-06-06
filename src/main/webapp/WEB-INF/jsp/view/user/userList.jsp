@@ -77,6 +77,44 @@ $(document).ready(function(){
 		});	
 		
 	});
+	
+	var stack = "";
+	
+	$(function() {
+		$("#dialog").dialog({
+			autoOpen: false
+		});
+		$(".sendMail").on("click", function() {
+			stack = $(this).attr("vals");
+			$("#reciver").prop('value',stack);
+			$("#dialog").dialog("open");
+		});
+	});
+	
+	// Validating Form Fields
+	$("#submit").click(function(e) {
+		var reciver = $("#reciver").val();
+		var title = $("#title").val();
+		var content = $("#content").val();
+		var emailReg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		
+		if (reciver === "" || title === "" || content === "") {
+			alert("Please fill all fields!");
+			$("#reciver").val('');
+			$("#title").val('');
+			$("#content").val('');
+			e.preventDefault();
+		} else if (!(reciver).match(emailReg)) {
+			alert("Invalid Email!");
+			$("#reciver").val('');
+			$("#title").val('');
+			$("#content").val('');
+			e.preventDefault();
+		} else {
+			stack="";
+			alert("Send it Successfully");
+		}
+	});
 });
 
 function search_enter(form){
@@ -154,6 +192,7 @@ function search_enter(form){
 					</c:otherwise>
 				</c:choose>
 				</th>
+				<th scope="col">thumbnail</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -161,12 +200,12 @@ function search_enter(form){
 			 <tr>
 				<th scope="row">${list.number }</th>
 				<td>${list.lastName }</td>
-				<td>${list.email }</td>
+				<td><a href="#" class="sendMail" id="sendMail" vals="${list.email }" >${list.email }</a></td>
 				<td>${list.authority }</td>
-				<td><a href="#" class="give_auth" vals="${list.email }">Img</a></td>
+				<td><a href="#" class="give_auth" vals="${list.email }" ><span style="font-size:16px;" class="hidden-xs showopacity glyphicon glyphicon-cog"></span></a></td>
 			    <td><fmt:formatDate value="${list.createdDate}" pattern="yyyy-MM-dd"/></td>
 			    <td><fmt:formatDate value="${list.lastDate}" pattern="yyyy-MM-dd"/></td>
-			    <td><img alt="" src="<%=request.getContextPath()%>/resource/upload/${list.imagePath}"></td>
+			    <td><img alt="" src="<%=request.getContextPath()%>/resource/upload/${list.imagePath}" height="42" ></td>
 			 </tr>
 			</c:forEach>
 		</tbody>
@@ -196,5 +235,27 @@ function search_enter(form){
 	
 	<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </div>
+<div id="dialog" title="Email">
+	<form action="#" method="post">
+	<label>Reciver:</label>
+	<input type="text" class="form-control" id="reciver" name="reciver" maxlength="250" required="required" placeholder="Email" autocomplete="off" value="">
+	<br><label>Title:</label><br>
+	<input type="text" class="form-control" id="title" name="title" maxlength="50" required="required" placeholder="Title" autocomplete="off">
+	<label>Content:</label>
+	<textarea name="content" id="content" rows="10" cols="25"></textarea><br>
+	<button type="submit" class="btn btn-primary" id="submit" value="submit">Submit</button>
+	</form>
+</div>
+
 </body>
+<style>
+.center {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+textarea {
+    resize: none;
+}
+</style>
 </html>

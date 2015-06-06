@@ -53,7 +53,7 @@ TrexConfig.addAttacher(
 		boxonly: _FALSE,
 		wysiwygonly: _FALSE,
 		features: { left:250, top:65, width:450, height:404 },
-		popPageUrl: "#host#path/pages/trex/file.html"
+		popPageUrl: "#host#path/pages/trex/file.jsp"
 	},
 	function(root){
 		var _config = TrexConfig.getAttacher("file", root);

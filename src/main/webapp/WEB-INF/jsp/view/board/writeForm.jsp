@@ -40,7 +40,7 @@
 <!-- start editor -->
 <div>
 <c:if test="${act == 'write'}">
-    <form id="frm" name="frm" action="<c:url value="/board/write.do" />" method="post" accept-charset="utf-8">
+    <form id="frm" name="frm" action="<c:url value="/board/write.do" />" enctype="multipart/form-data" method="post" accept-charset="utf-8">
 </c:if>
 <c:if test="${act == 'reply'}">
     <form id="frm" name="frm" action="<c:url value="/board/reply.do" />" method="post" accept-charset="utf-8">
@@ -50,7 +50,7 @@
     <input type="hidden" name="s" value="${param.s}"/>
     
     제목 : <input type="text" name="title" size="100"/><br/>
-
+	
     <c:if test="${param.s == 'product'}">
         <table id="selected_goods" border="1">
             <tbody>
@@ -91,6 +91,8 @@
     <!-- call editor frame -->
     <div id="editor_frame"></div>
     <textarea name="daumeditor" id="daumeditor" rows="10" cols="100" style="width:766px; height:412px;display: none;"></textarea>
+    <p>Add Thumbnail</p>
+    <input type="file" name="thumnail" id="thumnail"/><br>
     <input type="button" onclick="location.href='list.do?s=${param.s}'" value="취소"/>
     <input type="button" id="save_button" value="전송"/>
 </form>

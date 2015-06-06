@@ -54,6 +54,7 @@ $(document).ready(function () {
     					<li><a href="<%=request.getContextPath()%>/board/list.do?s=qna">QnA Board List</a></li>
 					</ul>
 				</li>
+				<sec:authorize access="isAuthenticated()">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">My Info<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a>
 					<ul class="dropdown-menu forAnimate" role="menu">
@@ -63,6 +64,7 @@ $(document).ready(function () {
 						<li><a href="<%=request.getContextPath()%>/goods/cart.do">Cart</a></li>
 					</ul>
 				</li>
+				</sec:authorize>
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Manager<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-cog"></span></a>
