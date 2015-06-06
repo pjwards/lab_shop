@@ -72,7 +72,6 @@ $(document).ready(function () {
 						<li><a href="<%=request.getContextPath()%>/user/userList.do">User List</a></li>
 						<li><a href="<%=request.getContextPath()%>/goods/list.do">Goods List</a></li>
 						<li><a href="<%=request.getContextPath()%>/admin/search.do">Search users</a></li>
-						<li><a href="<%=request.getContextPath()%>/email.do">Email</a></li>
 					</ul>
 				</li>
 				</sec:authorize>

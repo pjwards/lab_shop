@@ -27,7 +27,7 @@
     </select>
     
     <select id="selectList" parameterType="map" resultMap="wishlistResultMap">
-      select wish.board_no, wish.no, total_price, title, wish.user_email from shop_wishlist as wish 
+      select wish.board_no, wish.no, total_price, title, wish.user_email, image_path from shop_wishlist as wish 
       inner join shop_board as board on wish.board_no=board.no
       <choose>
       	<when test="keyword != NULL">

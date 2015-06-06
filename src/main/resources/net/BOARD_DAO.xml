@@ -105,6 +105,7 @@
             <if test="title != null">title = #{title},</if>
             <if test="content != null">content = #{content},</if>
             <if test="totalPrice != null">total_price = #{totalPrice}</if>
+            <if test="imagePath != null">image_path = #{imagePath}</if>
         </set>
         WHERE no = #{number}
     </update>

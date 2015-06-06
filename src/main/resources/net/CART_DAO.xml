@@ -20,7 +20,7 @@
     </insert>
     
     <select id="selectList" parameterType="String" resultMap="cartResultMap">
-      select cart.board_no, cart.no, total_price, title, cart.user_email, cart.quantity from shop_cart as cart 
+      select cart.board_no, cart.no, total_price, title, cart.user_email, cart.quantity, image_path from shop_cart as cart 
       inner join shop_board as board on cart.board_no=board.no
       where cart.user_email like #{userEmail}
       order by cart.no desc

@@ -77,9 +77,21 @@ $(function(){
 function validForm(editor) {
     var validator = new Trex.Validator();
     var content = editor.getContent();
+    var seperate = $("#hid").val();
+    
+    
     if (!validator.exists(content)) {
+    	alert(content);
         alert('내용을 입력하세요');
         return false;
+    }
+    
+    if(seperate === "product"){
+    	var thumbnail = $("#thumnail").val();
+    	if(thumbnail === ""){
+        	alert('Input thumbnail');
+        	return false;
+        }
     }
     return true;
 }

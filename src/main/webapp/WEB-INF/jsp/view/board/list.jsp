@@ -74,6 +74,9 @@
         <c:otherwise>
             <c:forEach var="list" items="${boardVOList}">
                 <tr>
+                	<c:if test="${param.s == 'product'}">
+                	<td><img alt="" src="<%=request.getContextPath()%>/resource/upload/${list.imagePath}" height="42" ></td>
+                	</c:if>
                     <td>${list.number}</td>
                     <td>
                         <c:if test="${list.level > 0}">

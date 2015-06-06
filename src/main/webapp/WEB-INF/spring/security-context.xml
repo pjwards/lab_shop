@@ -19,7 +19,6 @@
 		<intercept-url pattern="/user/orders.do" access="isAuthenticated()" />
 		<intercept-url pattern="/goods/cart.do" access="isAuthenticated()" />
 		<intercept-url pattern="/email.do" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/goods/list.do" access="hasRole('ROLE_ADMIN')" />
 		
 		<form-login 
 		    login-page="/main/login.do" 

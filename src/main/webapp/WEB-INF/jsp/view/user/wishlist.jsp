@@ -125,6 +125,7 @@ function search_enter(form){
 	<table id="box-table-a" class="table table-hover">
 		<thead>
 			<tr>
+				<th scope="col"></th>
 				<th scope="col">Product</th>
 				<th scope="col">Price</th>
 				<th scope="col">Go to Cart</th>
@@ -135,7 +136,8 @@ function search_enter(form){
 		<tbody>
 			<c:forEach var="list" items="${wishlist}">
 			 <tr>
-				<th scope="row"><a href="<%=request.getContextPath()%>/board/read.do?boardNumber=${list.boardNumber}">${list.title }</a></th>
+                <th scope="row"><img alt="" src="<%=request.getContextPath()%>/resource/upload/${list.imagePath}" height="42" ></th>
+				<td><a href="<%=request.getContextPath()%>/board/read.do?boardNumber=${list.boardNumber}">${list.title }</a></td>
 				<td>${list.price }</td>
 				<td><a href="#" class="cart" vals="go/${list.boardNumber}">Go</a></td>
 				<td><a href="#" class="cart" vals="copy/${list.boardNumber}">Copy</a></td>			

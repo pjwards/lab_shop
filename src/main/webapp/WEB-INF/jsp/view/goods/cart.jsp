@@ -60,7 +60,7 @@ $(document).ready(function(){
 		var addr = "${user.lastName }";
 		var post = "${user.address }";
 		var name = "${user.postcode }";
-		
+		alert(addr);
 		data.push($(this).attr("vals"));
 		confirmation(question).then(function (answer) {
 		    var ansbool = (String(answer) === "true");
@@ -181,6 +181,7 @@ $(document).ready(function(){
    		<table id="box-table-a" class="table table-hover" id="table">
 		<thead>
 			<tr>
+				<th scope="col"></th>
 				<th scope="col">Product</th>
 				<th scope="col">Price</th>
 				<th scope="col">Quantity</th>
@@ -194,6 +195,7 @@ $(document).ready(function(){
 			<c:forEach var="list" items="${cartlist}">
 				<c:set var="s" value="${s + list.quantity * list.price}"></c:set>
 			 <tr>
+			 	<th scope="row"><img alt="" src="<%=request.getContextPath()%>/resource/upload/${list.imagePath}" height="42" ></th>
 				<td><a href="<%=request.getContextPath()%>/goods/read.do?goodsNumber=${list.number}">${list.title}</a></td>
 				<td id="price_${list.number}" class="prc" vals="${list.price }">${list.price }</td>
 				<td><input type="text" value="${list.quantity }" id="qty_${list.number}" class="number" vals="${list.number}"/>
