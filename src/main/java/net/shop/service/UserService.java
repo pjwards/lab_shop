@@ -153,5 +153,18 @@ public interface UserService {
     Decription : call list of cart
     */
 	public List<CartVO> cartList(String email);
-	
+
+    /*
+	First Editor : Donghyun Seo (egaoneko@naver.com)
+	Last Editor  :
+	Date         : 2015-06-06
+	*/
+    public List<OrdersVO> ordersTotalList(int firstRow, int endRow, String keyword) throws Exception;
+
+    /*
+	First Editor : Donghyun Seo (egaoneko@naver.com)
+	Last Editor  :
+	Date         : 2015-06-06
+	*/
+    public int orderCountTotalList(String keyword) throws Exception;
 }

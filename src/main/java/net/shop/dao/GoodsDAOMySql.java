@@ -202,4 +202,37 @@ public class GoodsDAOMySql implements GoodsDAO {
             sqlSession.close();
         }
     }
+
+    @Override
+    public int selectCountForStock(HashMap<String, Object> map) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectOne("net.GoodsDao.selectCountForStock", map);
+        }finally{
+            sqlSession.close();
+        }
+    }
+
+    @Override
+    public List<GoodsVO> selectListForStock(HashMap<String, Object> map) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            return sqlSession.selectList("net.GoodsDao.selectListForStock", map);
+        }finally{
+            sqlSession.close();
+        }
+    }
+
+    @Override
+    public void decreaseGoodsStock(HashMap<String,Object> map) throws Exception {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try{
+            sqlSession.update("net.GoodsDao.decreaseStockCount", map);
+        }finally{
+            sqlSession.close();
+        }
+    }
 }

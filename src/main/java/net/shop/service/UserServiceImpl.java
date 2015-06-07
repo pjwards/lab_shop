@@ -10,6 +10,7 @@ import net.shop.dao.OrdersDAO;
 import net.shop.dao.UserDAO;
 import net.shop.dao.WishlistDAO;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import net.shop.vo.CartVO;
@@ -211,5 +212,32 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return cartDAO.selectList(email);
 	}
-	
+
+	/*
+	First Editor : Donghyun Seo (egaoneko@naver.com)
+	Last Editor  :
+	Date         : 2015-06-06
+	*/
+	@Override
+	public List<OrdersVO> ordersTotalList(int firstRow, int endRow, String keyword) throws Exception {
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("offset", firstRow);
+		map.put("limit", endRow);
+		map.put("keyword", keyword);
+		return ordersDAO.selectTotalListMap(map);
+	}
+
+	/*
+	First Editor : Donghyun Seo (egaoneko@naver.com)
+	Last Editor  :
+	Date         : 2015-06-06
+	*/
+	@Override
+	public int orderCountTotalList(String keyword) throws Exception {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("keyword", keyword);
+
+		return ordersDAO.countTotalList(map);
+	}
 }

@@ -7,6 +7,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <%@ include file="/WEB-INF/jsp/includes/src.jsp"%>
@@ -104,7 +106,7 @@ $(document).ready(function(){
 			 <tr>
 				<th scope="row">${list.number }</th>
 				<td><fmt:formatDate value="${list.orderDate}" pattern="yyyy-MM-dd"/></td>
-				<td><a href="<%=request.getContextPath()%>/goods/read.do?goodsNumber=${list.boardNumber}">${list.title }</a></td>
+				<td><a href="<%=request.getContextPath()%>/board/read.do?s=product&boardNumber=${list.boardNumber}">${list.title }</a></td>
 				<td>${list.totalPrice }</td>
 				<td>${list.quantity }</td>
 				<td>${list.orderNow }</td>

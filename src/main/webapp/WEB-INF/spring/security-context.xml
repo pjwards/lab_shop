@@ -14,12 +14,19 @@
 		<intercept-url pattern="/user/userEdit.do" access="isAuthenticated()" />
 		<intercept-url pattern="/user/userDelete.do" access="isAuthenticated()" />
 		<intercept-url pattern="/user/giveAuth.do" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/admin/search.do" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/user/wishlist.do" access="isAuthenticated()" />
 		<intercept-url pattern="/user/orders.do" access="isAuthenticated()" />
 		<intercept-url pattern="/goods/cart.do" access="isAuthenticated()" />
 		<intercept-url pattern="/email.do" access="hasRole('ROLE_ADMIN')" />
 		
+		<intercept-url pattern="/goods/list.do" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/board/write.do" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/board/reply.do" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/board/delete.do" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/board/update.do" access="hasRole('ROLE_ADMIN')" />
+
+
 		<form-login 
 		    login-page="/main/login.do" 
 		    default-target-url="/main/main.do" 

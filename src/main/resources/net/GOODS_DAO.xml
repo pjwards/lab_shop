@@ -98,7 +98,6 @@
         SELECT board_no FROM shop_board_goods WHERE goods_no = #{VALUE}
     </select>
 
-
     <delete id="deleteBoardGoodsByBoard" parameterType="int">
         DELETE FROM shop_board_goods WHERE board_no = #{VALUE}
     </delete>
@@ -106,5 +105,27 @@
     <delete id="deleteBoardGoodsByGoods" parameterType="int">
         DELETE FROM shop_board_goods WHERE goods_no = #{VALUE}
     </delete>
+
+    <select id="selectCountForStock" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) FROM shop_goods WHERE stock <![CDATA[ <= ]]> #{maxStock} and stock <![CDATA[ >= ]]> #{minStock}
+
+        <if test="keyword != NULL">
+            AND name LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%') OR manufacturer LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </select>
+
+    <select id="selectListForStock" parameterType="hashmap" resultMap="goodsResultMap">
+        SELECT * FROM shop_goods WHERE stock <![CDATA[ <= ]]> #{maxStock} and stock <![CDATA[ >= ]]> #{minStock}
+
+        <if test="keyword != NULL">
+            AND name LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%') OR manufacturer LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+
+        ORDER BY no DESC LIMIT #{rowBounds.offset},#{rowBounds.limit}
+    </select>
+
+    <update id="decreaseStockCount" parameterType="hashmap">
+        UPDATE shop_goods SET stock = stock - #{quantity} WHERE no = #{goodsNumber}
+    </update>
 
 </mapper>

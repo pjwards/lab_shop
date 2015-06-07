@@ -167,4 +167,38 @@ public class GoodsServiceImpl implements GoodsService {
 		paraMap.put("quantity", quantity);
 		return cartDAO.changeMap(paraMap);
 	}
+
+    @Override
+    public int selectCountForStock(int maxStock, int minStock, String keyword) throws Exception {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+
+        map.put("maxStock", maxStock);
+        map.put("minStock", minStock);
+        map.put("keyword", keyword);
+
+        return goodsDAO.selectCountForStock(map);
+    }
+
+    @Override
+    public List<GoodsVO> selectListForStock(int maxStock, int minStock, int firstRow, int endRow, String keyword) throws Exception {
+        RowBounds rowBounds = new RowBounds(firstRow - 1, endRow - firstRow + 1);
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("maxStock", maxStock);
+        map.put("minStock", minStock);
+        map.put("rowBounds", rowBounds);
+        map.put("keyword", keyword);
+
+        return goodsDAO.selectListForStock(map);
+    }
+
+    @Override
+    public void decreaseGoodsStock(int goodsNumber, int quantity) throws Exception {
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("goodsNumber", goodsNumber);
+        map.put("quantity", quantity);
+
+        goodsDAO.decreaseGoodsStock(map);
+    }
 }

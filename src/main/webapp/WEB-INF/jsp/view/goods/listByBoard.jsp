@@ -41,20 +41,20 @@
     </script>
 </head>
 <body>
-<table border="1">
+<table id="box-table-a" class="table table-hover">
     <tr>
-        <td>상품 번호</td>
-        <td>상품 명</td>
-        <td>크기</td>
-        <td>소재</td>
-        <td>구성</td>
-        <td>옵션</td>
-        <td>제조/수입</td>
-        <td>제조국</td>
-        <td>가격</td>
-        <td>재고</td>
-        <td>등록자</td>
-        <td>등록일</td>
+        <th scope="col">상품 번호</th>
+        <th scope="col">상품 명</th>
+        <th scope="col">크기</th>
+        <th scope="col">소재</th>
+        <th scope="col">구성</th>
+        <th scope="col">옵션</th>
+        <th scope="col">제조/수입</th>
+        <th scope="col">제조국</th>
+        <th scope="col">가격</th>
+        <th scope="col">재고</th>
+        <th scope="col">등록자</th>
+        <th scope="col">등록일</th>
     </tr>
 
     <c:choose>

@@ -123,4 +123,19 @@ public interface GoodsService {
 	 	Cange quantity of specific cart data
 	 */
 	public int cartChange(int quantity, int cartNumber);
+
+    /*
+    재고가 부족한 상품 전체 개수를 구한다.
+     */
+    public int selectCountForStock(int maxStock, int minStock, String keyword) throws Exception;
+
+    /*
+    재고가 부족한 상품 리스트를 읽어온다.
+     */
+    public List<GoodsVO> selectListForStock(int maxStock, int minStock, int firstRow, int endRow, String keyword) throws Exception;
+
+    /*
+    상품 재고를 줄인다.
+     */
+    public void decreaseGoodsStock(int goodsNumber, int quantity) throws Exception;
 }

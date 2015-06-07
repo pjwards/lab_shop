@@ -44,7 +44,6 @@
 <body>
 <%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
 <div class="main">
-<table border="1">
     <c:if test="${pagingVO.totalPageCount > 0}">
         <tr>
             <td colspan="5">
@@ -54,12 +53,13 @@
         </tr>
     </c:if>
 
+<table id="box-table-a" class="table table-hover">
     <tr>
-        <td>글 번호</td>
-        <td>제목</td>
-        <td>작성자</td>
-        <td>작성일</td>
-        <td>조회수</td>
+        <th scope="col">글 번호</th>
+        <th scope="col">제목</th>
+        <th scope="col">작성자</th>
+        <th scope="col">작성일</th>
+        <th scope="col">조회수</th>
     </tr>
 
     <c:choose>
@@ -95,7 +95,7 @@
 
             <%-- Paging --%>
             <tr>
-                <td colspan="5">
+                <td colspan="5" align="center">
                     <c:if test="${pagingVO.beginPage > 10}">
                         <a href="<c:url value="list.do?s=${param.s}&p=${pagingVO.beginPage-1}"/> ">이전</a>
                     </c:if>
@@ -124,7 +124,6 @@
             <input type="button" value="search" id="search_btn"/>
         </form>
     </div>
-<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
 </div>
 
 </body>

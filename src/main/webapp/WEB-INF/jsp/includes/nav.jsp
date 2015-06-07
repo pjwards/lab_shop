@@ -69,6 +69,7 @@ $(document).ready(function () {
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Manager<span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-cog"></span></a>
 					<ul class="dropdown-menu forAnimate" role="menu">
+						<li><a href="<%=request.getContextPath()%>/admin/statistics.do">Statistics</a></li>
 						<li><a href="<%=request.getContextPath()%>/user/userList.do">User List</a></li>
 						<li><a href="<%=request.getContextPath()%>/goods/list.do">Goods List</a></li>
 						<li><a href="<%=request.getContextPath()%>/admin/search.do">Search users</a></li>

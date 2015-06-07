@@ -57,9 +57,9 @@ $(document).ready(function(){
 	$(".order").click(function(){
 		var question = "Do you want to order it?";
 		var data = [];
-		var addr = "${user.lastName }";
-		var post = "${user.address }";
-		var name = "${user.postcode }";
+		var addr = "${user.address }";
+		var post = "${user.postcode }";
+		var name = "${user.lastName }";
 		alert(addr);
 		data.push($(this).attr("vals"));
 		confirmation(question).then(function (answer) {
@@ -109,9 +109,9 @@ $(document).ready(function(){
 	$("#total_order").click(function(){
 		var question = "Do you want to order it?";
 		var data = [];
-		var addr = "${user.lastName }";
-		var post = "${user.address }";
-		var name = "${user.postcode }";
+		var addr = "${user.address }";
+		var post = "${user.postcode }";
+		var name = "${user.lastName }";
 		
 		$('.order').each(function(){
 			data.push($(this).attr("vals"));
@@ -196,7 +196,7 @@ $(document).ready(function(){
 				<c:set var="s" value="${s + list.quantity * list.price}"></c:set>
 			 <tr>
 			 	<th scope="row"><img alt="" src="<%=request.getContextPath()%>/resource/upload/${list.imagePath}" height="42" ></th>
-				<td><a href="<%=request.getContextPath()%>/goods/read.do?goodsNumber=${list.number}">${list.title}</a></td>
+				<td><a href="<%=request.getContextPath()%>/board/read.do?s=product&boardNumber=${list.boardNumber}">${list.title}</a></td>
 				<td id="price_${list.number}" class="prc" vals="${list.price }">${list.price }</td>
 				<td><input type="text" value="${list.quantity }" id="qty_${list.number}" class="number" vals="${list.number}"/>
 					<input type="button" class="change_quan" vals="${list.number}" value="Change" >&nbsp;<span id="errmsg${list.number}" class="error"></span></td>

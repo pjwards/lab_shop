@@ -90,4 +90,19 @@ public interface GoodsDAO {
     게시글-상품 테이블에서 상품을 삭제한다.
      */
     public int deleteBoardGoodsByGoods(int goodsNumber) throws Exception;
+
+    /*
+    재고가 부족한 상품 전체 개수를 구한다.
+     */
+    public int selectCountForStock(HashMap<String,Object> map) throws Exception;
+
+    /*
+    재고가 부족한 상품 리스트를 읽어온다.
+     */
+    public List<GoodsVO> selectListForStock(HashMap<String,Object> map) throws Exception;
+
+    /*
+    상품 재고를 줄인다.
+     */
+    public void decreaseGoodsStock(HashMap<String,Object> map) throws Exception;
 }

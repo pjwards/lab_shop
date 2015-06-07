@@ -32,6 +32,22 @@ public class OrdersDAOMySql implements OrdersDAO {
 	     }
 	}
 
+	/*
+	First Editor : Donghyun Seo (egaoneko@naver.com)
+	Last Editor  :
+	Date         : 2015-06-06
+	*/
+	@Override
+	public List<OrdersVO> selectTotalListMap(HashMap<String, Object> map) throws Exception {
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+
+		try{
+			return sqlSession.selectList("net.OrdersDao.selectTotalList", map);
+		}finally{
+			sqlSession.close();
+		}
+	}
+
 	@Override
 	public int count() throws Exception{
 		// TODO Auto-generated method stub
@@ -55,7 +71,23 @@ public class OrdersDAOMySql implements OrdersDAO {
             sqlSession.close();
         }
 	}
-	
+
+	/*
+	First Editor : Donghyun Seo (egaoneko@naver.com)
+	Last Editor  :
+	Date         : 2015-06-06
+	*/
+	@Override
+	public int countTotalList(HashMap<String,Object> map) throws Exception {
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+
+		try{
+			return sqlSession.selectOne("net.OrdersDao.countTotalList",map);
+		}finally{
+			sqlSession.close();
+		}
+	}
+
 	@Override
 	public int delete(int number) {
 		// TODO Auto-generated method stub

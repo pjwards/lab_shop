@@ -11,7 +11,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 
-<c:if test="${!header.referer.contains('board')}">
+<c:if test="${isProduct == false}">
     <%@ include file="/WEB-INF/jsp/includes/src.jsp"%>
     <%@ include file="/WEB-INF/jsp/includes/header.jsp"%>
 </c:if>
@@ -27,9 +27,9 @@
         contextPath = "${pageContext.request.contextPath}";
 
         $(document).ready(function(){
-            var parentReferrer = parent.document.referrer;
+            var isProduct = ${isProduct};
 
-            if(~parentReferrer.indexOf('board')){
+            if(isProduct){
                 $(".popup_button").show();
                 $(".popup_button_col").attr("colspan", 13);
 
@@ -82,35 +82,36 @@
 </head>
 <body>
 
-<c:if test="${!header.referer.contains('board')}">
+<c:if test="${isProduct == false}">
 <%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
 <div class="main">
 </c:if>
 
-    <table border="1">
-        <c:if test="${pagingVO.totalPageCount > 0}">
-            <tr>
-                <td class="popup_button_col" colspan="12">
-                        ${pagingVO.firstRow}-${pagingVO.endRow}
-                    [${pagingVO.requestPage}/${pagingVO.totalPageCount}]
-                </td>
-            </tr>
-        </c:if>
+    <c:if test="${pagingVO.totalPageCount > 0}">
+        <tr>
+            <td class="popup_button_col" colspan="12">
+                    ${pagingVO.firstRow}-${pagingVO.endRow}
+                [${pagingVO.requestPage}/${pagingVO.totalPageCount}]
+            </td>
+        </tr>
+    </c:if>
+
+    <table id="box-table-a" class="table table-hover">
 
         <tr>
-            <td>상품 번호</td>
-            <td>상품 명</td>
-            <td>크기</td>
-            <td>소재</td>
-            <td>구성</td>
-            <td>옵션</td>
-            <td>제조/수입</td>
-            <td>제조국</td>
-            <td>가격</td>
-            <td>재고</td>
-            <td>등록자</td>
-            <td>등록일</td>
-            <td class="popup_button" style="display:none;">추가</td>
+            <th scope="col">상품 번호</th>
+            <th scope="col">상품 명</th>
+            <th scope="col">크기</th>
+            <th scope="col">소재</th>
+            <th scope="col">구성</th>
+            <th scope="col">옵션</th>
+            <th scope="col">제조/수입</th>
+            <th scope="col">제조국</th>
+            <th scope="col">가격</th>
+            <th scope="col">재고</th>
+            <th scope="col">등록자</th>
+            <th scope="col">등록일</th>
+            <th scope="col" class="popup_button" style="display:none;">추가</th>
         </tr>
 
         <c:choose>
@@ -128,14 +129,14 @@
                         <td>${list.number}</td>
                         <td>
 
-                            <c:if test="${!header.referer.contains('board')}">
+                            <c:if test="${isProduct == false}">
                                 <c:set var="query" value="p=${pagingVO.requestPage}&goodsNumber=${list.number}"/>
                                 <a href="<c:url value="/goods/read.do?${query}"/> ">
                                         ${list.name}
                                 </a>
                             </c:if>
 
-                            <c:if test="${header.referer.contains('board')}">
+                            <c:if test="${isProduct == true}">
                                 <c:set var="query" value="p=${pagingVO.requestPage}&goodsNumber=${list.number}"/>
                                 <a target="_blank " href="<c:url value="/goods/read.do?${query}"/> ">
                                         ${list.name}
@@ -157,9 +158,9 @@
                 </c:forEach>
 
                 <%-- Paging --%>
-                <c:if test="${!header.referer.contains('board')}">
+                <c:if test="${isProduct == false}">
                     <tr>
-                        <td class="popup_button_col" colspan="12">
+                        <td class="popup_button_col" colspan="12" align="center">
                             <c:if test="${pagingVO.beginPage > 10}">
                                 <a href="<c:url value="/goods/list.do?p=${pagingVO.beginPage-1}"/> ">이전</a>
                             </c:if>
@@ -172,9 +173,9 @@
                         </td>
                     </tr>
                 </c:if>
-                <c:if test="${header.referer.contains('board')}">
+                <c:if test="${isProduct == true}">
                     <tr>
-                        <td class="popup_button_col" colspan="12">
+                        <td class="popup_button_col" colspan="12" align="center">
                             <c:if test="${pagingVO.beginPage > 10}">
                                 <a href="#" onclick="loadPage('/goods/list.do?p=${pagingVO.beginPage-1}'); return false;">이전</a>
                             </c:if>
@@ -191,7 +192,7 @@
         </c:choose>
 
 
-        <c:if test="${!header.referer.contains('board')}">
+        <c:if test="${isProduct == false}">
             <tr>
                 <td class="popup_button_col" colspan="12">
                     <a href="<c:url value="/goods/write.do" />">상품 등록</a>
@@ -199,7 +200,7 @@
             </tr>
         </c:if>
 
-        <c:if test="${header.referer.contains('board')}">
+        <c:if test="${isProduct == true}">
             <tr>
                 <td class="popup_button_col" colspan="12">
                     <a target="_blank " href="<c:url value="/goods/write.do" />">상품 등록</a>
@@ -216,9 +217,7 @@
         </form>
     </div>
 
-    <a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
-
-<c:if test="${!header.referer.contains('board')}">
+<c:if test="${isProduct == false}">
 </div>
 </c:if>
 

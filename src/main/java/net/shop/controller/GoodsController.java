@@ -58,9 +58,17 @@ public class GoodsController {
     @RequestMapping(value = "/list.do")
     public ModelAndView goodsList(@RequestParam(value = "p", required = false) String requestPageString,
                                   @RequestParam(value="q",required=false) String keyword,
+                                  @RequestParam(value = "s", required = false, defaultValue = "default") String s,
                                   Authentication auth) throws Exception{
 
         ModelAndView modelAndView = new ModelAndView();
+
+        if(s.equals("product")){
+            modelAndView.addObject("isProduct", true);
+        } else  {
+            modelAndView.addObject("isProduct", false);
+        }
+
 
         String memberId = util.isMemberId(auth);
 
@@ -222,8 +230,8 @@ public class GoodsController {
         if(!goodsVO.getManufacturer().equals(manufacturer)) newGoodsVO.setManufacturer(manufacturer);
         if(!goodsVO.getMadein().equals(madein)) newGoodsVO.setMadein(madein);
         if(!goodsVO.getDescription().equals(description)) newGoodsVO.setDescription(description);
-        if(goodsVO.getPrice() != price) newGoodsVO.setPrice(price);
-        if(goodsVO.getStock() != stock) newGoodsVO.setStock(stock);
+        newGoodsVO.setPrice(price);
+        newGoodsVO.setStock(stock);
 
         int updateCount = goodsService.update(newGoodsVO);
         if (updateCount == 0) throw new GoodsNotFoundException("상품이 존재하지 않음 : " + goodsNumber);
@@ -450,17 +458,50 @@ public class GoodsController {
 		String email = vo.getUsername();
 		UserVO userVO = userService.selectOneVo(email);
 		String sender = userVO.getLastName();
+
+        boolean check = false;
+        String say = "[";
+        List<OrdersVO> ordersVOList = new ArrayList<>();
 		
 		if(boardNumbers != null) {
             for (int boardNumber : boardNumbers) {
             	CartVO cartVO = goodsService.cartOne(boardNumber, email);
           		int price = cartVO.getPrice();
           		int quantity = cartVO.getQuantity();
-         	
-          		OrdersVO ordersVO = new OrdersVO("Ok", email, sender, boardNumber, quantity, address, postcode, price, receiver);
-          		goodsService.addorderlist(ordersVO);
-          		goodsService.cartDelete(boardNumber, email);
-          		
+
+                /*
+                First Editor : Donghyun Seo (egaoneko@naver.com)
+                Last Editor  :
+                Date         : 2015-06-06
+                */
+
+                if(!checkStock(boardNumber, quantity)){
+                    check = true;
+                    say += boardService.selectOne(boardNumber).getTitle();
+                    say += ", ";
+                }
+
+                ordersVOList.add(new OrdersVO("Ok", email, sender, boardNumber, quantity, address, postcode, price, receiver));
+            }
+
+            /*
+            First Editor : Donghyun Seo (egaoneko@naver.com)
+            Last Editor  :
+            Date         : 2015-06-06
+            */
+
+            if (check){
+                say += "] 상품의 수량이 부족합니다. 관리자에 문의하여 주세요.";
+
+                model.addAttribute("say", say);
+                model.addAttribute("url", request.getContextPath()+"/goods/cart.do");
+                return "/error/alert";
+            }
+
+            for(OrdersVO ordersVO : ordersVOList){
+                goodsService.addorderlist(ordersVO);
+                goodsService.cartDelete(ordersVO.getBoardNumber(), ordersVO.getUserEmail());
+                decreaseStock(ordersVO.getBoardNumber(), ordersVO.getQuantity());
             }
         }else{
         	model.addAttribute("say", "Wrong Input");
@@ -473,4 +514,41 @@ public class GoodsController {
 		model.addAttribute("url", request.getContextPath()+"/user/orders.do");
 		return "/error/alert";
   	}
+
+    /*
+	First Editor : Donghyun Seo (egaoneko@naver.com)
+	Last Editor  :
+	Date         : 2015-06-06
+	*/
+    private boolean checkStock(int boardNumber, int quantity) throws Exception{
+
+        List<Integer> boardGoodsList = goodsService.selectBoardGoodsByBoard(boardNumber);
+        GoodsVO goodsVO;
+
+        if(!boardGoodsList.isEmpty()) {
+            for(int goodsNumber: boardGoodsList) {
+                goodsVO = goodsService.selectOne(goodsNumber);
+                if(goodsVO.getStock() < quantity) return false;
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    /*
+	First Editor : Donghyun Seo (egaoneko@naver.com)
+	Last Editor  :
+	Date         : 2015-06-06
+	*/
+    private void decreaseStock(int boardNumber, int quantity) throws Exception {
+
+        List<Integer> boardGoodsList = goodsService.selectBoardGoodsByBoard(boardNumber);
+
+        if (!boardGoodsList.isEmpty()) {
+            for (int goodsNumber : boardGoodsList) {
+                goodsService.decreaseGoodsStock(goodsNumber, quantity);
+            }
+        }
+    }
 }

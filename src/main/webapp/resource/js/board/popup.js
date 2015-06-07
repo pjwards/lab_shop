@@ -14,7 +14,7 @@
             $('#element_to_pop_up').bPopup({
                 content:'ajax', //'ajax', 'iframe' or 'image'
                 contentContainer:'.content',
-                loadUrl:contextPath+'/goods/list.do'
+                loadUrl:contextPath+'/goods/list.do?s=product'
             });
         });
     });

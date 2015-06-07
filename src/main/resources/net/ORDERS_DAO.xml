@@ -27,6 +27,17 @@
      order by orders.no desc
  	 limit #{offset},#{limit} 
     </select>
+
+    <select id="selectTotalList" parameterType="map" resultMap="ordersResultMap">
+        select orders.no, orders.order_date, orders.order_now, orders.user_email, orders.user_name,
+        orders.quantity, orders.total_price, orders.receiver, orders.board_no, board.title from shop_orders as orders
+        inner join shop_board as board on orders.board_no=board.no
+        <if test="keyword != NULL">
+            where orders.user_email LIKE CONCAT('%', #{keyword}, '%') OR orders.user_name LIKE CONCAT('%', #{keyword}, '%') or orders.no like CONCAT('%', #{keyword}, '%')
+        </if>
+        order by orders.no desc
+        limit #{offset},#{limit}
+    </select>
     
     <delete id="delete" parameterType="int">
       delete from shop_orders where no=#{number}
@@ -38,7 +49,14 @@
     
     <select id="countByKeyword" parameterType="String" resultType="int">
       select count(*) from shop_orders
-      where user_email like CONCAT('%', #{keyword}, '%') or user_name like CONCAT('%', #{keyword}, '%') or no like CONCAT('%', #{keyword}, '%')
+      where user_email like CONCAT('%', #{keyword}, '%') or user_name like CONCAT('%', #{keyword}, '%')!Ap
+    </select>
+
+    <select id="countTotalList" parameterType="map" resultType="int">
+        select count(*) from shop_orders
+        <if test="keyword != NULL">
+            WHERE user_email LIKE CONCAT('%', #{keyword}, '%') OR user_name LIKE CONCAT('%', #{keyword}, '%') OR no LIKE CONCAT('%', #{keyword}, '%')
+        </if>
     </select>
     
     <insert id="insert" parameterType="OrdersVO">
