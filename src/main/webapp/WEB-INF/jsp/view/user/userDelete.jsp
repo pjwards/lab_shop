@@ -18,8 +18,8 @@
 <body>
 <%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
 <div class="main">
-
-<h1>Why do you want to disable your account?</h1>
+<div class="text-center">
+<h2>Why do you want to disable your account?</h2>
 
 <form action="" method="post">
 	<div class="radio">
@@ -31,11 +31,12 @@
 	<div class="radio">
 	 <label>
     	<input type="radio" name="check" id="optionsRadios2" value="shit">
-    		This site is shit
+    		I don't like this site
   	 </label>
 	</div>
 	<button type="submit" class="btn btn-primary" value="submit">Submit</button>
 </form>
+</div>
 </div>
 </body>
 </html>

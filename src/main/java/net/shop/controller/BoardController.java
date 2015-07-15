@@ -141,7 +141,7 @@ public class BoardController {
 	@RequestMapping(value = "/write.do", method = RequestMethod.POST)
     public String boardWrite(@RequestParam(value = "title", required = true) String title,
                              @RequestParam(value = "daumeditor", required = true ) String daumeditor,
-                             @RequestParam(value = "thumnail") MultipartFile multipartFile,
+                             @RequestParam(value = "thumnail", required = false) MultipartFile multipartFile,
                              @RequestParam(value = "total_price", required = false ) Integer totalPrice,
                              @RequestParam(value = "s", required = true, defaultValue = "default") String separator,
                              Authentication auth, HttpServletRequest request, Model model) throws Exception{
@@ -152,29 +152,29 @@ public class BoardController {
         int groupId = boardService.generateNextGroupNumber("board");
         int userNumber = userService.selectOneNo(memberId);
         String imagePath = null;
-        
-        //upload thumnail
-  		if ( multipartFile.getSize() > 0 ) {
-  			String fileName = multipartFile.getOriginalFilename();
-  			if ( imageUtil.isImageFile ( fileName))
-  			{
-  				Calendar cal = Calendar.getInstance();
-  				String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
-  				File uploadFile =  File.createTempFile( "/home/jisung/", fileType);
-  				multipartFile.transferTo( uploadFile);
-  				String tempName =  cal.getTimeInMillis() + "";
-  				String replaceName = tempName+"_thum"+ fileType;
-  				File thumbnail =  new File (loadPath+replaceName);
-  				imageUtil.uploadImage( uploadFile, thumbnail, 100, 100);
-  				imagePath = replaceName;
-  			}
-  			else{
-  				model.addAttribute("say", "Wrong Image");
-  				model.addAttribute("url", request.getContextPath()+"/board/list.do?s=" + separator);
-  				return "/error/alert";
-  			}
-  		}
-      		
+        if(multipartFile != null){
+	        //upload thumnail
+	  		if ( multipartFile.getSize() > 0 ) {
+	  			String fileName = multipartFile.getOriginalFilename();
+	  			if ( imageUtil.isImageFile ( fileName))
+	  			{
+	  				Calendar cal = Calendar.getInstance();
+	  				String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
+	  				File uploadFile =  File.createTempFile( "/home/jisung/", fileType);
+	  				multipartFile.transferTo( uploadFile);
+	  				String tempName =  cal.getTimeInMillis() + "";
+	  				String replaceName = tempName+"_thum"+ fileType;
+	  				File thumbnail =  new File (loadPath+replaceName);
+	  				imageUtil.uploadImage( uploadFile, thumbnail, 100, 100);
+	  				imagePath = replaceName;
+	  			}
+	  			else{
+	  				model.addAttribute("say", "Wrong Image");
+	  				model.addAttribute("url", request.getContextPath()+"/board/list.do?s=" + separator);
+	  				return "/error/alert";
+	  			}
+	  		}
+        }
         BoardVO boardVO = new BoardVO();
         boardVO.setGroupNumber(groupId);
         DecimalFormat decimalFormat = new DecimalFormat("0000000000");

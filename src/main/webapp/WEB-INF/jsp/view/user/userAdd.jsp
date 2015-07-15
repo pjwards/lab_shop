@@ -98,18 +98,43 @@ $(function(){
 <body>
 <%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
 <div class="main">
+<div class="span3">
+<h2 >Sign Up</h2>
 	<form action="" method="post" enctype="multipart/form-data" id="submit_form" name="submit_form">
-		<input type="text" class="form-control" name="firstName" maxlength="50" required="required" placeholder="First name" autocomplete="off"><br>
-		<input type="text" class="form-control" name="lastName" maxlength="50" required="required" placeholder="Last name" autocomplete="off"><br>
-		<input type="text" class="form-control" id="email" name="email" maxlength="250" required="required" placeholder="Email " autocomplete="off">
-		<input type="button" class="btn btn-primary btn-sm" id="check_email" name="check_email" value="Check" ><p id="txt"></p><br>
-		<input type="password" class="form-control" name="password" maxlength="20" required="required" placeholder="Password" autocomplete="off"><br>
-		<input type="text" class="form-control" name="address" maxlength="250" required="required" placeholder="Address" autocomplete="off"><br>
-		<input type="text" class="form-control" id="postcode" name="postcode" maxlength="6" required="required" placeholder="Postcode" autocomplete="off">&nbsp;<span id="errmsg"></span><br><br>
+		<div class="form-group">
+		<label for="firstName">First Name</label>
+		<input type="text" class="span3" id="firstName" name="firstName" maxlength="50" required="required" placeholder="First name" autocomplete="off"><br>
+		</div>
+		<div class="form-group">
+		<label for="lastName">Last Name</label>
+		<input type="text" class="span3" id="lastName" name="lastName" maxlength="50" required="required" placeholder="Last name" autocomplete="off"><br>
+		</div>
+		<div class="form-group">
+		<label for="email">Email</label>
+		<input type="text" class="span3" id="email" name="email" maxlength="250" required="required" placeholder="Email " autocomplete="off">
+		<input type="button" class="btn btn-primary btn-sm" id="check_email" name="check_email" value="Check" ><p id="txt"></p>
+		</div>
+		<div class="form-group">
+		<label for="password">Password</label>
+		<input type="password" class="span3" id="password" name="password" maxlength="20" required="required" placeholder="Password" autocomplete="off"><br>
+		</div>
+		<div class="form-group">
+		<label for="address">Address</label>
+		<input type="text" class="span3" id="address" name="address" maxlength="250" required="required" placeholder="Address" autocomplete="off"><br>
+		</div>
+		<div class="form-group">
+		<label for="postcode">Postcode</label>
+		<input type="text" class="span3" id="postcode" name="postcode" maxlength="6" required="required" placeholder="Postcode" autocomplete="off">&nbsp;<span id="errmsg"></span><br><br>
+		</div>
+		<div class="form-group">
 		<input type="file" name="thumnail"/><br>
+		</div>
+		<div class="form-group">
 		<button type="submit" class="btn btn-primary" value="submit">Submit</button>
+		</div>
 	</form>
 	<a href="<%=request.getContextPath()%>/main/main.do">Back Home</a>
+</div>
 </div>
 </body>
 </html>

@@ -60,7 +60,7 @@ $(document).ready(function(){
 		var addr = "${user.address }";
 		var post = "${user.postcode }";
 		var name = "${user.lastName }";
-		alert(addr);
+		//alert(addr);
 		data.push($(this).attr("vals"));
 		confirmation(question).then(function (answer) {
 		    var ansbool = (String(answer) === "true");

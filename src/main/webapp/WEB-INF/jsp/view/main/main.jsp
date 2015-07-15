@@ -21,39 +21,102 @@
 <%@ include file="/WEB-INF/jsp/includes/nav.jsp"%>
 <div class="main">
 
-<h1>Main page</h1> 
-<ul>
-	<li><a href="<%=request.getContextPath()%>/user/userAdd.do">Sign Up</a></li>
-	<c:choose>
-		<c:when test="${vo != null }">
-			<c:url value="/j_spring_security_logout" var="logoutUrl" />
-			<li><a href="${logoutUrl}">Log Out</a></li>
-			<li><a href="<%=request.getContextPath()%>/user/userEdit.do">Your Account</a></li>
-			<li><a href="<%=request.getContextPath()%>/user/wishlist.do">Wishlist</a></li>
-			<li><a href="<%=request.getContextPath()%>/user/orders.do">Your Orders</a></li>
-			<li><a href="<%=request.getContextPath()%>/goods/cart.do">Cart</a></li>
-		</c:when>
-		<c:otherwise>
-			<li><a href="<%=request.getContextPath()%>/main/login.do">Sign In</a></li>
-		</c:otherwise>
-	</c:choose>
-	<li><a href="<%=request.getContextPath()%>/user/userList.do">User List</a></li>
-	<li><a href="<%=request.getContextPath()%>/goods/list.do">Goods List</a></li>
-    <li><a href="<%=request.getContextPath()%>/admin/search.do">Search users</a></li>
-    
-	<li><a href="<%=request.getContextPath()%>/board/list.do?s=default">Board List</a></li>
-    <li><a href="<%=request.getContextPath()%>/board/list.do?s=notice">Notice Board List</a></li>
-    <li><a href="<%=request.getContextPath()%>/board/list.do?s=qna">QnA Board List</a></li>
-    
-    <li><a href="<%=request.getContextPath()%>/upload.do">upload</a></li>
-    <li><a href="<%=request.getContextPath()%>/download.do">download</a></li>
-    <li><a href="<%=request.getContextPath()%>/email.do">Email</a></li>   
-     
-    <!-- <li><a href="test.jsp">Test</a></li>  --> 
-	<li><a href="<%=request.getContextPath()%>/goods/listByBoard.do?boardNumber=13">Goods List By Board</a></li>
-	<li><a href="<%=request.getContextPath()%>/board/list.do?s=product">Product Board List</a></li>
-</ul>
+<div class="jumbotron text-center">
+  <h1>Hello, Everyone!</h1>
+  <p>This is small shopping mall made by donghyun and jisung</p>
+  <p><a class="btn btn-primary btn-lg" href="<%=request.getContextPath()%>/board/list.do?s=product" role="button">Look around</a></p>
+</div>
+<div class="container">
+    <div class="row">
+		<div class="col-md-12">
+                <div id="Carousel" class="carousel slide">
+                 
+                <ol class="carousel-indicators">
+                    <li data-target="#Carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#Carousel" data-slide-to="1"></li>
+                    <li data-target="#Carousel" data-slide-to="2"></li>
+                </ol>
+                 
+                <!-- Carousel items -->
+                <div class="carousel-inner">
+                    
+                <div class="item active">
+                	<div class="row">
+                	  <div class="col-md-3"><a href="#" class="thumbnail"><img src="/lab_shop/resource/upload/image2.jpg" alt="Image" style="width:250;max-width:100%;"></a></div>
+                	  <div class="col-md-3"><a href="#" class="thumbnail"><img src="/lab_shop/resource/upload/image2.jpg" alt="Image" style="width:250;max-width:100%;"></a></div>
+                	  <div class="col-md-3"><a href="#" class="thumbnail"><img src="/lab_shop/resource/upload/image2.jpg" alt="Image" style="width:250;max-width:100%;"></a></div>
+                	  <div class="col-md-3"><a href="#" class="thumbnail"><img src="/lab_shop/resource/upload/image2.jpg" alt="Image" style="width:250;max-width:100%;"></a></div>
+                	</div><!--.row-->
+                </div><!--.item-->
+                 
+                <div class="item">
+                	<div class="row">
+                		<div class="col-md-3"><a href="#" class="thumbnail"><img src="/lab_shop/resource/upload/default.jpg" alt="Image" style="width:250;max-width:100%;"></a></div>
+                		<div class="col-md-3"><a href="#" class="thumbnail"><img src="/lab_shop/resource/upload/default.jpg" alt="Image" style="width:250;max-width:100%;"></a></div>
+                		<div class="col-md-3"><a href="#" class="thumbnail"><img src="/lab_shop/resource/upload/default.jpg" alt="Image" style="width:250;max-width:100%;"></a></div>
+                		<div class="col-md-3"><a href="#" class="thumbnail"><img src="/lab_shop/resource/upload/default.jpg" alt="Image" style="width:250;max-width:100%;"></a></div>
+                	</div><!--.row-->
+                </div><!--.item-->
+                 
+                <div class="item">
+                	<div class="row">
+                		<div class="col-md-3"><a href="#" class="thumbnail"><img src="/lab_shop/resource/upload/download.jpg" alt="Image" style="width:250;max-width:100%;"></a></div>
+                		<div class="col-md-3"><a href="#" class="thumbnail"><img src="/lab_shop/resource/upload/download.jpg" alt="Image" style="width:250;max-width:100%;"></a></div>
+                		<div class="col-md-3"><a href="#" class="thumbnail"><img src="/lab_shop/resource/upload/download.jpg" alt="Image" style="width:250;max-width:100%;"></a></div>
+                		<div class="col-md-3"><a href="#" class="thumbnail"><img src="/lab_shop/resource/upload/download.jpg" alt="Image" style="width:250;max-width:100%;"></a></div>
+                	</div><!--.row-->
+                </div><!--.item-->
+                 
+                </div><!--.carousel-inner-->
+                  <a data-slide="prev" href="#Carousel" class="left carousel-control">‹</a>
+                  <a data-slide="next" href="#Carousel" class="right carousel-control">›</a>
+                </div><!--.Carousel-->
+                 
+		</div>
+	</div>
+</div><!--.container-->
 </div>
 </body>
+<script>
+$(document).ready(function() {
+    $('#Carousel').carousel({
+        interval: 5000
+    })
+});
+</script>
+<style>
+body{padding-top:20px;}
+.carousel {
+    margin-bottom: 0;
+    padding: 0 40px 30px 40px;
+}
+/* The controlsy */
+.carousel-control {
+	left: -12px;
+    height: 40px;
+	width: 40px;
+    background: none repeat scroll 0 0 #222222;
+    border: 4px solid #FFFFFF;
+    border-radius: 23px 23px 23px 23px;
+    margin-top: 90px;
+}
+.carousel-control.right {
+	right: -12px;
+}
+/* The indicators */
+.carousel-indicators {
+	right: 50%;
+	top: auto;
+	bottom: -10px;
+	margin-right: -19px;
+}
+/* The colour of the indicators */
+.carousel-indicators li {
+	background: #cecece;
+}
+.carousel-indicators .active {
+background: #428bca;
+}
+</style>
 
 </html>
